@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: usda
+Version: 0.0.1
+Summary: A set of python modules for Urban Spatial Data Analysis Method (USDA)
+Home-page: https://richiebao.github.io/USDA_PyPI
+Download-URL: 
+Maintainer: Richie Bao
+Maintainer-email: richiebao@outlook.com
+License: new BSD
+Project-URL: Bug Tracker, 
+Project-URL: Documentation, https://richiebao.github.io/USDA_PyPI
+Project-URL: Source Code, https://github.com/richieBao/USDA_PyPI
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: C
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+Classifier: Topic :: Scientific/Engineering
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.7
+Provides-Extra: examples
+Provides-Extra: docs
+Provides-Extra: tests
+Provides-Extra: benchmark
+License-File: LICENSE
+
+# USDA_
+
+USDA

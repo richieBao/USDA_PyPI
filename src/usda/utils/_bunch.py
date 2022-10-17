@@ -1,4 +1,4 @@
-# Code Migration from: scikit-learn/sklearn/utils/_bunch.py
+# Code Migrating from: scikit-learn/sklearn/utils/_bunch.py
 class Bunch(dict):
     """Container object exposing keys as attributes.
     Bunch objects are sometimes used as an output for functions and methods.
@@ -6,7 +6,7 @@ class Bunch(dict):
     `bunch["value_key"]`, or by an attribute, `bunch.value_key`.
     Examples
     --------
-    >>> from sklearn.utils import Bunch
+    >>> from usda.utils import Bunch
     >>> b = Bunch(a=1, b=2)
     >>> b['b']
     2
