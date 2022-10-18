@@ -36,6 +36,43 @@ def test_DisplayablePath():
     paths = utils.DisplayablePath.make_tree(Path(app_root))
     for path in paths:
         print(path.displayable())    
+        
+def test_coordinate_transformation():
+    lng = 128.543
+    lat = 37.065
+    # datasets._baiduPOI_dataCrawler.wgs84togcj02(lng, lat)
+    # print(help(bdc))
+    from usda.utils import _coordinate_transformation as cc
+    print(help(cc))
+    
+def test_baiduPOI_dataCrawler_circle():
+    page_num_range=range(20)
+    query_dic={
+        'location':'34.265708,108.953431',
+        'radius':1000,
+        'query':'旅游景点',   
+        'page_size':'20',
+        'scope':2, 
+        'output':'json',
+        'ak':'YuN8HxzYhGNfNLGX0FVo3NU3NOrgSNdF'        
+    }    
+    poi_save_path='./test/data/poi_circle.json'    
+    datasets.baiduPOI_dataCrawler_circle(query_dic,poi_save_path,page_num_range)
+    
+def test_csv2df():
+    poi_fn_csv='./test/data/poi_csv.csv'
+    data=database.csv2df(poi_fn_csv)
+    print(data)
+    
+def test_filePath_extraction():
+    dirpath='./test'
+    fileType=["csv","sqlite"]
+    poi_paths=utils.filePath_extraction(dirpath,fileType)
+    print(poi_paths) 
+    
+def test_poi_csv2GeoDF_batch():
+    pass
+    
 
 if __name__=="__main__":
     print(dir(usda))
@@ -44,6 +81,8 @@ if __name__=="__main__":
     # test_df2SQLite()
     # test_SQLite2df()
     # test_postSQL2gpd()
-    test_DisplayablePath()
-    
-    
+    # test_DisplayablePath()    
+    # test_coordinate_transformation()
+    # test_baiduPOI_dataCrawler_circle()
+    # test_csv2df()
+    # test_filePath_extraction()

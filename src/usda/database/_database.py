@@ -85,6 +85,5 @@ def postSQL2gpd(table_name,geom_col='geometry',**kwargs):
     return gdf          
                 
         
-if __name__=="__main__":
-    pass
+
     
