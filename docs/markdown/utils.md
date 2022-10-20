@@ -2,7 +2,7 @@
 
 ## utils.Bunch
 
-构建类属性”字典“。
+构建类属性“字典”
 
 > Code Migrating from: scikit-learn/sklearn/utils/_bunch.py
 
@@ -117,5 +117,21 @@ Pictures/
 ├── QQ截图20220419090125.png
 └── Saved Pictures/
     └── desktop.ini
+```
+
+## utils.filePath_extraction
+
+以所在文件夹路径为键，值为包含该文件夹下所有文件名的列表。文件类型可以自行定义 
+
+```python
+filePath_extraction(dirpath, fileType)
+    funciton  - 以所在文件夹路径为键，值为包含该文件夹下所有文件名的列表。文件类型可以自行定义 
+    
+    Params:
+        dirpath - 根目录，存储所有待读取的文件；string
+        fileType - 待读取文件的类型；list(string)
+        
+    Returns:
+        filePath_Info - 文件路径字典，文件夹路径为键，文件夹下的文件名列表为值；dict
 ```
 

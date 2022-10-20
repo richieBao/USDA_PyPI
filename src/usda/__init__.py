@@ -5,10 +5,12 @@ Created on Sun Aug 21 15:11:00 2022
 @author: Richie Bao-caDesign设计(cadesign.cn)
 """
 
-__version__ = "0.0.12"
+__version__ = "0.0.14"
 
 __all__ = [
     "datasets",
     "database",
     "utils",
+    "charts",
+    "stats",
     ]

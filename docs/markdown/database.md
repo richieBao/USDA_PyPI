@@ -75,3 +75,41 @@ postSQL2gpd(table_name, geom_col='geometry', **kwargs)
     Returns:
         读取的表数据；GeoDataFrame
 ```
+
+?> __数据类型转换__
+
+## database.csv2df
+
+转换CSV格式的POI数据为pandas的DataFrame
+
+```python
+csv2df(poi_fn_csv)
+    function-转换CSV格式的POI数据为pandas的DataFrame
+    
+    Params:
+        poi_fn_csv - 存储有POI数据的CSV格式文件路径        
+    
+    Returns:
+        poi_df - DataFrame(pandas)
+
+None
+```
+
+## database.poi_csv2GeoDF_batch
+
+CSV格式POI数据批量转换为GeoDataFrame格式数据，需要调用转换CSV格式的POI数据为pandas的DataFrame函数`csv2df(poi_fn_csv)`
+
+```python
+poi_csv2GeoDF_batch(poi_paths, fields_extraction, save_path)
+    funciton - CSV格式POI数据批量转换为GeoDataFrame格式数据，需要调用转换CSV格式的POI数据为pandas的DataFrame函数csv2df(poi_fn_csv)
+    
+    Params:
+        poi_paths - 文件夹路径为键，值为包含该文件夹下所有文件名列表的字典；dict
+        fields_extraction - 配置需要提取的字段；list(string)
+        save_path - 存储数据格式及保存路径的字典；string
+        
+    Returns:
+        poisInAll_gdf - 提取给定字段的POI数据；GeoDataFrame（GeoPandas）
+
+None
+```

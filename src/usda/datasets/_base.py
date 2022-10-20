@@ -43,10 +43,79 @@ def load_sales_data_cartoon_database(data_module=DATA_MODULE):
     table_names=['sales_table','exporting_country_table','sale_details_table','commodity_table']   
     
     return Bunch(sales_table=sales_table,
-                 # exporting_country_table=exporting_country_table,
-                 # sale_details_table=sale_details_table，
-                 # commodity_table=commodity_table，
+                 exporting_country_table=exporting_country_table,
+                 sale_details_table=sale_details_table,
+                 commodity_table=commodity_table,
                  file_name=data_file_name)
+
+def load_ramen_price_cartoon_statistic(data_module=DATA_MODULE):
+    '''
+    源于《漫画统计学》中“美味拉面畅销前50”上刊载的拉面馆的拉面价格    
+
+    Parameters
+    ----------
+    data_module : string, optional
+        数据所在文件夹. The default is DATA_MODULE.
+
+    Returns
+    -------
+    Class
+        拉面假数据：含属性字段ramen_price，file_name.
+
+    '''
+    data_file_name="ramen_price_cartoon_statistic.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        data=pickle.load(data_file)  
+        
+        data_file_name="ramen_price_cartoon_statistic"
+    
+    return Bunch(ramen_price=data, file_name=data_file_name)
+
+def load_bowling_contest_cartoon_statistic(data_module=DATA_MODULE):
+    '''
+    数据源于《漫画统计学》保龄球大赛的结果
+
+    Parameters
+    ----------
+    data_module : string, optional
+        数据所在文件夹. The default is DATA_MODULE.
+
+    Returns
+    -------
+    Class
+        保龄球大赛得分，含属性字段bowling_contest，file_name.
+
+    '''
+    data_file_name="bowling_contest_cartoon_statistic.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        data=pickle.load(data_file)  
+        
+        data_file_name="bowling_contest_cartoon_statistic"
+    
+    return Bunch(bowling_contest=data, file_name=data_file_name)
+
+def load_test_score_cartoon_statistic(data_module=DATA_MODULE):
+    '''
+    源于《漫画统计学》中的考试成绩数据
+
+    Parameters
+    ----------
+    data_module : string, optional
+        数据所在文件夹. The default is DATA_MODULE.
+
+    Returns
+    -------
+    Class
+        试成绩数据，含属性字段test_score，file_name.
+
+    '''
+    data_file_name="test_score_cartoon_statistic.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        data=pickle.load(data_file)  
+        
+        data_file_name="test_score_cartoon_statistic"
+    
+    return Bunch(test_score=data, file_name=data_file_name)
 
 def baiduPOI_dataCrawler(query_dic,bound_coordinate,partition,page_num_range,poi_fn_list=False):
     '''
@@ -209,9 +278,9 @@ def baiduPOI_batchCrawler(poi_config_para):
         partition=poi_config_para['partition']
         page_num_range=poi_config_para['page_num_range']
         util_A.baiduPOI_dataCrawler(query_dic,bound_coordinate,partition,page_num_range,poi_fn_list=[poi_fn_csv,poi_fn_json]) 
-
-
+ 
 
 if __name__=="__main__":
-    sales_data_cartoon_databas=load_sales_data_cartoon_database()
+    pass
+    # sales_data_cartoon_databas=load_sales_data_cartoon_database()
     
