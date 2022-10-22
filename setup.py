@@ -5,7 +5,7 @@ Created on Sun Aug 21 14:57:02 2022
 @author: Richie Bao-caDesign设计(cadesign.cn)
 
 python setup.py sdist
-twine upload dist/usda-0.0.14.tar.gz
+twine upload dist/usda-0.0.15.tar.gz
 """
 from setuptools import setup,find_packages,find_namespace_packages
 import src.usda._min_dependencies as min_deps 

@@ -12,6 +12,9 @@ src/usda.egg-info/top_level.txt
 src/usda/charts/__init__.py
 src/usda/charts/_stats_charts.py
 src/usda/charts/_table_show.py
+src/usda/data_process/__init__.py
+src/usda/data_process/_geoinfodata_conversion.py
+src/usda/data_process/_osm_dataprocess.py
 src/usda/database/__init__.py
 src/usda/database/_data_format_conversion.py
 src/usda/database/_database.py
@@ -25,9 +28,11 @@ src/usda/datasets/data/sales_data_cartoon_database.pickle
 src/usda/datasets/data/test_score_cartoon_statistic.pickle
 src/usda/stats/__init__.py
 src/usda/stats/_descriptive_stats.py
+src/usda/stats/_kde.py
 src/usda/stats/_outlier.py
 src/usda/utils/_DisplayablePath.py
 src/usda/utils/__init__.py
 src/usda/utils/_bunch.py
 src/usda/utils/_coordinate_transformation.py
 src/usda/utils/_file_structure.py
+src/usda/utils/_operating_time.py

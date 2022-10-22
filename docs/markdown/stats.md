@@ -35,3 +35,40 @@ comparisonOFdistribution(df, field, bins=100)
     Returns:
         None
 ```
+
+?> 统计推断
+
+## stats.is_outlier
+
+判断异常值
+
+```python
+is_outlier(data, threshold=3.5)
+    function-判断异常值
+        
+    Params:
+        data - 待分析的数据，列表或者一维数组；list/array
+        threshold - 判断是否为异常值的边界条件, The default is 3.5；float
+        
+    Returns
+        is_outlier_bool - 判断异常值后的布尔值列表；list(bool)
+        data[~is_outlier_bool] - 移除异常值后的数值列表；list
+```
+
+## stats.ptsKDE_geoDF2raster
+
+计算GeoDaraFrame格式的点数据核密度估计，并转换为栅格数据
+
+```python
+ptsKDE_geoDF2raster(pts_geoDF, raster_path, cellSize, scale)
+    function - 计算GeoDaraFrame格式的点数据核密度估计，并转换为栅格数据
+    
+    Params:
+        pts_geoDF - GeoDaraFrame格式的点数据；GeoDataFrame(GeoPandas)
+        raster_path - 保存的栅格文件路径；string
+        cellSize - 栅格单元大小；int
+        scale - 缩放核密度估计值；int/float
+        
+    Returns:
+        返回读取已经保存的核密度估计栅格数据；array
+```

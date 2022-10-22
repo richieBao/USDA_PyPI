@@ -3,9 +3,10 @@
 * 1\. API
     * [usda.database](./markdown/database.md)
     * [usda.datasets](./markdown/datasets.md)
+    * [usda.data_process](./markdown/data_process.md)
     * [usda.utils](./markdown/utils.md)
     * [usda.charts](./markdown/charts.md)
-    * [usda.stats](./markdown/stats.md)
+    * [usda.stats](./markdown/stats.md)    
 
 * 2\. Examples
     * [Dataset examples](./markdown/examples_dataset.md)

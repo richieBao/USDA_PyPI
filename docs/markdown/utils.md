@@ -135,3 +135,23 @@ filePath_extraction(dirpath, fileType)
         filePath_Info - 文件路径字典，文件夹路径为键，文件夹下的文件名列表为值；dict
 ```
 
+## utils.start_time
+
+计算当前时间
+
+```python
+start_time()
+    function-计算当前时间
+```
+
+## utils.duration
+
+计算持续时间
+
+```python
+duration(start_time)
+    function-计算持续时间
+    
+    Params:
+    start_time - 开始时间；datatime
+```
