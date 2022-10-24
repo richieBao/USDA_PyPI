@@ -6,6 +6,7 @@ Created on Wed Oct 19 08:40:17 2022
 """
 import plotly.graph_objects as go
 import pandas as pd 
+from IPython.display import HTML
 
 def plotly_table(df,column_extraction):
     '''
@@ -30,5 +31,21 @@ def plotly_table(df,column_extraction):
                    align='left'))
                    ])
     fig.show() 
+    
+def print_html(df,row_numbers=5):    
+    '''
+    function - 在Jupyter中打印DataFrame格式数据为HTML
+    
+    Params:
+        df - 需要打印的DataFrame或GeoDataFrame格式数据；DataFrame
+        row_numbers - 打印的行数，如果为正，从开始打印如果为负，从末尾打印；int
+        
+    Returns:
+        转换后的HTML格式数据；
+     '''    
+    if row_numbers>0:
+        return HTML(df.head(row_numbers).to_html())
+    else:
+        return HTML(df.tail(abs(row_numbers)).to_html())    
     
     

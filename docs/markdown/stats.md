@@ -72,3 +72,110 @@ ptsKDE_geoDF2raster(pts_geoDF, raster_path, cellSize, scale)
     Returns:
         返回读取已经保存的核密度估计栅格数据；array
 ```
+
+?> regression
+
+## stats.coefficient_of_determination
+
+回归方程的决定系数
+
+```python
+coefficient_of_determination(observed_vals, predicted_vals)
+    function - 回归方程的决定系数
+    
+    Params:
+        observed_vals - 观测值（实测值）；list(float)
+        predicted_vals - 预测值；list(float)
+        
+    Returns:
+        R_square_a - 决定系数，由观测值和预测值计算获得；float
+        R_square_b - 决定系数，由残差平方和和总平方和计算获得；float
+```
+
+## stats.ANOVA
+
+简单线性回归方程-回归显著性检验（回归系数检验）
+
+```python
+ANOVA(observed_vals, predicted_vals, df_reg, df_res)
+    function - 简单线性回归方程-回归显著性检验（回归系数检验）
+    
+    Params:
+        observed_vals - 观测值（实测值）；list(float)
+        predicted_vals - 预测值；list(float)
+        
+    Returns:
+        None
+```
+
+## stats.confidenceInterval_estimator_LR
+
+简单线性回归置信区间估计，及预测区间
+
+```python
+confidenceInterval_estimator_LR(x, sample_num, X, y, model, confidence=0.05)
+    function - 简单线性回归置信区间估计，及预测区间
+    
+    Params:
+        x - 自变量取值；float
+        sample_num - 样本数量；int
+        X - 样本数据集-自变量；list(float)
+        y - 样本数据集-因变量；list(float)
+        model -使用sklearn获取的线性回归模型；model
+        confidence -  置信度。The default is 0.05" ；float
+    
+    Returns:
+    
+       CI - 置信区间；list(float)
+```
+
+## stats.correlationAnalysis_multivarialbe
+
+DataFrame数据格式，成组计算pearsonr相关系数
+
+```python
+    function - DataFrame数据格式，成组计算pearsonr相关系数
+    
+    Params:
+        df - DataFrame格式数据集；DataFrame(float)
+    
+    Returns:
+        p_values - P值；DataFrame(float)
+        correlation - 相关系数；DataFame(float)
+```
+
+## stats.coefficient_of_determination_correction
+
+回归方程修正自由度的判定系数
+
+```python
+coefficient_of_determination_correction(observed_vals, predicted_vals, independent_variable_n)
+    function - 回归方程修正自由度的判定系数
+    
+    Params:
+        observed_vals - 观测值（实测值）；list(float)
+        predicted_vals - 预测值；list(float)
+        independent_variable_n - 自变量个数；int
+        
+    Returns:
+        R_square_correction - 正自由度的判定系数；float
+```
+
+## stats.confidenceInterval_estimator_LR_multivariable
+
+多元线性回归置信区间估计，及预测区间
+
+```python
+confidenceInterval_estimator_LR_multivariable(X, y, model, confidence=0.05)
+    function - 多元线性回归置信区间估计，及预测区间
+    
+    Params:
+        X - 样本自变量；DataFrame数据格式
+        y - 样本因变量；list(float)
+        model - 多元回归模型；model
+        confidence - 置信度，The default is 0.05；float
+    
+    return:
+        CI- 预测值的置信区间；list(float)
+```
+

@@ -10,6 +10,7 @@ src/usda.egg-info/not-zip-safe
 src/usda.egg-info/requires.txt
 src/usda.egg-info/top_level.txt
 src/usda/charts/__init__.py
+src/usda/charts/_colors.py
 src/usda/charts/_stats_charts.py
 src/usda/charts/_table_show.py
 src/usda/data_process/__init__.py
@@ -30,6 +31,7 @@ src/usda/stats/__init__.py
 src/usda/stats/_descriptive_stats.py
 src/usda/stats/_kde.py
 src/usda/stats/_outlier.py
+src/usda/stats/_regression.py
 src/usda/utils/_DisplayablePath.py
 src/usda/utils/__init__.py
 src/usda/utils/_bunch.py

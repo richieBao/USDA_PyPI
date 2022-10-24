@@ -38,3 +38,52 @@ probability_graph(x_i, x_min, x_max, x_s=-9999, left=True, step=0.001, subplot_n
     Returns:
         None
 ```
+
+## charts.print_html
+
+在Jupyter中打印DataFrame格式数据为HTML
+
+```python
+print_html(df, row_numbers=5)
+    function - 在Jupyter中打印DataFrame格式数据为HTML
+    
+    Params:
+        df - 需要打印的DataFrame或GeoDataFrame格式数据；DataFrame
+        row_numbers - 打印的行数，如果为正，从开始打印如果为负，从末尾打印；int
+        
+    Returns:
+        转换后的HTML格式数据；
+```
+
+## charts.demo_con_style
+
+在matplotlib的子图中绘制连接线。参考： matplotlib官网Connectionstyle Demo
+
+```python
+demo_con_style(a_coordi, b_coordi, ax, connectionstyle)
+    function - 在matplotlib的子图中绘制连接线。参考： matplotlib官网Connectionstyle Demo
+    
+    Params:
+        a_coordi - a点的x，y坐标；tuple
+        b_coordi - b点的x，y坐标；tuple
+        ax - 子图；ax(plot)
+        connectionstyle - 连接线的形式；string
+        
+    Returns:
+        None
+```
+
+##charts.generate_colors
+
+生成颜色列表或者字典
+
+```python
+generate_colors()
+    function - 生成颜色列表或者字典
+    
+    Returns:
+        hex_colors_only - 16进制颜色值列表；list
+        hex_colors_dic - 颜色名称：16进制颜色值；dict
+        rgb_colors_dic - 颜色名称：(r,g,b)；dict
+```
+
