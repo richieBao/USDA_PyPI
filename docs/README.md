@@ -6,7 +6,7 @@
 
 ---
 
-`USDA`库开发维护者：
+**Maintainer**，`USDA`库开发维护者：
 
 * 包瑞清（Richie Bao）- 西安建筑科技大学（Xi’an University of Architecture and Technology，China）：[GitHub主页](https://github.com/richieBao)；Email: richiebao@outlook.com
 
