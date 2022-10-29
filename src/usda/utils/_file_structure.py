@@ -28,3 +28,21 @@ def filePath_extraction(dirpath,fileType):
                 filePath_Info.setdefault(dirpath,tempList)
     return filePath_Info
 
+def fp_sort(fp_list,str_pattern,prefix=""):
+    '''
+    function - 按照文件名中的数字排序文件列表
+    
+    Params:
+        fp_list - 文件列表；list(string)
+        str_pattern - 字符串匹配模式，用于提取文件名中的数字；re.compile()
+        prefix - 字典数据格式的键名前缀；string
+    
+    Returns:
+        fn_sort - 返回排序后的列表；list(string)
+        fn_dict - 返回字典；dict
+    '''
+    
+    fn_num_extraction=[(int(re.findall(str_pattern, fn)[0]),fn) for fn in fp_list]
+    fn_sort=sorted(fn_num_extraction)
+    fn_dict=dict([("%s"%prefix+str(i[0]),i[1]) for i in fn_sort])
+    return fn_sort,fn_dict

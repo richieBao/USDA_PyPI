@@ -8,7 +8,12 @@
 
 `USDA`库开发维护者：
 
-* 包瑞清（Richie Bao）-西安建筑科技大学：[GitHub主页](https://github.com/richieBao)；Email: richiebao@outlook.com
+* 包瑞清（Richie Bao）- 西安建筑科技大学（Xi’an University of Architecture and Technology，China）：[GitHub主页](https://github.com/richieBao)；Email: richiebao@outlook.com
+
+* 程宏 (Hong Cheng) - Kwangwoon University（光云大学，韩）
+
+* Alexis Arias - Illinois Institute of Technology（IIT，美）
+
 
 > 欢迎志同道合的伙伴们加入`USDA`库开发维护，有意者可邮件Richie Bao。
 

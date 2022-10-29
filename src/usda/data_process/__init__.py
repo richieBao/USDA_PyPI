@@ -9,12 +9,17 @@ from ._osm_dataprocess import osmHandler
 from ._osm_dataprocess import save_osm
 
 from ._geoinfodata_conversion import pts2raster
+from ._landsat_dataprocess import LandsatMTL_info
+from ._raster_dataprocess import raster_clip
+from ._image_pixel_sampling_zoom import image_pixel_sampling
 
 __all__ = [
     "shpPolygon2OsmosisTxt",
     "osmHandler",
     "save_osm",
     "pts2raster",
+    "raster_clip",
+    "image_pixel_sampling",
     ]
 
 

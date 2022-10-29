@@ -148,6 +148,37 @@ def test_correlationAnalysis_multivarialbe():
     print("correlation:")
     print(correlation)    
     
+def test_k_neighbors_entire():
+    import numpy as np
+    xy= np.array([[23714. ,   364.7],
+                  [21375. ,   331.4],
+                  [32355. ,   353.7],
+                  [35503. ,   273.3]])
+    neighbors=machine_learning.k_neighbors_entire(xy,k=3)
+    print(neighbors)
+    
+def test_vector_plot_3d():
+    import matplotlib.pyplot as plt
+    from sympy.vector.coordsysrect import CoordSys3D
+    from sympy.vector.vector import Vector, BaseVector
+    from sympy.vector import Vector
+    
+    fig, ax=plt.subplots(figsize=(12,12))
+    ax=fig.add_subplot( projection='3d')
+        
+    # 定义坐标系统，及打印向量v1=3*i+4*j+5*k
+    C=CoordSys3D('C')
+    i, j, k = C.base_vectors()
+    v1=3*i+4*j+5*k
+    v1_origin=Vector.zero
+    maths.vector_plot_3d(ax,C,v1_origin,v1,color='r',label='vector',arrow_length_ratio=0.1)
+    ax.legend()
+    ax.view_init(20,20) # 可以旋转图形的角度，方便观察
+    plt.show()
+    
+def test_image_pixel_sampling():
+    help(data_process.image_pixel_sampling)    
+        
 
 if __name__=="__main__":
     print(dir(usda))    
@@ -165,5 +196,6 @@ if __name__=="__main__":
     # test_ANOVA()
     # test_confidenceInterval_estimator_LR()
     # test_correlationAnalysis_multivarialbe()
-    
-    
+    # test_k_neighbors_entire()
+    # test_vector_plot_3d()
+    # test_image_pixel_sampling()

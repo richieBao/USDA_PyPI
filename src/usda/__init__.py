@@ -14,8 +14,11 @@ __all__ = [
     "datasets",
     "database",
     "utils",
-    "charts",
+    "data_visualization",
     "stats",
     "data_process",
+    "models",
+    "maths",
+    "indices",
     ]
 
