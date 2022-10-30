@@ -16,6 +16,9 @@ from ._curve_segmentation import curve_segmentation_1DConvolution
 from ._sir_model import SIR_deriv
 from ._sir_model import convolution_diffusion_img
 from ._sir_model import SIR_spatialPropagating
+from ._superpixel_segmentation import superpixel_segmentation_Felzenszwalb
+from ._superpixel_segmentation import superpixel_segmentation_quickshift
+from ._superpixel_segmentation import multiSegs_stackStatistics
 
 __all__=[
     "k_neighbors_entire",
@@ -28,6 +31,9 @@ __all__=[
     "curve_segmentation_1DConvolution"
     "SIR_deriv",
     "convolution_diffusion_img",
+    "superpixel_segmentation_Felzenszwalb",
+    "superpixel_segmentation_quickshift",
+    "multiSegs_stackStatistics",
     ]
 
 

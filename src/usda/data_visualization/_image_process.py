@@ -9,6 +9,8 @@ import numpy as np
 
 from statistics import multimode
 from tqdm import tqdm  
+from PIL import Image
+
 
 def image_exposure(img_bands,percentile=(2,98)):
     '''
@@ -64,3 +66,24 @@ def downsampling_blockFreqency(array_2d,blocksize=[10,10]):
     downsample=np.array(blockFrenq_list).swapaxes(0,1)
     
     return downsample 
+
+def img_rescale(img_path,scale):
+    '''
+    function - 读取与压缩图像，返回2维度数组
+    
+    Params:
+        img_path - 待处理图像路径；lstring
+        scale - 图像缩放比例因子；float
+    
+    Returns:
+        img_3d - 返回三维图像数组；ndarray        
+        img_2d - 返回二维图像数组；ndarray
+    '''
+
+    img=Image.open(img_path) # 读取图像为数组，值为RGB格式0-255  
+    img_resize=img.resize([int(scale * s) for s in img.size] ) # 传入图像的数组，调整图片大小
+    img_3d=np.array(img_resize)
+    h, w, d=img_3d.shape
+    img_2d=np.reshape(img_3d, (h*w, d))  # 调整数组形状为2维
+
+    return img_3d,img_2d

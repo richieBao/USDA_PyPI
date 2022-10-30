@@ -14,6 +14,9 @@ from ._base import baiduPOI_dataCrawler
 from ._base import baiduPOI_dataCrawler_circle
 from ._base import baiduPOI_batchCrawler
 from ._dataset_info import KITTI_info
+from ._rs_image import Sentinel2_bandFNs
+from ._kml_info import kml_coordiExtraction
+from ._img_info import img_exif_info
 
 __all__ = [
     "load_sales_data_cartoon_database",
@@ -24,7 +27,10 @@ __all__ = [
     "baiduPOI_dataCrawler",
     "baiduPOI_dataCrawler_circle",
     "baiduPOI_batchCrawler",
-    "KITTI_info"
+    "KITTI_info",
+    "Sentinel2_bandFNs",
+    "kml_coordiExtraction",
+    "img_exif_info",
     ]
 
 
