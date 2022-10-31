@@ -19,6 +19,13 @@ from ._sir_model import SIR_spatialPropagating
 from ._superpixel_segmentation import superpixel_segmentation_Felzenszwalb
 from ._superpixel_segmentation import superpixel_segmentation_quickshift
 from ._superpixel_segmentation import multiSegs_stackStatistics
+from ._bow_feature_builder import feature_builder_BOW
+from ._label_encoder import df_multiColumns_LabelEncoder
+from ._entropy import entropy_compomnent
+from ._entropy import IG
+from ._decision_tree import decisionTree_structure
+from ._random_forest_classifier import ERF_trainer
+from ._image_tag_extractor import ImageTag_extractor
 
 __all__=[
     "k_neighbors_entire",
@@ -34,6 +41,13 @@ __all__=[
     "superpixel_segmentation_Felzenszwalb",
     "superpixel_segmentation_quickshift",
     "multiSegs_stackStatistics",
+    "feature_builder_BOW",
+    "df_multiColumns_LabelEncoder",
+    "entropy_compomnent",
+    "IG",
+    "decisionTree_structure",
+    "ERF_trainer",
+    "ImageTag_extractor",
     ]
 
 

@@ -15,6 +15,7 @@ from ._image_pixel_sampling_zoom import image_pixel_sampling
 
 from ._tiler_calculation import deg2num
 from ._tiler_calculation import centroid
+from ._kitti_dataprocess import KITTI_info2sqlite
 
 __all__ = [
     "shpPolygon2OsmosisTxt",
@@ -25,6 +26,7 @@ __all__ = [
     "image_pixel_sampling",
     "deg2num",
     "centroid",
+    "KITTI_info2sqlite",
     ]
 
 

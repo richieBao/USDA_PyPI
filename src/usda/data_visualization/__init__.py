@@ -18,6 +18,7 @@ from ._raster_show import bands_show
 from ._image_process import image_exposure
 from ._image_process import downsampling_blockFreqency
 from ._image_process import img_rescale
+from ._image_process import imgs_compression_cv
 from ._raster_percentile_slider import percentile_slider
 from ._imgs_show import img_struc_show
 from ._imgs_show import plotly_scatterMapbox
@@ -37,6 +38,7 @@ from ._imgs_layout_show import imgs_layoutShow
 from ._imgs_layout_show import imgs_layoutShow_FPList
 from ._img_theme_color import img_theme_color
 from ._img_theme_color import themeColor_impression
+
 
 __all__ = [
     "plotly_table",
@@ -67,6 +69,7 @@ __all__ = [
     "img_rescale",
     "img_theme_color",
     "themeColor_impression",
+    "imgs_compression_cv",
     ]
 
 

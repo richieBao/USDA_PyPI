@@ -11,6 +11,11 @@ from statistics import multimode
 from tqdm import tqdm  
 from PIL import Image
 
+from pathlib import Path
+import cv2 as cv
+import os
+import pandas as pd   
+
 
 def image_exposure(img_bands,percentile=(2,98)):
     '''
@@ -87,3 +92,40 @@ def img_rescale(img_path,scale):
     img_2d=np.reshape(img_3d, (h*w, d))  # 调整数组形状为2维
 
     return img_3d,img_2d
+
+def imgs_compression_cv(imgs_root,imwrite_root,imgsPath_fp,gap=1,png_compression=9,jpg_quality=100):
+    '''
+    function - 使用OpenCV的方法压缩保存图像    
+    
+    Params:
+        imgs_root - 待处理的图像文件根目录；string
+        imwrite_root - 图像保存根目录；string
+        gap - 无人驾驶场景下的图像通常是紧密连续的，可以剔除部分图像避免干扰， 默认值为1；int
+        png_compression - png格式压缩值，默认为9；int
+        jpg_quality - jpg格式压缩至，默认为100。for jpeg only. 0 - 100 (higher means better)；int
+        png_compression: For png only. 0 - 9 (higher means a smaller size and longer compression time):int
+        
+    Returns:
+        imgs_save_fp - 保存压缩图像文件路径列表；list(string)
+    ''' 
+    
+    if not os.path.exists(imwrite_root):
+        os.makedirs(imwrite_root)
+    
+    imgs_root=Path(imgs_root)
+    imgs_fp=[p for p in imgs_root.iterdir()][::gap]
+    imgs_save_fp=[]
+    for img_fp in tqdm(imgs_fp):
+        img_save_fp=str(Path(imwrite_root).joinpath(img_fp.name))
+        img=cv.imread(str(img_fp ))
+        if img_fp.suffix=='.png':
+            cv.imwrite(img_save_fp,img,[int(cv.IMWRITE_PNG_COMPRESSION), png_compression])
+            imgs_save_fp.append(img_save_fp)
+        elif img_fp.suffix=='.jpg':
+            cv.imwrite(img_save_fp,img,[int(cv.IMWRITE_JPEG_QUALITY), jpg_quality])
+            imgs_save_fp.append(strimg_save_fp)
+        else:
+            print("Only .jpg and .png format files are supported.")
+   
+    pd.DataFrame(imgs_save_fp,columns=['imgs_fp']).to_pickle(imgsPath_fp)
+    return imgs_save_fp

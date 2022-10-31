@@ -14,6 +14,7 @@ from ._base import baiduPOI_dataCrawler
 from ._base import baiduPOI_dataCrawler_circle
 from ._base import baiduPOI_batchCrawler
 from ._dataset_info import KITTI_info
+from ._dataset_info import KITTI_info_gap
 from ._rs_image import Sentinel2_bandFNs
 from ._kml_info import kml_coordiExtraction
 from ._img_info import img_exif_info
