@@ -27,6 +27,7 @@ __all__ = [
     "deg2num",
     "centroid",
     "KITTI_info2sqlite",
+    "LandsatMTL_info",
     ]
 
 

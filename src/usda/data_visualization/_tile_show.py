@@ -4,7 +4,6 @@ Created on Sun Oct 30 14:30:37 2022
 
 @author: richie bao
 """
-%matplotlib inline
 import matplotlib.pyplot as plt
 import math,os
 import numpy as np

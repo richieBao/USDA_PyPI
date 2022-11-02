@@ -55,10 +55,10 @@ def data_division(data,division,right=True):
     return data_digitize,data_rgb
 
 def uniqueish_color():
-    import matplotlib.pyplot as plt
-    import numpy as np
     '''
     function - 使用matplotlib提供的方法随机返回浮点型RGB
     '''
+    import matplotlib.pyplot as plt
+    import numpy as np
     
     return plt.cm.gist_ncar(np.random.random())

@@ -11,7 +11,7 @@ from ._dim1_convolution import dim1_convolution_SubplotAnimation
 from ._dim1_convolution import G_T_type_1
 from ._dim1_convolution import F_T_type_1
 from ._dim1_convolution import G_T_type_2
-from ._dim1_convolution import G_T_type_2
+from ._dim1_convolution import F_T_type_2
 from ._curve_segmentation import curve_segmentation_1DConvolution
 from ._sir_model import SIR_deriv
 from ._sir_model import convolution_diffusion_img
@@ -34,7 +34,7 @@ __all__=[
     "G_T_type_1",
     "F_T_type_1",
     "G_T_type_2",
-    "G_T_type_2",
+    "F_T_type_2",
     "curve_segmentation_1DConvolution"
     "SIR_deriv",
     "convolution_diffusion_img",
@@ -48,6 +48,7 @@ __all__=[
     "decisionTree_structure",
     "ERF_trainer",
     "ImageTag_extractor",
+    "SIR_spatialPropagating",
     ]
 
 

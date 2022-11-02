@@ -91,8 +91,6 @@ csv2df(poi_fn_csv)
     
     Returns:
         poi_df - DataFrame(pandas)
-
-None
 ```
 
 ## database.poi_csv2GeoDF_batch
@@ -110,6 +108,42 @@ poi_csv2GeoDF_batch(poi_paths, fields_extraction, save_path)
         
     Returns:
         poisInAll_gdf - 提取给定字段的POI数据；GeoDataFrame（GeoPandas）
-
-None
 ```
+
+?> 保存数据文件
+
+## database.save_as_json
+
+保存文件，将文件存储为json数据格式
+
+```python
+save_as_json(array, save_root, fn)
+    function - 保存文件,将文件存储为json数据格式
+    
+    Params:
+        array - 待保存的数组；array
+        save_root - 文件保存的根目录 ；string
+        fn - 保存的文件名；string
+        
+    Returns:
+        None
+```
+
+?> 读取MATLAB图表数据
+
+## database.read_MatLabFig_type_A
+
+读取MatLab的图表数据，类型-A
+
+```python
+read_MatLabFig_type_A(matLabFig_fp, plot=True)
+    function - 读取MatLab的图表数据，类型-A
+    
+    Params:
+        matLabFig_fp - MatLab的图表数据文件路径；string
+    
+    Returns:
+        fig_dic - 返回图表数据，（X,Y,Z）
+```
+
+

@@ -5,8 +5,8 @@ Created on Sat Oct 29 16:06:25 2022
 @author: richie bao
 """
 import matplotlib.pyplot as plt
-from data_generator import DataGenerator
-from knee_locator import KneeLocator  
+from .data_generator import DataGenerator
+from .knee_locator import KneeLocator  
 
 def knee_lineGraph(x,y):
     '''

@@ -155,3 +155,67 @@ duration(start_time)
     Params:
     start_time - 开始时间；datatime
 ```
+
+## utils.fp_sort
+
+按照文件名中的数字排序文件列表
+
+```python
+fp_sort(fp_list, str_pattern, prefix='')
+    function - 按照文件名中的数字排序文件列表
+    
+    Params:
+        fp_list - 文件列表；list(string)
+        str_pattern - 字符串匹配模式，用于提取文件名中的数字；re.compile()
+        prefix - 字典数据格式的键名前缀；string
+    
+    Returns:
+        fn_sort - 返回排序后的列表；list(string)
+        fn_dict - 返回字典；dict
+```
+
+## utils.variable_name
+
+将变量名转换为字符串
+
+```python
+variable_name(var)
+    function - 将变量名转换为字符串
+    
+    Parasm:
+        var - 变量名
+```
+
+## utils.lst_index_split
+
+根据索引，分割列表
+
+```python
+lst_index_split(lst, args)
+    function - 根据索引，分割列表
+    
+    transfer:https://codereview.stackexchange.com/questions/47868/splitting-a-list-by-indexes/47877
+```
+
+## utils.flatten_lst
+
+嵌套列表展平
+
+```python
+<lambda> lambda lst
+```
+
+## utils.nestedlst_insert
+
+嵌套列表，子列表前后插值
+
+```python
+nestedlst_insert(nestedlst)
+    function - 嵌套列表，子列表前后插值
+    
+    Params:
+        nestedlst - 嵌套列表；list
+    
+    Returns:
+        nestedlst - 分割后的列表；list
+```

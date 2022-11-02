@@ -155,3 +155,88 @@ baiduPOI_batchCrawler(poi_config_para)
         None
 ```
 
+?> KITTI数据集相关信息提取
+
+## datasets.KITTI_info
+
+读取KITTI文件信息，1-包括经纬度，惯性导航系统信息等的.txt文件，2-包含时间戳的.txt文件
+
+```python
+KITTI_info(KITTI_info_fp, timestamps_fp)
+    function - 读取KITTI文件信息，1-包括经纬度，惯性导航系统信息等的.txt文件，2-包含时间戳的.txt文件
+    
+    Params:
+        KITTI_info_fp - 数据文件路径；string
+        timestamps_fp - 时间戳文件路径；string
+        
+    Returns:
+        drive_info - 返回数据；DataFrame
+```
+
+## datasets.KITTI_info_gap
+
+读取KITTI文件信息，1-包括经纬度，惯性导航系统信息等的.txt文件。只返回经纬度、海拔信息
+
+```python
+KITTI_info_gap(KITTI_info_fp, save_fp, gap=1)
+    function - 读取KITTI文件信息，1-包括经纬度，惯性导航系统信息等的.txt文件。只返回经纬度、海拔信息
+    
+    Params:
+        KITTI_info_fp - 数据文件路径；string
+        save_fp - 文件保存路径；string
+        gap - 间隔连续剔除部分图像避免干扰， 默认值为1；int
+        
+    Returns:
+        drive_info_coordi - 返回经纬度和海拔信息；DataFrame
+```
+
+?> Sentinel-2 遥感影像信息
+
+## datasets.Sentinel2_bandFNs
+
+获取sentinel-2波段文件路径，和打印主要信息
+
+```python
+Sentinel2_bandFNs(MTD_MSIL2A_fn)
+    funciton - 获取sentinel-2波段文件路径，和打印主要信息
+    
+    Params:
+        MTD_MSIL2A_fn - MTD_MSIL2A 文件路径；string
+    
+    Returns:
+        band_fns_list - 波段相对路径列表；list(string)
+        band_fns_dict - 波段路径为值，反应波段信息的字段为键的字典；dict
+```
+
+---
+
+## datasets.kml_coordiExtraction
+
+提取.kml文件中的坐标信息
+
+```python
+kml_coordiExtraction(kml_pathDict)
+    function - 提取.kml文件中的坐标信息
+    
+    Params:
+        kml_pathDict - .kml文件路径字典。文件夹名为键，值为包含该文件夹下所有文件名的列表。使用filePath_extraction()函数提取。
+    
+    Returns:
+        kml_coordi_dict - 返回坐标信息；dict
+```
+
+## datasets.img_exif_info
+
+提取数码照片的属性信息和拍摄数据，即可交换图像文件格式（Exchangeable image file format，Exif）
+
+```python
+img_exif_info(img_fp, printing=True)
+    function - 提取数码照片的属性信息和拍摄数据，即可交换图像文件格式（Exchangeable image file format，Exif）
+    
+    Params:
+        img_fp - 一个图像的文件路径；string
+        printing - 是否打印。The default is True；bool
+        
+    Returns:
+        exif_ - 提取的照片信息结果；dict
+```

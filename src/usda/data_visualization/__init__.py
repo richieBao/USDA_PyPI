@@ -38,6 +38,7 @@ from ._imgs_layout_show import imgs_layoutShow
 from ._imgs_layout_show import imgs_layoutShow_FPList
 from ._img_theme_color import img_theme_color
 from ._img_theme_color import themeColor_impression
+from ._chart_custom import boxplot_custom
 
 
 __all__ = [
@@ -70,6 +71,10 @@ __all__ = [
     "img_theme_color",
     "themeColor_impression",
     "imgs_compression_cv",
+    "boxplot_custom",
+    "SIFT_detection",
+    "feature_matching",
+    "segMasks_layoutShow",
     ]
 
 

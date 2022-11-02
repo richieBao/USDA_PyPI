@@ -123,3 +123,131 @@ pts2raster(pts_shp, raster_path, cellSize, field_name=False)
         返回读取已经保存的栅格数据；array
 ```
 
+## data_process.raster_clip
+
+给定裁切边界，批量裁切栅格数据
+
+```python
+raster_clip(raster_fp, clip_boundary_fp, save_path)
+    function - 给定裁切边界，批量裁切栅格数据
+    
+    Params:
+        raster_fp - 待裁切的栅格数据文件路径（.tif）；string
+        clip_boundary - 用于裁切的边界（.shp，WGS84，无投影），与栅格具有相同的坐标投影系统；string
+    
+    Returns:
+        rasterClipped_pathList - 裁切后的文件路径列表；list(string)
+```
+
+## data_process.image_pixel_sampling
+
+图像采样工具
+
+```python
+class image_pixel_sampling(builtins.object)
+ |  image_pixel_sampling(mainframe, rgb_band, img_path=0, landsat_stack=0)
+ |  
+ |  图像采样工具
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, mainframe, rgb_band, img_path=0, landsat_stack=0)
+ |      读取图像
+ |      
+ |      例如：    
+ |      workspace="./data"
+ |      img_fp=os.path.join(workspace,'a_191018_exposure_rescaled.npy')
+ |      landsat_stack=np.load(img_fp)        
+ |      
+ |      rgb_band=[3,2,1]          
+ |      mainframe=tk.Tk()
+ |      app=image_pixel_sampling(mainframe, rgb_band=rgb_band,landsat_stack=landsat_stack)
+ |      mainframe.mainloop()
+ |      
+ |      import pickle as pkl
+ |      with open(os.path.join(workspace,r'sampling_position.pkl'),'wb') as handle:
+ |          pkl.dump(app.MW.sample_coordi_recover,handle)
+ |  
+ |  landsat_stack_array2img(self, landsat_stack, rgb_band)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+```
+
+## data_process.deg2num
+
+将经纬度坐标转换为指定zoom level缩放级别下，金子塔中瓦片的坐标
+
+```python
+deg2num(lat_deg, lon_deg, zoom)
+    code migration
+    function - 将经纬度坐标转换为指定zoom level缩放级别下，金子塔中瓦片的坐标。
+    
+    Params:
+        lat_deg - 纬度；float
+        lon_deg - 经度；float
+        zoom - 缩放级别；int
+        
+    Returns:
+        xtile - 金子塔瓦片x坐标；int
+        ytile - 金子塔瓦片y坐标；int
+```
+
+## data_process.centroid
+
+根据获取的地图边界坐标[左下角经度，左下角纬度，右上角经度，右上角维度]计算中心点坐标
+
+```python
+centroid(bounds)
+    code migration
+    function - 根据获取的地图边界坐标[左下角经度，左下角纬度，右上角经度，右上角维度]计算中心点坐标
+    
+    Params:
+        bounds - [左下角经度，左下角纬度，右上角经度，右上角维度]；numerical
+        
+    Returns:
+        lat - 边界中心点维度；float
+        lng - 边界中心点经度；float
+```
+
+## data_process.KITTI_info2sqlite
+
+将KITTI图像路径与经纬度信息对应起来，并存入SQLite数据库
+
+```python
+KITTI_info2sqlite(imgsPath_fp, info_fp, replace_path, db_fp, table, method='fail')
+    function - 将KITTI图像路径与经纬度信息对应起来，并存入SQLite数据库
+    
+    Params:
+        imgsPath_fp - 图像文件路径；string
+        info_fp - 图像信息文件路径；string
+        replace_path - 替换路径名；string
+        db_fp - SQLite数据库路径；string
+        table - 数据库表名；string
+        method - 包括fail, replace, append等。The default is'fail'；string    
+    
+    Returns:
+        None
+```
+
+## data_process.LandsatMTL_info
+
+读取landsat *_MTL.txt文件，提取需要的信息
+
+```python
+LandsatMTL_info(fp)
+    function - 读取landsat *_MTL.txt文件，提取需要的信息
+    
+    Paras:
+        fp - Landsat 文件根目录；string
+    
+    return:
+        band_fp_dic - 返回各个波段的路径字典；dict
+        Landsat_para - 返回Landsat 参数 ；dict
+```
