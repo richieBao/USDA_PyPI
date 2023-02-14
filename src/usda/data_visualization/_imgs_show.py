@@ -7,9 +7,11 @@ Created on Fri Oct 28 18:30:52 2022
 from skimage import io
 from skimage.morphology import square,rectangle
 import matplotlib.pyplot as plt  
+import matplotlib
 
 import pandas as pd
 import plotly.graph_objects as go 
+import numpy as np
 
 def img_struc_show(img_fp,val='R',figsize=(7,7)):
     '''
@@ -61,3 +63,53 @@ def plotly_scatterMapbox(df,**kwargs):
             'center': {'lon': field['center_lon'], 'lat':field['center_lat']},
             'zoom': 16})    
     fig.show()    
+    
+def imshow_label2darray(array_2d,label=True,**kwargs):
+    '''
+    打印2维数组为栅格形式，并标注每个单元（像素位置）的值；cmap可配置为随机颜色
+
+    Parameters
+    ----------
+    array_2d : 2darray
+        2维数组.
+    label : bool, optional
+        是否标注单元值. The default is True.
+    **kwargs : kwargs
+        图表打印参数，默认值有：
+        args=dict(figsize=(10,10),
+                  cmap='Accent',
+                  text_color='white',
+                  dtype='int',
+                  random_seed=30).
+
+    Returns
+    -------
+    None.
+
+    '''    
+    args=dict(figsize=(10,10),
+              cmap='Accent',
+              text_color='white',
+              dtype='int',
+              random_seed=None)    
+    args.update(kwargs)
+    
+    if args['random_seed']:
+        np.random.seed(args['random_seed'])
+        cmap=matplotlib.colors.ListedColormap (np.random.rand(256,3))
+    else:
+        cmap=args['cmap']
+    
+    fig,ax=plt.subplots(1,1,figsize=args['figsize']) 
+    ax.imshow(array_2d,cmap=cmap)
+    
+    if label:
+        nx,ny=array_2d.shape
+        x=np.linspace(0, nx-1, nx)
+        y=np.linspace(0, ny-1, ny)
+        xv, yv=np.meshgrid(x, y)   
+        
+        xyv=np.stack((xv,yv,array_2d),axis=2).reshape(-1,3).astype(args['dtype'])
+        for x,y,i in xyv: 
+            ax.text(x=x ,y=y, s=i,ha='center', va='center',color=args['text_color'])    
+    plt.show()

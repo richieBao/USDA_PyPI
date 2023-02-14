@@ -29,3 +29,4 @@ def raster_clip(raster_fp,clip_boundary_fp,save_path):
     rasterClipped_pathList=es.crop_all(raster_fp, save_path, clip_bound_proj, overwrite=True) # 对所有波段band执行裁切
     print("clipping finished.")
     return rasterClipped_pathList
+    

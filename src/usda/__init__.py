@@ -17,8 +17,10 @@ __all__ = [
     "data_visualization",
     "stats",
     "data_process",
+    "geodata_process",
     "models",
     "maths",
     "indices",
+    "pattern_signature",
     ]
 

@@ -17,6 +17,8 @@ from ._tiler_calculation import deg2num
 from ._tiler_calculation import centroid
 from ._kitti_dataprocess import KITTI_info2sqlite
 
+from ._quadrat import pt_coordi_transform
+
 __all__ = [
     "shpPolygon2OsmosisTxt",
     "osmHandler",
@@ -28,6 +30,7 @@ __all__ = [
     "centroid",
     "KITTI_info2sqlite",
     "LandsatMTL_info",
+    "pt_coordi_transform",
     ]
 
 

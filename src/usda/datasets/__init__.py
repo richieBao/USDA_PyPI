@@ -11,6 +11,8 @@ from ._base import load_test_score_cartoon_statistic
 from ._base import baiduPOI_dataCrawler
 from ._base import baiduPOI_dataCrawler_circle
 from ._base import baiduPOI_batchCrawler
+from ._base import generate_categorical_2darray
+
 from ._dataset_info import KITTI_info
 from ._dataset_info import KITTI_info_gap
 from ._rs_image import Sentinel2_bandFNs
@@ -30,6 +32,7 @@ __all__ = [
     "Sentinel2_bandFNs",
     "kml_coordiExtraction",
     "img_exif_info",
+    "generate_categorical_2darray",
     ]
 
 

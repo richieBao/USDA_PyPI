@@ -55,6 +55,9 @@ src/usda/datasets/data/bowling_contest_cartoon_statistic.pickle
 src/usda/datasets/data/ramen_price_cartoon_statistic.pickle
 src/usda/datasets/data/sales_data_cartoon_database.pickle
 src/usda/datasets/data/test_score_cartoon_statistic.pickle
+src/usda/geodata_process/__init__.py
+src/usda/geodata_process/_quadrat.py
+src/usda/geodata_process/_raster_dataprocess.py
 src/usda/indices/__init__.py
 src/usda/indices/_rs_indices.py
 src/usda/maths/__init__.py
@@ -73,6 +76,13 @@ src/usda/models/_neighbors.py
 src/usda/models/_random_forest_classifier.py
 src/usda/models/_sir_model.py
 src/usda/models/_superpixel_segmentation.py
+src/usda/pattern_signature/__init__.py
+src/usda/pattern_signature/_distance_metric.py
+src/usda/pattern_signature/_grid_neighbors_xy_finder.py
+src/usda/pattern_signature/_img_region_growing.py
+src/usda/pattern_signature/_pattern_module.py
+src/usda/pattern_signature/_signature.py
+src/usda/pattern_signature/_signature2distance_integration.py
 src/usda/stats/__init__.py
 src/usda/stats/_descriptive_stats.py
 src/usda/stats/_kde.py
@@ -81,6 +91,7 @@ src/usda/stats/_regression.py
 src/usda/utils/__init__.py
 src/usda/utils/_bunch.py
 src/usda/utils/_coordinate_transformation.py
+src/usda/utils/_df_process.py
 src/usda/utils/_displayable_path.py
 src/usda/utils/_file_structure.py
 src/usda/utils/_gadgets.py

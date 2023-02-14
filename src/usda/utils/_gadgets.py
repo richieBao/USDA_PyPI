@@ -2,7 +2,7 @@
 """
 Created on Fri Oct 28 08:25:20 2022
 
-@author: richi
+@author: richie bao
 """
 
 def variable_name(var):

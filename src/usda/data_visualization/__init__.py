@@ -3,6 +3,8 @@
 Created on Sun Aug 21 15:11:00 2022
 
 @author: Richie Bao-caDesign设计(cadesign.cn)
+
+dependency: rasterio, earthpy, cv2, plotly (including for JupyterLab),rio_tiler
 """
 from ._table_show import plotly_table
 from ._table_show import print_html
@@ -21,6 +23,7 @@ from ._image_process import img_rescale
 from ._image_process import imgs_compression_cv
 from ._raster_percentile_slider import percentile_slider
 from ._imgs_show import img_struc_show
+from ._imgs_show import imshow_label2darray
 from ._imgs_show import plotly_scatterMapbox
 from ._gif_show import animated_gif_show
 from ._img_feature_extraction import Gaussion_blur
@@ -55,6 +58,7 @@ __all__ = [
     "percentile_slider",
     "uniqueish_color",
     "img_struc_show",
+    "imshow_label2darray",
     "animated_gif_show",
     "Gaussion_blur",
     "STAR_detection",

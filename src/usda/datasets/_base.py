@@ -14,6 +14,8 @@ import csv
 import pathlib
 from ..utils import _coordinate_transformation as cc
 from tqdm import tqdm
+import numpy as np
+from scipy import linalg, ndimage
 
 DATA_MODULE="usda.datasets.data"
 
@@ -278,6 +280,65 @@ def baiduPOI_batchCrawler(poi_config_para):
         partition=poi_config_para['partition']
         page_num_range=poi_config_para['page_num_range']
         util_A.baiduPOI_dataCrawler(query_dic,bound_coordinate,partition,page_num_range,poi_fn_list=[poi_fn_csv,poi_fn_json]) 
+        
+
+def generate_categorical_2darray(**kwargs):    
+    '''
+    生成具有一定聚类二维空间分布特征的分类属性矩阵数据
+    ref:Feature agglomeration vs. univariate selection, https://scikit-learn.org/stable/auto_examples/cluster/plot_feature_agglomeration_vs_univariate_selection.html#sphx-glr-auto-examples-cluster-plot-feature-agglomeration-vs-univariate-selection-py
+
+    Parameters
+    ----------
+    **kwargs : kwargs
+        默认值为：
+        args=dict(
+            size=16,二维矩阵大小；numerical
+            n_samples=3, 样本数量；int
+            seed=None,随机种子；int
+            snr=5.0,噪声系数；numerical
+            )  .
+
+    Returns
+    -------
+    X : ndarray
+        样本数组.
+    y : 1darray
+        类标.
+
+    '''
+    
+    args=dict(
+        size=16,
+        n_samples=3,
+        seed=None,
+        snr=5.0,
+        )    
+    
+    args['roi_size']=args['size']-1
+    args.update(kwargs)
+    
+    roi_size=args['roi_size']
+    size=args['size']
+    
+    if args['seed']:
+        np.random.seed(args['seed'])
+        
+    coef=np.zeros((size, size))
+    coef[0:roi_size, 0:roi_size]=-1.0
+    coef[-roi_size:, -roi_size:]=1.0
+    
+    X=np.random.randn(args['n_samples'], size**2)
+    for x in X:  # smooth data
+        x[:]=ndimage.gaussian_filter(x.reshape(size, size), sigma=1.0).ravel()
+    X -= X.mean(axis=0)    
+    X /= X.std(axis=0)
+    y=np.dot(X, coef.ravel())
+    
+    noise=np.random.randn(y.shape[0])
+    noise_coef=(linalg.norm(y, 2) / np.exp(args['snr'] / 20.0)) / linalg.norm(noise, 2)
+    y += noise_coef * noise
+    
+    return X,y        
  
 
 if __name__=="__main__":

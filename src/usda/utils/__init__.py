@@ -18,6 +18,10 @@ from ._gadgets import lst_index_split
 from ._gadgets import flatten_lst
 from ._gadgets import nestedlst_insert
 
+from ._df_process import complete_dataframe_rowcols
+from ._df_process import xy_to_matrix
+from ._df_process import matrix_to_xy
+
 __all__=[
     "Bunch",
     "DisplayablePath",
@@ -29,4 +33,7 @@ __all__=[
     "lst_index_split",
     "flatten_lst",
     "nestedlst_insert",
+    "complete_dataframe_rowcols",
+    "xy_to_matrix",
+    "matrix_to_xy",
     ]
