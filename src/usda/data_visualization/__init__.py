@@ -42,6 +42,9 @@ from ._imgs_layout_show import imgs_layoutShow_FPList
 from ._img_theme_color import img_theme_color
 from ._img_theme_color import themeColor_impression
 from ._chart_custom import boxplot_custom
+from ._chart_custom import  histogram_3d
+
+from ._gdf_plot import gdf_plot_annotate
 
 
 __all__ = [
@@ -79,6 +82,8 @@ __all__ = [
     "SIFT_detection",
     "feature_matching",
     "segMasks_layoutShow",
+    "histogram_3d",
+    "gdf_plot_annotate",
     ]
 
 

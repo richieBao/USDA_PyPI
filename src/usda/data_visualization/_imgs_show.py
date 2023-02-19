@@ -91,7 +91,9 @@ def imshow_label2darray(array_2d,label=True,**kwargs):
               cmap='Accent',
               text_color='white',
               dtype='int',
-              random_seed=None)    
+              random_seed=None,
+              fontsize=5,
+              )    
     args.update(kwargs)
     
     if args['random_seed']:
@@ -111,5 +113,5 @@ def imshow_label2darray(array_2d,label=True,**kwargs):
         
         xyv=np.stack((xv,yv,array_2d),axis=2).reshape(-1,3).astype(args['dtype'])
         for x,y,i in xyv: 
-            ax.text(x=x ,y=y, s=i,ha='center', va='center',color=args['text_color'])    
+            ax.text(x=x ,y=y, s=i,ha='center', va='center',color=args['text_color'],fontsize=args['fontsize'])    
     plt.show()

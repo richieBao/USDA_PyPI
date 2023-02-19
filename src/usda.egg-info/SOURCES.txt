@@ -21,6 +21,7 @@ src/usda/data_visualization/__init__.py
 src/usda/data_visualization/_chart_custom.py
 src/usda/data_visualization/_colors.py
 src/usda/data_visualization/_dynamic_streetView_visual_perception.py
+src/usda/data_visualization/_gdf_plot.py
 src/usda/data_visualization/_gif_show.py
 src/usda/data_visualization/_graphic_drawing.py
 src/usda/data_visualization/_image_process.py

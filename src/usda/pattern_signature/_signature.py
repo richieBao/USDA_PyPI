@@ -31,7 +31,7 @@ def lexsort_based(data):
     row_mask=np.append([True],np.any(np.diff(sorted_data,axis=0),1))
     return sorted_data[row_mask]
 
-def class_clumpSize_histogram(class_2darray,clump_2darray,base=2):
+def class_clumpSize_histogram(class_2darray,clump_2darray,base=2, right=False):
     '''
     计算类/簇大小 直方图 （class/clump-size histogram），其中簇需预先由cc3d库的connected_components等方法计算
 
@@ -53,7 +53,8 @@ def class_clumpSize_histogram(class_2darray,clump_2darray,base=2):
     
     unique, counts=np.unique(clump_2darray, return_counts=True)
     class_clump=np.stack((class_2darray,clump_2darray),axis=2)
-    class_clump_mapping=np.sort(lexsort_based(class_clump.reshape(-1,2)),axis=0) 
+    class_clump_mapping=lexsort_based(class_clump.reshape(-1,2)).tolist()
+    class_clump_mapping.sort(key=lambda x:x[0])
     counts_max=max(counts)
     bins=[]
     c=itertools.count()
@@ -65,7 +66,7 @@ def class_clumpSize_histogram(class_2darray,clump_2darray,base=2):
         if val>counts_max:break
         
     bins.insert(0,0)      
-    inds=np.digitize(counts,bins)
+    inds=np.digitize(counts,bins,right=right)
     class_inds_mapping=dict(zip(unique,inds))
     clump_counts_mapping=dict(zip(unique,counts))                          
     func=lambda row:[row[0],class_inds_mapping[row[1]],clump_counts_mapping[row[1]]]

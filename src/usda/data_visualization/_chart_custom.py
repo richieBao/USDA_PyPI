@@ -5,6 +5,10 @@ Created on Wed Nov  2 14:11:37 2022
 @author: richie bao
 """
 import matplotlib.pyplot as plt
+from matplotlib import style
+from matplotlib import cm
+import matplotlib
+import numpy as np
 
 def boxplot_custom(data_dict,**args):
     '''
@@ -83,3 +87,92 @@ def boxplot_custom(data_dict,**args):
 
     plt.show()    
     return paras
+
+def histogram_3d(df,**kwargs):
+    '''
+    打印3维柱状图（直方图）
+
+    Parameters
+    ----------
+    df : DataFrame
+        待打印的矩阵（数组）.
+    **kwargs : kwargs
+        图表样式参数，默认为：
+        args=dict(dx=.3, # thickness of the bars
+                  dy=.3, # thickness of the bars
+                  figsize=(10,10),
+                  font_size=10,
+                  xlabel='X',
+                  ylabel='Y',
+                  zlabel='Z',
+                  pitch=45,
+                  roll=45,
+                  zoom=0.9,).
+
+    Returns
+    -------
+    None.
+
+    '''
+    # style.use('ggplot')
+    
+    args=dict(dx=.3,
+              dy=.3,
+              figsize=(10,10),
+              font_size=10,
+              xlabel='X',
+              ylabel='Y',
+              zlabel='Z',
+              pitch=45,
+              roll=45,
+              zoom=0.9,)
+    
+    args.update(kwargs)    
+    matplotlib.rcParams.update({'font.size': args['font_size']})
+    
+    # thickness of the bars
+    dx, dy=args['dx'], args['dy']
+    
+    # prepare 3d axes
+    fig=plt.figure(figsize=args['figsize'])
+    ax=fig.add_subplot(111, projection='3d')    
+    
+    # set up positions for the bars 
+    xpos=np.arange(df.shape[0])
+    ypos=np.arange(df.shape[1])    
+    
+    
+    # set the ticks in the middle of the bars
+    ax.set_xticks(xpos + dx/2)
+    ax.set_yticks(ypos + dy/2)    
+    
+    # create meshgrid 
+    # print xpos before and after this block if not clear
+    xpos, ypos=np.meshgrid(xpos, ypos)
+    xpos=xpos.flatten()
+    ypos=ypos.flatten()    
+    
+    # the bars starts from 0 attitude
+    zpos=np.zeros(df.shape).flatten()
+
+    # the bars' heights
+    dz=df.T.values.ravel()
+    colors=cm.rainbow(np.linspace(0.2, 1., xpos.ravel().shape[0]))    
+    
+    # plot 
+    ax.bar3d(xpos,ypos,zpos,dx,dy,dz,color=colors)
+
+    # put the column / index labels
+    ax.yaxis.set_ticklabels(df.columns)
+    ax.xaxis.set_ticklabels(df.index)    
+    
+    # name the axes
+    ax.set_xlabel(args['xlabel'])
+    ax.set_ylabel(args['ylabel'])
+    ax.set_zlabel(args['zlabel'])
+
+    ax.view_init(args['pitch'],args['roll']) 
+    ax.set_box_aspect(aspect=None, zoom=args['zoom'])
+    # plt.tight_layout()
+    plt.show()        
+    

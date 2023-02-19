@@ -515,5 +515,3 @@ class Categorical_data_region_growing():
                     if(self.PassedAll()):
                         break
         self.SEGS=self.passedBy
-        
-        

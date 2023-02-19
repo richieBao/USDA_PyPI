@@ -17,7 +17,8 @@ from ._pattern_module import pattern_compare
 # from ._pattern_module import pattern_reference_distance
 from ._pattern_module import Pattern_segment_regionGrow
 from ._pattern_module import Categorical_data_region_growing
-from ._img_region_growing import  Img_regionGrow
+from ._img_region_growing import Img_regionGrow
+from ._img_region_growing import Img_gray_regionGrow
 
 __all__ = [
     "lexsort_based",
@@ -33,6 +34,7 @@ __all__ = [
     "Pattern_segment_regionGrow",
     "Categorical_data_region_growing",
     "Img_regionGrow",
+    "Img_gray_regionGrow",
     ]
 
 

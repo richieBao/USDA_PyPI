@@ -9,11 +9,15 @@ from ._quadrat import pt_on_quadrat
 from ._quadrat import rec_quadrats_gdf
 
 from ._raster_dataprocess import rio_read_subset
+from ._raster_dataprocess import raster2polygon
+from ._raster_dataprocess import raster_reprojection
 
 __all__ = [
     "pt_coordi_transform",
     "pt_on_quadrat",
     "rio_read_subset",
     "rec_quadrats_gdf",
+    "raster2polygon",
+    "raster_reprojection",
     ]
 

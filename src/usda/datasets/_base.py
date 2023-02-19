@@ -312,6 +312,7 @@ def generate_categorical_2darray(**kwargs):
         n_samples=3,
         seed=None,
         snr=5.0,
+        sigma=1.0,
         )    
     
     args['roi_size']=args['size']-1
@@ -322,6 +323,8 @@ def generate_categorical_2darray(**kwargs):
     
     if args['seed']:
         np.random.seed(args['seed'])
+    else:
+        np.random.seed()
         
     coef=np.zeros((size, size))
     coef[0:roi_size, 0:roi_size]=-1.0
@@ -329,7 +332,7 @@ def generate_categorical_2darray(**kwargs):
     
     X=np.random.randn(args['n_samples'], size**2)
     for x in X:  # smooth data
-        x[:]=ndimage.gaussian_filter(x.reshape(size, size), sigma=1.0).ravel()
+        x[:]=ndimage.gaussian_filter(x.reshape(size, size), sigma=args['sigma']).ravel()
     X -= X.mean(axis=0)    
     X /= X.std(axis=0)
     y=np.dot(X, coef.ravel())
