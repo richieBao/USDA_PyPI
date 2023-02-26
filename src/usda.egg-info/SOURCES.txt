@@ -31,6 +31,7 @@ src/usda/data_visualization/_imgs_layout_show.py
 src/usda/data_visualization/_imgs_show.py
 src/usda/data_visualization/_knee_line_graph.py
 src/usda/data_visualization/_moving_average_inflection.py
+src/usda/data_visualization/_panorama_show.py
 src/usda/data_visualization/_raster_percentile_slider.py
 src/usda/data_visualization/_raster_show.py
 src/usda/data_visualization/_stats_charts.py
@@ -53,8 +54,10 @@ src/usda/datasets/_kml_info.py
 src/usda/datasets/_rs_image.py
 src/usda/datasets/data/__init__.py
 src/usda/datasets/data/bowling_contest_cartoon_statistic.pickle
+src/usda/datasets/data/evaluation_criteria_raw_values.pickle
 src/usda/datasets/data/ramen_price_cartoon_statistic.pickle
 src/usda/datasets/data/sales_data_cartoon_database.pickle
+src/usda/datasets/data/sustainability_attributes4electricity_generation_tech.pickle
 src/usda/datasets/data/test_score_cartoon_statistic.pickle
 src/usda/geodata_process/__init__.py
 src/usda/geodata_process/_quadrat.py
@@ -97,3 +100,6 @@ src/usda/utils/_displayable_path.py
 src/usda/utils/_file_structure.py
 src/usda/utils/_gadgets.py
 src/usda/utils/_operating_time.py
+src/usda/weight/__init__.py
+src/usda/weight/_decision_rule.py
+src/usda/weight/_entropy_weight.py

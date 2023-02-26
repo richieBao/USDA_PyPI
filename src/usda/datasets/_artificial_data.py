@@ -7,6 +7,7 @@ Created on Thu Oct 13 20:11:47 2022
 import pandas as pd
 from datetime import datetime
 import pickle
+import numpy as np
 
 def sales_data_cartoon_database():    
     '''
@@ -73,12 +74,51 @@ def test_score_cartoon_statistic():
     test_score=pd.DataFrame.from_dict(test_score_dic)    
     with open("./data/test_score_cartoon_statistic.pickle",'wb') as f:
         pickle.dump(test_score,f,pickle.HIGHEST_PROTOCOL)        
-        print("dumped test_score_cartoon_statistic.")          
+        print("dumped test_score_cartoon_statistic.")    
         
+def evaluation_criteria_raw_values():
+    '''
+    来自于：Boroushaki, S. Entropy-Based Weights for MultiCriteria Spatial Decision-Making. Yearbook of the Association of Pacific Coast Geographers 79, 168–187 (2017).一文中的演示数据
+    用于说明信息熵权重
+
+    Returns
+    -------
+    None.
+
+    '''
+    evaluation_criteria_raw_values_dict=dict(slope=[9,20,10,16],
+                                             distance2water=[2.2,3.2,2.0,3.5],
+                                             elevation=[5700,3100,4900,3600],
+                                             distance2population=[1.2,1.3,1.2,1.4])
+    evaluation_criteria_raw_values_df=pd.DataFrame(evaluation_criteria_raw_values_dict)    
+    evaluation_criteria_raw_values_df.to_pickle("./data/evaluation_criteria_raw_values.pickle")  
+    
+def sustainability_attributes4electricity_generation_tech():
+    '''
+    来自于： Şahin, M. A comprehensive analysis of weighting and multicriteria methods in the context of sustainable energy. International Journal of Environmental Science and Technology 18, 1591–1616 (2021).
+
+    Returns
+    -------
+    None.
+
+    '''
+    array=np.array([[156, 0, 0, 0.0003, 1.6, 499, 0.11, 0.0721, 30.34, 49, 85, 30],
+                    [92.5, 0, 0, 0.0004, 1.6, 888, 0.11, 0.1200, 37.2, 38.5, 85, 40],
+                    [41.34, 7.3, 2.3, 0.004, 20, 26, 0.27, 0.0027, 19.7, 90, 35, 80],
+                    [73.19, 7.3, 3.7, 0.015, 0.001, 26, 0.17, 0.0019, 6.54, 34, 33, 25],
+                    [116.33, 10.5, 2.7, 0.05, 156, 170, 0.25, 0.0017, 2.44, 15, 90, 40],
+                    [160, 13.3, 6.7, 0.0003, 0.01, 85, 0.87, 0.0002, 2.56, 13, 18, 25]])
+
+    df=pd.DataFrame(array,index=['Natural_gas','Coal','Hydro','Wind_onshore','Geothermal','SolorPV'],columns=[f'C{i}' for i in range(1,13,1)])
+    df.to_pickle("./data/sustainability_attributes4electricity_generation_tech.pickle")              
+    
+    
         
 if __name__=="__main__":
     print("-"*50)
     # sales_data_cartoon_database()
     # ramen_price_cartoon_statistic()
     # bowling_contest_cartoon_statistic()
-    test_score_cartoon_statistic()
+    # test_score_cartoon_statistic()
+    # evaluation_criteria_raw_values()
+    sustainability_attributes4electricity_generation_tech()

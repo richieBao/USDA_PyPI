@@ -8,7 +8,7 @@ python setup.py sdist
 twine upload dist/usda-0.0.17.tar.gz
 """
 
-__version__ = "0.0.17"
+__version__ = "0.0.18"
 
 __all__ = [
     "datasets",
@@ -22,5 +22,6 @@ __all__ = [
     "maths",
     "indices",
     "pattern_signature",
+    "weight",
     ]
 

@@ -4,7 +4,7 @@ Created on Thu Oct 13 19:00:53 2022
 
 @author: richie bao
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,text
 import pandas as pd
 import geopandas as gpd
 
@@ -79,7 +79,8 @@ def postSQL2gpd(table_name,geom_col='geometry',**kwargs):
     '''
 
     engine=create_engine("postgresql://{myusername}:{mypassword}@localhost:5432/{mydatabase}".format(myusername=kwargs['myusername'],mypassword=kwargs['mypassword'],mydatabase=kwargs['mydatabase']))  
-    gdf=gpd.read_postgis(table_name, con=engine,geom_col=geom_col)
+    sql=f"SELECT * FROM {table_name}"
+    gdf=gpd.read_postgis(sql=text(sql), con=engine.connect(),geom_col=geom_col)
     print("_"*50)
     print('The data has been read from PostgreSQL database. The table name is {}.'.format(table_name))    
     return gdf          

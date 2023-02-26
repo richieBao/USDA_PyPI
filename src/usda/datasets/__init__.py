@@ -12,6 +12,8 @@ from ._base import baiduPOI_dataCrawler
 from ._base import baiduPOI_dataCrawler_circle
 from ._base import baiduPOI_batchCrawler
 from ._base import generate_categorical_2darray
+from ._base import load_evaluation_criteria_raw_values
+from ._base import load_sustainability_attributes4electricity_generation_tech
 
 from ._dataset_info import KITTI_info
 from ._dataset_info import KITTI_info_gap
@@ -33,6 +35,8 @@ __all__ = [
     "kml_coordiExtraction",
     "img_exif_info",
     "generate_categorical_2darray",
+    "load_evaluation_criteria_raw_values",
+    "load_sustainability_attributes4electricity_generation_tech",
     ]
 
 

@@ -17,10 +17,12 @@ from ._gadgets import variable_name
 from ._gadgets import lst_index_split
 from ._gadgets import flatten_lst
 from ._gadgets import nestedlst_insert
+from ._gadgets import AttrDict
 
 from ._df_process import complete_dataframe_rowcols
 from ._df_process import xy_to_matrix
 from ._df_process import matrix_to_xy
+from ._df_process import df_normalize
 
 __all__=[
     "Bunch",
@@ -36,4 +38,7 @@ __all__=[
     "complete_dataframe_rowcols",
     "xy_to_matrix",
     "matrix_to_xy",
+    "df_normalize",
+    "AttrDict",
     ]
+

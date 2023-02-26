@@ -16,6 +16,7 @@ from ..utils import _coordinate_transformation as cc
 from tqdm import tqdm
 import numpy as np
 from scipy import linalg, ndimage
+import pandas as pd
 
 DATA_MODULE="usda.datasets.data"
 
@@ -342,9 +343,51 @@ def generate_categorical_2darray(**kwargs):
     y += noise_coef * noise
     
     return X,y        
- 
+
+def load_evaluation_criteria_raw_values(data_module=DATA_MODULE):
+    '''
+    来自于：Boroushaki, S. Entropy-Based Weights for MultiCriteria Spatial Decision-Making. Yearbook of the Association of Pacific Coast Geographers 79, 168–187 (2017).一文中的演示数据
+    用于说明信息熵权重
+
+    Parameters
+    ----------
+    data_module : string
+        数据所在文件夹. The default is DATA_MODULE.
+
+    Returns
+    -------
+    Class
+        含属性字段：DataFrame数据及文件名.
+
+    '''
+    
+    data_file_name="evaluation_criteria_raw_values.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        evaluation_criteria_raw_values=pd.read_pickle(data_file)  
+    return Bunch(data=evaluation_criteria_raw_values, name=data_file_name)
+
+def load_sustainability_attributes4electricity_generation_tech(data_module=DATA_MODULE):
+    '''
+    来自于： Şahin, M. A comprehensive analysis of weighting and multicriteria methods in the context of sustainable energy. International Journal of Environmental Science and Technology 18, 1591–1616 (2021).
+
+    Parameters
+    ----------
+    data_module : string
+        数据所在文件夹. The default is DATA_MODULE.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    
+    data_file_name="sustainability_attributes4electricity_generation_tech.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        data=pd.read_pickle(data_file)  
+    return Bunch(data=data, name=data_file_name) 
 
 if __name__=="__main__":
     pass
     # sales_data_cartoon_databas=load_sales_data_cartoon_database()
-    
+    # df=ArithmeticErrorload_evaluation_criteria_raw_values

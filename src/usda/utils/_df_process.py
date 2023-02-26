@@ -104,3 +104,28 @@ def matrix_to_xy(df, columns=None, reset_index=False):
     if reset_index:
         xy.columns=columns or ["row", "col", "val"]
     return xy
+
+def df_normalize(df,feature_range=(-1, 1)):
+    '''
+    对DataFrame格式数据，逐列执行标准化
+    Parameters
+    ----------
+    df : DataFrame
+        待执行标准化的数据.
+    feature_range : tuple, optional
+        标准化后的数值范围. The default is (-1, 1).
+    Returns
+    -------
+    result : DataFrame
+        逐列标准化后的数据.
+    '''
+    from sklearn.preprocessing import MinMaxScaler
+    scaler=MinMaxScaler(feature_range=feature_range)
+    
+    result = df.copy()
+    for feature_name in df.columns:
+        # max_value=df[feature_name].max()
+        # min_value=df[feature_name].min()
+        # result[feature_name]=(df[feature_name] - min_value) / (max_value - min_value)
+        result[feature_name]=scaler.fit_transform(df[[feature_name]])
+    return result

@@ -45,6 +45,7 @@ from ._chart_custom import boxplot_custom
 from ._chart_custom import  histogram_3d
 
 from ._gdf_plot import gdf_plot_annotate
+from ._panorama_show import sphere_panorama_label
 
 
 __all__ = [
@@ -84,6 +85,7 @@ __all__ = [
     "segMasks_layoutShow",
     "histogram_3d",
     "gdf_plot_annotate",
+    "sphere_panorama_label",
     ]
 
 
