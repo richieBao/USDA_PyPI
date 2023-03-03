@@ -23,5 +23,6 @@ __all__ = [
     "indices",
     "pattern_signature",
     "weight",
+    "meta_heuristics",
     ]
 

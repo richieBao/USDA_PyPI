@@ -112,6 +112,35 @@ def sustainability_attributes4electricity_generation_tech():
     df=pd.DataFrame(array,index=['Natural_gas','Coal','Hydro','Wind_onshore','Geothermal','SolorPV'],columns=[f'C{i}' for i in range(1,13,1)])
     df.to_pickle("./data/sustainability_attributes4electricity_generation_tech.pickle")              
     
+def microclimate_in_office_rooms():
+    '''
+    来自于：Zavadskas, E. K. & Turskis, Z. A new additive ratio assessment (ARAS) method in multicriteria decision-making. Technological and Economic Development of Economy 16, 159–172 (2010).
+
+    Returns
+    -------
+    None.
+
+    '''
+    array=np.array([[7.6, 46, 18, 390, 0.1, 11],
+                   [5.5, 32, 21, 360, 0.05, 11],
+                   [5.3, 32, 21, 290, 0.05, 11],
+                   [5.7, 37, 19, 270, 0.05, 9],
+                   [4.2, 38, 19, 240, 0.1, 8],
+                   [4.4, 38, 19, 260, 0.1, 8],
+                   [3.9, 42, 16, 270, 0.1, 5],
+                   [7.9, 44, 20, 400, 0.05, 6],
+                   [8.1, 44, 20, 380, 0.05, 6],
+                   [4.5, 46, 18, 320, 0.1,7],
+                   [5.7, 48, 20, 320, 0.05, 11],
+                   [5.2, 48, 20, 310, 0.05, 11],
+                   [7.1, 49, 19, 280, 0.1, 12],
+                   [6.9, 50, 16, 250, 0.05, 10]])
+    
+    df=pd.DataFrame(array,columns=['amount _of_air_per_head','relative_air_humidity','air_temperature','illumination_during_work_hours','rate_of_air_flow','dew_point'],
+                    index=range(1,15,1))
+    
+    df.to_pickle("./data/microclimate_in_office_rooms.pickle") 
+    
     
         
 if __name__=="__main__":
@@ -121,4 +150,5 @@ if __name__=="__main__":
     # bowling_contest_cartoon_statistic()
     # test_score_cartoon_statistic()
     # evaluation_criteria_raw_values()
-    sustainability_attributes4electricity_generation_tech()
+    # sustainability_attributes4electricity_generation_tech()
+    microclimate_in_office_rooms()

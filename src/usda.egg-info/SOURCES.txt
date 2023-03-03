@@ -55,6 +55,7 @@ src/usda/datasets/_rs_image.py
 src/usda/datasets/data/__init__.py
 src/usda/datasets/data/bowling_contest_cartoon_statistic.pickle
 src/usda/datasets/data/evaluation_criteria_raw_values.pickle
+src/usda/datasets/data/microclimate_in_office_rooms.pickle
 src/usda/datasets/data/ramen_price_cartoon_statistic.pickle
 src/usda/datasets/data/sales_data_cartoon_database.pickle
 src/usda/datasets/data/sustainability_attributes4electricity_generation_tech.pickle
@@ -62,11 +63,15 @@ src/usda/datasets/data/test_score_cartoon_statistic.pickle
 src/usda/geodata_process/__init__.py
 src/usda/geodata_process/_quadrat.py
 src/usda/geodata_process/_raster_dataprocess.py
+src/usda/geodata_process/_raster_stats.py
 src/usda/indices/__init__.py
 src/usda/indices/_rs_indices.py
 src/usda/maths/__init__.py
 src/usda/maths/_algebra.py
 src/usda/maths/_geometric_calculation.py
+src/usda/meta_heuristics/__init__.py
+src/usda/meta_heuristics/_ga.py
+src/usda/meta_heuristics/_gwo.py
 src/usda/models/__init__.py
 src/usda/models/_bow_feature_builder.py
 src/usda/models/_computational_performance.py

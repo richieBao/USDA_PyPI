@@ -387,6 +387,23 @@ def load_sustainability_attributes4electricity_generation_tech(data_module=DATA_
         data=pd.read_pickle(data_file)  
     return Bunch(data=data, name=data_file_name) 
 
+def load_microclimate_in_office_rooms(data_module=DATA_MODULE):
+    data_file_name="microclimate_in_office_rooms.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        data=pd.read_pickle(data_file)  
+    measurement_units=[r'm3/h', r'%', r'°C', r'lx', r'm/s', r'°C']
+    optimisation_direction=[r'max',r'max',r'max',r'max',r'min',r'min']
+    weight_of_criteria=[0.21, 0.16, 0.26, 0.17, 0.12, 0.08] 
+    optimal_value=[15, 50, 24.5, 400, 0.05, 5] 
+    
+    return Bunch(data=data, 
+                 name=data_file_name,
+                 measurement_units=measurement_units,
+                 optimisation_direction=optimisation_direction,
+                 weight_of_criteria=weight_of_criteria,
+                 optimal_value=optimal_value) 
+    
+
 if __name__=="__main__":
     pass
     # sales_data_cartoon_databas=load_sales_data_cartoon_database()
