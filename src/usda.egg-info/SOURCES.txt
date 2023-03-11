@@ -71,6 +71,9 @@ src/usda/maths/_algebra.py
 src/usda/maths/_geometric_calculation.py
 src/usda/meta_heuristics/__init__.py
 src/usda/meta_heuristics/_ga.py
+src/usda/meta_heuristics/_ga_2d.py
+src/usda/meta_heuristics/_ga_2d_testing.py
+src/usda/meta_heuristics/_ga_SegaranT.py
 src/usda/meta_heuristics/_gwo.py
 src/usda/models/__init__.py
 src/usda/models/_bow_feature_builder.py
@@ -85,6 +88,9 @@ src/usda/models/_neighbors.py
 src/usda/models/_random_forest_classifier.py
 src/usda/models/_sir_model.py
 src/usda/models/_superpixel_segmentation.py
+src/usda/network/__init__.py
+src/usda/network/_g_drawing.py
+src/usda/network/_pt_pattern.py
 src/usda/pattern_signature/__init__.py
 src/usda/pattern_signature/_distance_metric.py
 src/usda/pattern_signature/_grid_neighbors_xy_finder.py

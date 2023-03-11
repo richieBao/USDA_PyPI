@@ -110,10 +110,14 @@ def genetic_algorithm(population_size = 5, mutation_rate = 0.1, elite = 0, min_v
     population = initial_population(population_size = population_size, min_values = min_values, max_values = max_values, target_function = target_function)
     fitness = fitness_function(population)    
     elite_ind = np.copy(population[population[:,-1].argsort()][0,:])
+    
+    epoch={}
     while (count <= generations):  
         if verbose:
             if count%verbose==0:            
                 print('Generation = ', count, ' f(x) = ', elite_ind[-1])  
+        epoch[count]=elite_ind[-1]  
+        
         offspring = breeding(population, fitness, min_values = min_values, max_values = max_values, mu = mu, elite = elite, target_function = target_function) 
         population = mutation(offspring, mutation_rate = mutation_rate, eta = eta, min_values = min_values, max_values = max_values, target_function = target_function)
         fitness = fitness_function(population)
@@ -121,7 +125,7 @@ def genetic_algorithm(population_size = 5, mutation_rate = 0.1, elite = 0, min_v
         if(elite_ind[-1] > value[-1]):
             elite_ind = np.copy(value) 
         count = count + 1       
-    return elite_ind 
+    return elite_ind, epoch
 
 ############################################################################
 

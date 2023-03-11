@@ -24,5 +24,6 @@ __all__ = [
     "pattern_signature",
     "weight",
     "meta_heuristics",
+    "network",
     ]
 
