@@ -15,6 +15,7 @@ from ._base import generate_categorical_2darray
 from ._base import load_evaluation_criteria_raw_values
 from ._base import load_sustainability_attributes4electricity_generation_tech
 from ._base import load_microclimate_in_office_rooms
+from ._base import load_jisperveld_data
 
 from ._dataset_info import KITTI_info
 from ._dataset_info import KITTI_info_gap
@@ -39,6 +40,7 @@ __all__ = [
     "load_evaluation_criteria_raw_values",
     "load_sustainability_attributes4electricity_generation_tech",
     "load_microclimate_in_office_rooms",
+    'load_jisperveld_data'
     ]
 
 

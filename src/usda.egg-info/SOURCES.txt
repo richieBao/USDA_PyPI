@@ -32,6 +32,7 @@ src/usda/data_visualization/_imgs_show.py
 src/usda/data_visualization/_knee_line_graph.py
 src/usda/data_visualization/_moving_average_inflection.py
 src/usda/data_visualization/_panorama_show.py
+src/usda/data_visualization/_plot_single_function.py
 src/usda/data_visualization/_raster_percentile_slider.py
 src/usda/data_visualization/_raster_show.py
 src/usda/data_visualization/_stats_charts.py
@@ -55,6 +56,7 @@ src/usda/datasets/_rs_image.py
 src/usda/datasets/data/__init__.py
 src/usda/datasets/data/bowling_contest_cartoon_statistic.pickle
 src/usda/datasets/data/evaluation_criteria_raw_values.pickle
+src/usda/datasets/data/jisperveld_data.pickle
 src/usda/datasets/data/microclimate_in_office_rooms.pickle
 src/usda/datasets/data/ramen_price_cartoon_statistic.pickle
 src/usda/datasets/data/sales_data_cartoon_database.pickle
@@ -72,9 +74,12 @@ src/usda/maths/_geometric_calculation.py
 src/usda/meta_heuristics/__init__.py
 src/usda/meta_heuristics/_ga.py
 src/usda/meta_heuristics/_ga_2d.py
-src/usda/meta_heuristics/_ga_2d_testing.py
+src/usda/meta_heuristics/_ga_2d_fixed_map.py
+src/usda/meta_heuristics/_ga_2d_testing_1.py
+src/usda/meta_heuristics/_ga_2d_testing_2.py
 src/usda/meta_heuristics/_ga_SegaranT.py
 src/usda/meta_heuristics/_gwo.py
+src/usda/meta_heuristics/_pso.py
 src/usda/models/__init__.py
 src/usda/models/_bow_feature_builder.py
 src/usda/models/_computational_performance.py

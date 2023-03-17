@@ -93,6 +93,7 @@ def imshow_label2darray(array_2d,label=True,**kwargs):
               dtype='int',
               random_seed=None,
               fontsize=5,
+              norm=None,
               )    
     args.update(kwargs)
     
@@ -100,10 +101,10 @@ def imshow_label2darray(array_2d,label=True,**kwargs):
         np.random.seed(args['random_seed'])
         cmap=matplotlib.colors.ListedColormap (np.random.rand(256,3))
     else:
-        cmap=args['cmap']
+        cmap=args['cmap']        
     
     fig,ax=plt.subplots(1,1,figsize=args['figsize']) 
-    ax.imshow(array_2d,cmap=cmap)
+    ax.imshow(array_2d,cmap=cmap,norm=args['norm'])
     
     if label:
         nx,ny=array_2d.shape

@@ -47,6 +47,8 @@ from ._chart_custom import  histogram_3d
 from ._gdf_plot import gdf_plot_annotate
 from ._panorama_show import sphere_panorama_label
 
+from ._plot_single_function import plot_single_function
+
 
 __all__ = [
     "plotly_table",
@@ -86,6 +88,7 @@ __all__ = [
     "histogram_3d",
     "gdf_plot_annotate",
     "sphere_panorama_label",
+    "plot_single_function",
     ]
 
 

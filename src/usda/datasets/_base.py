@@ -403,8 +403,65 @@ def load_microclimate_in_office_rooms(data_module=DATA_MODULE):
                  weight_of_criteria=weight_of_criteria,
                  optimal_value=optimal_value) 
     
+def load_jisperveld_data(data_module=DATA_MODULE):
+    '''
+    来自于： Janssen, R., van Herwijnen, M., Stewart, T. J. & Aerts, J. C. J. H. Multiobjective decision support for land-use planning. Environ Plann B Plann Des 35, 740–756 (2008).
+
+    Parameters
+    ----------
+    data_module : string
+        数据所在文件夹. The default is DATA_MODULE.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''    
+    
+    data_file_name="jisperveld_data.pickle" 
+    with resources.open_binary(data_module,data_file_name) as data_file:
+        data=pd.read_pickle(data_file)     
+        
+    nature_recreation_vals={'nature_value':{'intensive_agriculture':4, 'extensive_agriculture':'nature_vals', 'residence':3,'industry':1,'recreation_day_trips':5,'recreation_overnight':5,'wet_natural_area':'nature_vals','water_recreational_use':7, 'water_limited_access':'nature_vals'},
+                            'recreational_value':{'intensive_agriculture':6, 'extensive_agriculture':'nature_vals', 'residence':3,'industry':1,'recreation_day_trips':'recreation_b','recreation_overnight':'recreation_c','wet_natural_area':7,'water_recreational_use':'recreation_b', 'water_limited_access':1}}
+    nature_recreation_vals_df=pd.DataFrame(nature_recreation_vals)     
+    
+    
+    lu_conversion_cost=np.array([[0,-75,150,150,-225,0,-150,-300,-300],
+          [75,0,150,150,-150,75,-75,-225,-225],
+          [np.nan,np.nan,0,np.nan,-10000,-10000,np.nan,np.nan,np.nan],
+          [np.nan,np.nan,np.nan,0,-10000,-10000,np.nan,np.nan,np.nan],
+          [150,75,3,300,0,150,0,-150,-150],
+          [0,-75,150,150,-150,0,-150,-300,-230],
+          [np.nan,75,225,225,-75,150,0,-75,-75],
+          [100,100,np.nan,np.nan,np.nan,np.nan,0,0,15],
+          [100,100,np.nan,np.nan,np.nan,np.nan,0,0,0]])
+    cols=['intensive_agriculture', 'extensive_agriculture','residence', 'industry','recreation_day_trips','recreation_overnight','wet_natural_area','water_recreational_use', 'water_limited_access']
+    lu_conversion_cost_df=pd.DataFrame(lu_conversion_cost,index=cols,columns=cols)
+            
+    return Bunch(
+        lu=data['lu'],
+        nature_vals=data['nature_vals'],
+        recreation_b=data['recreation_b'],
+        recreation_c=data['recreation_c'],
+        fixed_LU=data['fixed_LU'],
+        lu_name={1:'intensive_agriculture',
+                 2:'extensive_agriculture',
+                 3:'residence',
+                 4:'industry',
+                 5:'recreation_day_trips',
+                 6:'recreation_overnight',
+                 7:'wet_natural_area',
+                 8:'water_recreational_use',
+                 9:'water_limited_access'},        
+        nature_recreation_vals=nature_recreation_vals_df,
+        lu_conversion_cost=lu_conversion_cost_df,
+        data_name_lst=['lu','recreation_b','recreation_c','fixed_LU','nature_recreation_vals','lu_conversion_cost'],)
+        
 
 if __name__=="__main__":
     pass
     # sales_data_cartoon_databas=load_sales_data_cartoon_database()
     # df=ArithmeticErrorload_evaluation_criteria_raw_values
+    # load_jisperveld_data()
