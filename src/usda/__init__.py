@@ -25,5 +25,6 @@ __all__ = [
     "weight",
     "meta_heuristics",
     "network",
+    "random_walk",
     ]
 

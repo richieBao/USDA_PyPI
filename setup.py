@@ -7,7 +7,8 @@ Created on Sun Aug 21 14:57:02 2022
 python setup.py sdist
 twine upload dist/usda-0.0.15.tar.gz
 """
-from setuptools import setup,find_packages,find_namespace_packages
+# Extension,setup,
+from setuptools import find_packages,find_namespace_packages,setup
 import src.usda._min_dependencies as min_deps 
 
 DISTNAME="usda"

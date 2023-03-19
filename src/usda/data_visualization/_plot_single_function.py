@@ -20,7 +20,7 @@ from scipy.sparse.linalg import svds
 ############################################################################
 
 # Function: Solution Plot 
-def plot_single_function(min_values, max_values, target_function, step = [0.1, 0.1], solution = [ ], proj_view = '3D', view = 'browser'):
+def plot_single_function(min_values, max_values, target_function, step = [0.1, 0.1], solution = [ ], proj_view = '3D', view = 'browser',mode='markers+text'):
     if (view == 'browser' ):
         pio.renderers.default = 'browser'
     x    = []
@@ -49,10 +49,10 @@ def plot_single_function(min_values, max_values, target_function, step = [0.1, 0
             s_trace = go.Scatter(x         = sol[:, 0],
                                  y         = sol[:, 1],
                                  opacity   = 1,
-                                 mode      = 'markers+text',
+                                 mode      =mode, # 'markers+text',
                                  marker    = dict(symbol = 'circle-dot', size = 10, color = 'red'),
                                  hovertext = c_sol,
-                                 name      = ''
+                                 name      = '',
                                  )
             data.append(s_trace)
         if ( len(min_values) > 2):
@@ -62,7 +62,7 @@ def plot_single_function(min_values, max_values, target_function, step = [0.1, 0
         n_trace = go.Scatter(x         = front[:, 0],
                              y         = front[:, 1],
                              opacity   = 0.5,
-                             mode      = 'markers+text',
+                             mode      =mode, # 'markers+text',
                              marker    = dict(symbol = 'circle-dot', size = 5, color = -front[:,-1]),
                              hovertext = nid_list,
                              name      = ''
@@ -148,3 +148,21 @@ def plot_single_function(min_values, max_values, target_function, step = [0.1, 0
 
 ############################################################################
 
+if __name__=="__main__":
+    import math
+    
+    def func(variables_values=[0]):
+        r=variables_values[0]
+        func_value=pow(math.e,-1*r**2)
+        return func_value
+    
+    plot_parameters = {
+        'min_values': [0],
+        'max_values': [5],
+        'step': [0.1],
+        'solution': [],
+        'proj_view': '1d',
+        'view': 'browser' ,
+        'mode':'lines'
+    }
+    plot_single_function(target_function=func, **plot_parameters)    

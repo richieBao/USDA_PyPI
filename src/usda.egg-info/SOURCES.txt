@@ -72,6 +72,8 @@ src/usda/maths/__init__.py
 src/usda/maths/_algebra.py
 src/usda/maths/_geometric_calculation.py
 src/usda/meta_heuristics/__init__.py
+src/usda/meta_heuristics/_cuckoo_s.py
+src/usda/meta_heuristics/_firefly_a.py
 src/usda/meta_heuristics/_ga.py
 src/usda/meta_heuristics/_ga_2d.py
 src/usda/meta_heuristics/_ga_2d_fixed_map.py
@@ -80,6 +82,8 @@ src/usda/meta_heuristics/_ga_2d_testing_2.py
 src/usda/meta_heuristics/_ga_SegaranT.py
 src/usda/meta_heuristics/_gwo.py
 src/usda/meta_heuristics/_pso.py
+src/usda/meta_heuristics/_pso_2d.py
+src/usda/meta_heuristics/_pso_2d_testing.py
 src/usda/models/__init__.py
 src/usda/models/_bow_feature_builder.py
 src/usda/models/_computational_performance.py
