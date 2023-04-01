@@ -8,11 +8,13 @@ from ._g_drawing import G_drawing
 from ._pt_pattern import closest_point
 from ._pt_pattern import get_dist
 from ._pt_pattern import nni
+from ._pt_pattern import nni_1d
 
 __all__ = [
     "G_drawing",
     "closest_point",
     "get_dist",
     "nni",
+    "nni_1d",
     ]
 

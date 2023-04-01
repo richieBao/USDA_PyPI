@@ -8,7 +8,6 @@ from sqlalchemy import create_engine,text
 import pandas as pd
 import geopandas as gpd
 
-
 def df2SQLite(db_fp, df, table_name, method='fail'):    
     '''
     function - 把pandas DataFrame格式数据写入数据库（同时创建表）
@@ -85,6 +84,35 @@ def postSQL2gpd(table_name,geom_col='geometry',**kwargs):
     print('The data has been read from PostgreSQL database. The table name is {}.'.format(table_name))    
     return gdf          
                 
-        
-
+def df2postSQL(df,table_name,if_exists='replace',**kwargs):
+    '''
+    function - 将DataFrame格式数据写入PostgreSQL数据库
     
+    Paras:
+        df - DataFrame格式数据
+        table_name - 写入数据库中的表名
+        **kwargs - 连接数据库相关信息，包括myusername（数据库的用户名），mypassword（用户密钥），mydatabase（数据库名）
+    '''    
+    #The URI should start with postgresql:// instead of postgres://. SQLAlchemy used to accept both, but has removed support for the postgres name.
+    engine=create_engine("postgresql://{myusername}:{mypassword}@localhost:5432/{mydatabase}".format(myusername=kwargs['myusername'],mypassword=kwargs['mypassword'],mydatabase=kwargs['mydatabase']))  
+    conn=engine.connect()
+    df.to_sql(table_name, con=conn, if_exists=if_exists,index=False)    
+    # gdf.to_postgis(table_name, con=engine, if_exists='replace', index=False,)  
+    print("_"*50)    
+    print('The GeoDataFrame has been written to the PostgreSQL database.The table name is {}.'.format(table_name))   
+
+def postSQL2df(table_name,**kwargs):    
+    '''
+    function - 读取PostgreSQL数据库中的表为DataFrame格式数据
+    
+    Paras:
+        table_name - 待读取数据库中的表名
+        **kwargs - 连接数据库相关信息，包括myusername（数据库的用户名），mypassword（用户密钥），mydatabase（数据库名）
+    '''    
+    engine=create_engine("postgresql://{myusername}:{mypassword}@localhost:5432/{mydatabase}".format(myusername=kwargs['myusername'],mypassword=kwargs['mypassword'],mydatabase=kwargs['mydatabase']))  
+    conn=engine.connect()
+    df=pd.read_sql('SELECT * FROM {}'.format(table_name), conn)
+
+    print("_"*50)
+    print('The data has been read from PostgreSQL database. The table name is {}.'.format(table_name))    
+    return df 

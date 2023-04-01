@@ -178,4 +178,36 @@ def class_decomposition(class_2darray):
     tags_classified_all_levels_concat=pd.concat(tags_classified_all_levels)
     
     return tags_classified_all_levels_concat.fillna(0)
+
+def group_bins_histogram(df,cols,by,bins):
+    '''
+    统计给定列（属性），给定bin的频数（直方图）
+
+    Parameters
+    ----------
+    df : DataFrame
+        数据.
+    cols : list[str]
+        用于计算的列名，含用于分组的列名.
+    by : str
+        用于分组的列名.
+    bins : list[numerical]
+        列表区间，划分的宽度为(a,b].
+
+    Returns
+    -------
+    cluster_bins_histogram_dict : dict[]
+        按组按bin统计频数结果，键为分组值，值为DataFrame，含个区间的频数.
+
+    '''
+    
+    cluster_num=df[by].value_counts().to_dict()
+    cluster_bins=df[cols].groupby(by, group_keys=True).apply(lambda x:{i:pd.cut(x[i],bins).value_counts() for i in x.columns})
+    cluster_bins_histogram_dict={}
+    for idx,row in cluster_bins.iteritems():
+        bins_fre_df=pd.DataFrame(row)
+        bins_fre_df.drop(columns=[by],inplace=True)
+        cluster_bins_histogram_dict[idx]=bins_fre_df/cluster_num[idx]        
+        
+    return cluster_bins_histogram_dict
     

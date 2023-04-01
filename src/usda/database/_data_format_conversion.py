@@ -93,3 +93,29 @@ def poi_csv2GeoDF_batch(poi_paths,fields_extraction,save_path):
     poisInAll_gdf2shp.to_file(save_path['shp'],encoding='utf-8')
         
     return poisInAll_gdf
+
+def json2gdf(json_fn,numeric_columns=None,epsg=None):
+    '''
+    读取.geojson(json)文件为GeoDataFrame格式文件，选择配置投影
+
+    Parameters
+    ----------
+    json_fn : string
+        文件路径.
+    epsg : int, optional
+        坐标投影系统，epsg编号. The default is None.
+
+    Returns
+    -------
+    gdf : GeoDataFrmae
+        转换后的GeoDataFrame格式文件.
+
+    '''    
+    gdf=gpd.read_file(json_fn)
+    if epsg:
+        gdf.to_crs(epsg,inplace=True)   
+    print("fields_{}".format(gdf.columns))    
+    if numeric_columns:
+        gdf=gdf.astype(numeric_columns)
+
+    return gdf

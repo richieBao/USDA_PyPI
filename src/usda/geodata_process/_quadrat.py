@@ -108,3 +108,39 @@ def rec_quadrats_gdf(leftBottom_coordi,rightTop_coordi,h_distance,v_distance,crs
         grids_gdf.to_crs(to_crs,inplace=True)
         
     return grids_gdf    
+
+def rec_quadrats_bounded_gdf(polygon_gdf,h_distance,v_distance):
+    '''
+    绘制给定边界的网格式样方
+
+    Parameters
+    ----------
+    polygon_gdf : GeoDataFrmae
+        绘制边界.
+    h_distance : float
+        样方宽.
+    v_distance : float
+        样方高.
+
+    Returns
+    -------
+    grids_in_polygon_gdf : GeoDataFrmae
+        网格式样方.
+
+    '''
+    
+    minx, miny, maxx, maxy=polygon_gdf.bounds.values[0]
+    
+    x=np.arange(minx, maxx, h_distance)
+    y=np.arange(miny, maxy, v_distance)
+    hlines=[((x1, yi), (x2, yi)) for x1, x2 in zip(x[:-1], x[1:]) for yi in y]
+    vlines=[((xi, y1), (xi, y2)) for y1, y2 in zip(y[:-1], y[1:]) for xi in x]
+    grids=list(polygonize(MultiLineString(hlines + vlines)))
+    
+    grids_gdf=gpd.GeoDataFrame({'geometry':grids},crs=polygon_gdf.crs)    
+    Sjoin=gpd.tools.sjoin(grids_gdf,polygon_gdf,predicate="within", how='left')
+    idx_name=polygon_gdf.index.values[0]
+    grids_in_polygon_gdf=grids_gdf[Sjoin.index_right==idx_name]
+    grids_in_polygon_gdf.reset_index(drop=True,inplace=True)
+    
+    return grids_in_polygon_gdf 

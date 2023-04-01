@@ -14,6 +14,7 @@ src/usda/data_process/_geoinfodata_conversion.py
 src/usda/data_process/_image_pixel_sampling_zoom.py
 src/usda/data_process/_kitti_dataprocess.py
 src/usda/data_process/_landsat_dataprocess.py
+src/usda/data_process/_naip_dataprocess.py
 src/usda/data_process/_osm_dataprocess.py
 src/usda/data_process/_raster_dataprocess.py
 src/usda/data_process/_tiler_calculation.py
@@ -66,6 +67,9 @@ src/usda/geodata_process/__init__.py
 src/usda/geodata_process/_quadrat.py
 src/usda/geodata_process/_raster_dataprocess.py
 src/usda/geodata_process/_raster_stats.py
+src/usda/geodata_process/_rasterize.py
+src/usda/geodata_process/_rio_tiler.py
+src/usda/geodata_process/_sample_pts.py
 src/usda/indices/__init__.py
 src/usda/indices/_rs_indices.py
 src/usda/maths/__init__.py
@@ -86,11 +90,13 @@ src/usda/meta_heuristics/_pso_2d.py
 src/usda/meta_heuristics/_pso_2d_testing.py
 src/usda/models/__init__.py
 src/usda/models/_bow_feature_builder.py
+src/usda/models/_clustering.py
 src/usda/models/_computational_performance.py
 src/usda/models/_curve_segmentation.py
 src/usda/models/_decision_tree.py
 src/usda/models/_dim1_convolution.py
 src/usda/models/_entropy.py
+src/usda/models/_global_local_autocorrelation.py
 src/usda/models/_image_tag_extractor.py
 src/usda/models/_label_encoder.py
 src/usda/models/_neighbors.py

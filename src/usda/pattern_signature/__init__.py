@@ -8,6 +8,7 @@ from ._signature import lexsort_based
 from ._signature import class_clumpSize_histogram
 from ._signature import class_co_occurrence
 from ._signature import class_decomposition
+from ._signature import group_bins_histogram
 from ._grid_neighbors_xy_finder import GridNghFinder
 
 from ._distance_metric import Distances
@@ -35,6 +36,7 @@ __all__ = [
     "Categorical_data_region_growing",
     "Img_regionGrow",
     "Img_gray_regionGrow",
+    "group_bins_histogram",
     ]
 
 

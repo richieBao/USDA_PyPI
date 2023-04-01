@@ -9,6 +9,9 @@ from rasterio.windows import Window
 from osgeo import gdal, ogr, osr
 from rasterio.warp import calculate_default_transform, reproject, Resampling
 
+import rasterio,glob,os
+from rasterio.merge import merge
+
 def rio_read_subset(fn,lbNrt_coordinates):
     '''
     指定左下角和右上角坐标，部分读取栅格数据
@@ -126,3 +129,70 @@ def raster_reprojection(raster_fp,save_path,dst_crs):
                     dst_crs=dst_crs,
                     resampling=Resampling.nearest)         
 
+def raster_mosaic(dir_path,out_fp,dtype=None):
+    '''
+    function - 合并多个栅格为一个
+    
+    Paras:
+        dir_path - 栅格根目录
+        out-fp - 保存路径
+    
+    return:
+        out_trans - 返回变换信息
+    '''
+    
+    #迁移rasterio提供的定义数组最小数据类型的函数
+    def get_minimum_int_dtype(values):
+        """
+        Uses range checking to determine the minimum integer data type required
+        to represent values.
+
+        :param values: numpy array
+        :return: named data type that can be later used to create a numpy dtype
+        """
+
+        min_value = values.min()
+        max_value = values.max()
+
+        if min_value >= 0:
+            if max_value <= 255:
+                return rasterio.uint8
+            elif max_value <= 65535:
+                return rasterio.uint16
+            elif max_value <= 4294967295:
+                return rasterio.uint32
+        elif min_value >= -32768 and max_value <= 32767:
+            return rasterio.int16
+        elif min_value >= -2147483648 and max_value <= 2147483647:
+            return rasterio.int32
+    
+    search_criteria = "*.tif" #搜寻所要合并的栅格.tif文件
+    fp_pattern=os.path.join(dir_path, search_criteria)
+    fps=glob.glob(fp_pattern) #使用glob库搜索指定模式的文件
+    src_files_to_mosaic=[]
+    for fp in fps:
+        src=rasterio.open(fp)
+        src_files_to_mosaic.append(src)    
+    mosaic,out_trans=merge(src_files_to_mosaic)  #merge函数返回一个栅格数组，以及转换信息   
+    
+    #获得元数据
+    out_meta=src.meta.copy()
+    #更新元数据
+    if dtype:
+        data_type=dtype
+    else:
+        data_type=get_minimum_int_dtype(mosaic)
+    out_meta.update({"driver": "GTiff",
+                     "height": mosaic.shape[1],
+                     "width": mosaic.shape[2],
+                     "transform": out_trans,
+                     #通过压缩和配置存储类型，减小存储文件大小
+                     "compress":'lzw',
+                     "dtype":data_type, 
+                      }
+                    )      
+    
+    with rasterio.open(out_fp, "w", **out_meta) as dest:
+        dest.write(mosaic.astype(data_type))     
+    
+    return out_trans

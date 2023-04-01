@@ -26,6 +26,8 @@ from ._entropy import IG
 from ._decision_tree import decisionTree_structure
 from ._random_forest_classifier import ERF_trainer
 from ._image_tag_extractor import ImageTag_extractor
+from ._clustering import clustering_minibatchkmeans_selectkbest_ns
+from ._global_local_autocorrelation import moran_local_autocorrelation_gdf
 
 __all__=[
     "k_neighbors_entire",
@@ -49,6 +51,8 @@ __all__=[
     "ERF_trainer",
     "ImageTag_extractor",
     "SIR_spatialPropagating",
+    "clustering_minibatchkmeans_selectkbest_ns",
+    "moran_local_autocorrelation_gdf",
     ]
 
 

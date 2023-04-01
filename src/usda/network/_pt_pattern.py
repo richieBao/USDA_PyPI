@@ -80,6 +80,48 @@ def nni(coordinates,area):
     z_score=(d_o-d_e)/(0.26136/math.sqrt(pow(n,2)/area))
     
     return nni,z_score
+
+def nni_1d(series,length=None):
+    '''
+    计算一维度最近邻指数
+
+    Parameters
+    ----------
+    series : list[float]
+        值列表.
+    length : int
+        参考长度.
+
+    Returns
+    -------
+    flaot
+        最近邻指数.
+    float
+        z_score.
+
+    '''
+    import math
+    def closest_val(lst,target):
+        return min(lst,key=lambda v:abs(v-target))
+    
+    d_sum=0
+    for i in range(len(series)):
+        series_outI=[series[j] for j in range(len(series)) if j!=i]
+        neighbor_val=closest_val(series_outI,series[i])
+        d_sum+=abs(series[i]-neighbor_val)
+        
+    if length:
+        length=length
+    else:
+        length=max(series)
+        
+    n=len(series)
+    d_o=d_sum/n    
+    d_e=0.5/math.sqrt(n/length)
+    nni=d_o/d_e
+    z_score=(d_o-d_e)/(0.26136/math.sqrt(pow(n,2)/length))
+    
+    return nni,z_score
         
 if __name__=="__main__":
     coordinates_lst=[(random.randint(0,20),random.randint(0,20))for i in range(10)]
