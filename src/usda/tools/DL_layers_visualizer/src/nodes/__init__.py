@@ -10,4 +10,6 @@ __all__ = ["node_input_float",
            "node_img",
            "node_WGAN64_model",
            "node_file_path",
-           "node_text_input"]
+           "node_text_input",
+           "node_WGAN64_D_PDF",
+           "node_imgs_batch",]

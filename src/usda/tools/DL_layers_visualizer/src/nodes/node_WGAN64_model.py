@@ -60,12 +60,12 @@ def cal_trainedWGAN_callback(sender, app_data, user_data):
     model_path=dpg.get_value(str(random_id) + node_type + "_Input1_value")
     imgs_dir=dpg.get_value(str(random_id) + node_type + "_Input2_value")
 
-    layers,img_info=gan_model(model_path.split('.')[0],imgs_dir)            
+    layers,img_info,learn=gan_model(model_path.split('.')[0],imgs_dir)            
     imgs_texture_tag=_create_static_textures(img_info,random_id)     
     
-    gvals['WGAN_layers!'+str(random_id)]=layers
+    gvals['WGAN_layers!'+str(random_id)]=learn
     
-    with dpg.plot(label="trained WGAN generating process Plot", height=400,width=-1,equal_aspects=True , parent=str(random_id) + node_type + "_Cal"): 
+    with dpg.plot(label="trained WGAN generating process Plot", height=400,width=-100,equal_aspects=True , parent=str(random_id) + node_type + "_Cal"): 
         dpg.add_plot_legend()
         dpg.add_plot_axis(dpg.mvXAxis, label="x axis")
         with dpg.plot_axis(dpg.mvYAxis, label="y axis"):
@@ -83,7 +83,7 @@ def cal_trainedWGAN_callback(sender, app_data, user_data):
                     
     with dpg.node_attribute(tag=str(random_id) + node_type+ "_Output", attribute_type=dpg.mvNode_Attr_Output,parent=str(random_id) + node_type):
         dpg.add_text(tag=str(random_id) + node_type+ "_Output_value",
-                     label="WGAN_layers_tag",
+                     label="WGAN_learner_ID",
                      default_value='WGAN_layers!'+str(random_id),
                      bullet=True)
     
@@ -136,7 +136,7 @@ def gan_model(model_path,imgs_folder):
             
     img_info=sorting_layer_imgs4dpg(imgs_dict)   
     
-    return layers,img_info   
+    return layers,img_info,learn   
 
 def sorting_layer_imgs4dpg(layer_imgs):
     imgs_T_dict={}

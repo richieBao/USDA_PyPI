@@ -79,19 +79,19 @@ class NodeEditor:
                     button_2_tag=button_selectable('orange',2,'button_2_theme')                    
                     dpg.add_button(tag='b_7',label="Input Image", callback=callback_add_node,user_data="Image",width=button_width)
                     dpg.add_button(tag='b_8',label="Load WGAN Model_64", callback=callback_add_node,user_data="WGAN64_Model",width=button_width)
+                    dpg.add_button(tag='b_11',label="WGAN D_PDF plot", callback=callback_add_node,user_data="WGAD_D_plot",width=button_width)
+                    dpg.add_button(tag='b_12',label="Images Batch", callback=callback_add_node,user_data="Imgs_batch",width=button_width)
                     
-                    button_theme_2_lst=['b_7','b_8'] 
+                    button_theme_2_lst=['b_7','b_8','b_11','b_12'] 
                     for button in button_theme_2_lst:
                         dpg.bind_item_theme(button, button_2_tag)
                         
                     button_3_tag=button_selectable('green',2,'button_3_theme') 
                     dpg.add_button(tag='b_9',label="File Path Selector", callback=callback_add_node,user_data="File_Path",width=button_width)    
-                    button_theme_3_lst=['b_9']
+                    dpg.add_button(tag='b_10',label="Text Input", callback=callback_add_node,user_data="Text_Input",width=button_width)   
+                    button_theme_3_lst=['b_9','b_10']
                     for button in button_theme_3_lst:
                         dpg.bind_item_theme(button, button_3_tag)                    
-                    
-                    
-                    
                     
                 #------------------------------------------------------------------                         
                 # Add node editor to the window
@@ -132,6 +132,9 @@ def callback_add_node(sender, app_data, user_data):
         "Image":node_img.add_node_image,
         "WGAN64_Model":node_WGAN64_model.add_node_wgan_64,
         "File_Path":node_file_path.add_node_file_path,
+        "Text_Input":node_text_input.add_node_input_text,
+        "WGAD_D_plot":node_WGAN64_D_PDF.add_node_WGAD_PDF_plot,
+        "Imgs_batch":node_imgs_batch.add_node_imgs_batch
     }
     function_dict[user_data](LastNodePosition)
 

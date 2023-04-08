@@ -10,7 +10,7 @@ import dearpygui.dearpygui as dpg
 from src.node_editor import NodeEditor
 
 dpg.create_context()
-dpg.create_viewport(title="ML layers visualizer",
+dpg.create_viewport(title="simple WGAN Analysis Visualizer",
                     width=1500,
                     height=768)
 
@@ -24,7 +24,7 @@ with dpg.font_registry():
     default_font = dpg.add_font("fonts/OpenSans-Regular.ttf", 15)
     
 with dpg.viewport_menu_bar():
-    dpg.add_menu_item(label="Debugger", callback=callback_show_debugger)    
+    dpg.add_menu_item(label="DEBUGGER", callback=callback_show_debugger)    
     # dpg.add_menu_item(label="Close", callback=callback_close_program)        
     dpg.bind_font(default_font)
 
