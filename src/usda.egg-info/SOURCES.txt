@@ -103,6 +103,9 @@ src/usda/models/_neighbors.py
 src/usda/models/_random_forest_classifier.py
 src/usda/models/_sir_model.py
 src/usda/models/_superpixel_segmentation.py
+src/usda/net/_.py
+src/usda/net/__init__.py
+src/usda/net/_networks_pix2pix.py
 src/usda/network/__init__.py
 src/usda/network/_g_drawing.py
 src/usda/network/_pt_pattern.py
