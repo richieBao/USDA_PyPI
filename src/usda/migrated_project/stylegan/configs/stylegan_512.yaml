@@ -1,0 +1,11 @@
+# Config file for CelebA dataset (200k)
+
+output_dir: '/content/gdrive/MyDrive/ckpts/stylegan4naip_8'
+structure: 'linear'
+device_id: ('0')
+dataset:
+  img_dir: '/content/naip/naip_512'
+  folder: False
+  resolution: 512
+sched:
+  epochs: [40,80,80,80,80,20,20,20]

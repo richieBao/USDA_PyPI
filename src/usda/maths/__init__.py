@@ -12,6 +12,8 @@ from ._algebra import vector2matrix_rref
 from ._geometric_calculation import circle_lines
 from ._geometric_calculation import point_Proj2Line
 
+from ._plot_single_function import plot_single_function
+
 __all__=[
     "vector_plot_2d",
     "vector_plot_3d",
@@ -19,6 +21,7 @@ __all__=[
     "vector2matrix_rref",
     "circle_lines",
     "point_Proj2Line",
+    "plot_single_function",
     ]
 
 
