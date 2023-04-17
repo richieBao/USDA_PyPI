@@ -45,7 +45,6 @@ def load(model, cpk_file):
 class Stylegan_train:
     
     def __init__(self):
-        pass
         self.args=args
         self.opt=opt
         self.opt.update(self.args)           

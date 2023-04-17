@@ -13,6 +13,7 @@ from ._convert import parse_arguments
 from ._generate_samples import G_imgs
 from ._generate_truncation_figure import G_truncation_imgs
 from ._generate_mixing_figure import G_depth_mixing_imgs
+from ._generate_grid import adjust_dynamic_range
 
 __all__=["data",
          "models",
@@ -27,6 +28,7 @@ __all__=["data",
          "G_imgs",
          "G_truncation_imgs",
          "G_depth_mixing_imgs",
+         "adjust_dynamic_range",
          ]
 
 

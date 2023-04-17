@@ -7,7 +7,7 @@ Created on Sun Aug 21 15:11:00 2022
 python setup.py sdist
 twine upload dist/usda-0.0.17.tar.gz
 """
-__version__ = "0.0.20"
+__version__ = "0.0.21"
 
 __all__ = [
     "data_process"
@@ -31,3 +31,10 @@ __all__ = [
     "migrated_project",
     ]
 
+
+
+'''
+cd C:\Users\richi\omen_richiebao\omen_github\USDA_PyPI && python setup.py sdist && cd C:\Users\richi\omen_richiebao\omen_github\USDA_PyPI\dist && pip install usda-0.0.21.tar.gz
+twine upload dist/usda-0.0.21.tar.gz
+twine upload dist/usda-0.0.21.tar.gz
+'''
