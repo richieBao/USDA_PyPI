@@ -81,14 +81,14 @@ class Pix2pix_train:
                         self.visualizer.plot_current_losses(epoch, float(epoch_iter) / self.dataset_size, losses)                    
                         
                 if self.total_iters % self.opt.train.saveload.save_latest_freq == 0:   # cache our latest model every <save_latest_freq> iterations
-                    print('saving the latest model (epoch %d, total_iters %d)' % (epoch, total_iters))
+                    print('saving the latest model (epoch %d, total_iters %d)' % (epoch, self.total_iters))
                     save_suffix = 'iter_%d' % self.total_iters if self.opt.train.saveload.save_by_iter else 'latest'
                     self.model.save_networks(save_suffix)                        
                             
                 iter_data_time = time.time()            
 
             if epoch % self.opt.train.saveload.save_epoch_freq == 0:              # cache our model every <save_epoch_freq> epochs
-                print('saving the model at the end of epoch %d, iters %d' % (epoch, total_iters))
+                print('saving the model at the end of epoch %d, iters %d' % (epoch, self.total_iters))
                 self.model.save_networks('latest')
                 self.model.save_networks(epoch)
                 

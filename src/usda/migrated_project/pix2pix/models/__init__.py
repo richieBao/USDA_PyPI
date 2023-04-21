@@ -22,8 +22,12 @@ import importlib
 
 if __package__:
     from ._base_model import BaseModel
+    from ._networks import define_G
 else:
    from _base_model import BaseModel
+   from _networks import define_G
+   
+__all__=["define_G"]
 
 
 def find_model_using_name(model_name):

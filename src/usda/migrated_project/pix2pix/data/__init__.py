@@ -16,12 +16,15 @@ import torch.utils.data
 
 if __package__:
     from ._base_dataset import BaseDataset    
+    from ._base_dataset import get_transform
 else:
     from _base_dataset import BaseDataset   
+    from _base_dataset import get_transform
 
 __all__ = [
     "create_dataset",   
     "_unaligned_dataset",
+    "get_transform",
     ]    
 
 

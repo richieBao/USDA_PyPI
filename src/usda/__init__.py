@@ -5,9 +5,9 @@ Created on Sun Aug 21 15:11:00 2022
 @author: Richie Bao-caDesign设计(cadesign.cn)
 
 python setup.py sdist
-twine upload dist/usda-0.0.17.tar.gz
+twine upload dist/usda-0.0.22.tar.gz
 """
-__version__ = "0.0.21"
+__version__ = "0.0.22"
 
 __all__ = [
     "data_process"
@@ -29,12 +29,5 @@ __all__ = [
     "net",
     "tools",
     "migrated_project",
+    "imgs_process",
     ]
-
-
-
-'''
-cd C:\Users\richi\omen_richiebao\omen_github\USDA_PyPI && python setup.py sdist && cd C:\Users\richi\omen_richiebao\omen_github\USDA_PyPI\dist && pip install usda-0.0.21.tar.gz
-twine upload dist/usda-0.0.21.tar.gz
-twine upload dist/usda-0.0.21.tar.gz
-'''

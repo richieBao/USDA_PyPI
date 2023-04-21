@@ -25,6 +25,8 @@ from ._rasterize import create_multiband_raster
 from ._sample_pts import meshgrid_pts_in_geoBounds
 from ._sample_pts import random_pts_in_geoBounds
 
+from ._shp_dataprocess import shp2gdf
+
 __all__ = [
     "pt_coordi_transform",
     "pt_on_quadrat",
@@ -42,5 +44,6 @@ __all__ = [
     "rec_quadrats_bounded_gdf",
     "zonal_stats_raster_batch",
     "raster_mosaic",
+    "shp2gdf",
     ]
 
