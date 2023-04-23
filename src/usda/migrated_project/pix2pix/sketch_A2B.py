@@ -16,10 +16,9 @@ import numpy as np
 import datetime
 
 if __package__:
-    from .A2B import A2B_generator
+    from .A2B import A2B_generator    
 else:
     from A2B import A2B_generator
-    
 
 from PIL import EpsImagePlugin
 EpsImagePlugin.gs_windows_binary =r'C:\Program Files\gs\gs10.01.1\bin\gswin64c'
@@ -59,6 +58,11 @@ LC_id2name={0:'None',
 def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % rgb
 
+def package_path(*paths, package_directory=os.path.dirname(os.path.abspath(__file__))):
+    # path=os.path.join(package_directory, *paths)
+    # return path.replace("\\","/")
+    return os.path.join(package_directory, *paths)
+
 class Sketch_A2B(Tk):
     
     def __init__(self):
@@ -82,7 +86,7 @@ class Sketch_A2B(Tk):
         self.pointer= "black"
         self.erase="white"
         
-        self.pick_color=LabelFrame(self,text='Colors',font =('arial',15)) 
+        self.pick_color=LabelFrame(self,text='LC Colors',font =('arial',15)) 
         self.pick_color.grid(row=1,rowspan=7*10,column=0) # column=0, rowspan=6,columnspan=2, padx=5, pady=5
         
         LC_color_hex_dict={k:rgb_to_hex(v) for k, v in LC_color_dict.items()}
@@ -111,7 +115,7 @@ class Sketch_A2B(Tk):
         # Background Button for choosing color of the Canvas
         self.bg_btn=Button(self,text="Background",command=self.canvas_color,width=9).grid(row=4,column=1)  
         # pretrained model
-        self.load_btn=Button(self,text="laod model",command=self.browseFiles,width=9).grid(row=5,column=1)     
+        self.load_btn=Button(self,text="load model",command=self.browseFiles,width=9).grid(row=5,column=1)     
         
         self.update_btn=Button(self,text="update G_Img",command=self.A2B,width=9,bg='red').grid(row=6,column=1) 
         
@@ -125,14 +129,14 @@ class Sketch_A2B(Tk):
         self.canvas=Canvas(self,bg='white',bd=5,height=512,width=512)     
         self.canvas.grid(row=1,column=2,rowspan=10)   
         #Bind the background Canvas with mouse click
-        self.canvas.bind("<B1-Motion>",self.paint)   
-        
-        # self.container=self.canvas.create_rectangle(0, 0, 512, 512,) # outline='white'
+        self.canvas.bind("<B1-Motion>",self.paint)          
         
         self.canvas4img=Canvas(self,bg='white',bd=5,height=512,width=512)  
         self.canvas4img.grid(row=1,column=3,rowspan=10)
-        temp_fn=r'C:\Users\richi\omen_richiebao\omen_temp\22.jpg'
-        self.im=im = ImageTk.PhotoImage(Image.open(temp_fn))
+        # temp_fn=r'C:\Users\richi\omen_richiebao\omen_temp\22.jpg'
+        # example_img='./imgs/example_s.jpg'
+        example_img=package_path('imgs','example.jpg')
+        self.im=im = ImageTk.PhotoImage(Image.open(example_img))
         self.img_container=self.canvas4img.create_image((0,0),anchor=NW, image=im)
         
         # self.var_time = StringVar()

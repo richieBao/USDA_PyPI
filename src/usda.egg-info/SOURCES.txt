@@ -95,6 +95,7 @@ src/usda/meta_heuristics/_pso_2d_testing.py
 src/usda/migrated_project/__init__.py
 src/usda/migrated_project/pix2pix/A2B.py
 src/usda/migrated_project/pix2pix/__init__.py
+src/usda/migrated_project/pix2pix/sketch_A2B.py
 src/usda/migrated_project/pix2pix/test.py
 src/usda/migrated_project/pix2pix/train.py
 src/usda/migrated_project/pix2pix/data/__init__.py
@@ -106,6 +107,8 @@ src/usda/migrated_project/pix2pix/data/_single_dataset.py
 src/usda/migrated_project/pix2pix/data/_template_dataset.py
 src/usda/migrated_project/pix2pix/data/_unaligned_dataset.py
 src/usda/migrated_project/pix2pix/datasets/__init__.py
+src/usda/migrated_project/pix2pix/imgs/__init__.py
+src/usda/migrated_project/pix2pix/imgs/example.jpg
 src/usda/migrated_project/pix2pix/models/__init__.py
 src/usda/migrated_project/pix2pix/models/_base_model.py
 src/usda/migrated_project/pix2pix/models/_networks.py
@@ -188,6 +191,9 @@ src/usda/stats/_kde.py
 src/usda/stats/_outlier.py
 src/usda/stats/_regression.py
 src/usda/tools/__init__.py
+src/usda/tools/DL_layers_visualizer/0_72.jpg
+src/usda/tools/DL_layers_visualizer/0_8.jpg
+src/usda/tools/DL_layers_visualizer/0_9.jpg
 src/usda/tools/DL_layers_visualizer/DL_layers_visualizer.py
 src/usda/tools/DL_layers_visualizer/__init__.py
 src/usda/utils/__init__.py

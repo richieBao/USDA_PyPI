@@ -36,7 +36,7 @@ extra_setuptools_args=dict(
     extras_require={key: min_deps.tag_to_packages[key] for key in ["examples", "docs", "tests", "benchmark"]},
     )    
 
-PACKAGE_DATA={"usda.datasets.data":["*.pickle"]}
+PACKAGE_DATA={"usda.datasets.data":["*.pickle"],"usda.migrated_project.pix2pix.imgs":["*.jpg"]}
 
 def setup_package():
     python_requires=">=3.7"
