@@ -28,5 +28,6 @@ __all__ = [
     "correlationAnalysis_multivarialbe",
     "coefficient_of_determination_correction",
     "confidenceInterval_estimator_LR_multivariable",
+    "P_Xk_binomialDistribution",
     ]
 

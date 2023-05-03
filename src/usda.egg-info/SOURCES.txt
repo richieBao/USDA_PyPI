@@ -185,6 +185,8 @@ src/usda/pattern_signature/_img_region_growing.py
 src/usda/pattern_signature/_pattern_module.py
 src/usda/pattern_signature/_signature.py
 src/usda/pattern_signature/_signature2distance_integration.py
+src/usda/pgm/__init__.py
+src/usda/pgm/_probability_theory.py
 src/usda/stats/__init__.py
 src/usda/stats/_descriptive_stats.py
 src/usda/stats/_kde.py
