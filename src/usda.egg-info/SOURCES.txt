@@ -18,6 +18,8 @@ src/usda/data_process/_naip_dataprocess.py
 src/usda/data_process/_osm_dataprocess.py
 src/usda/data_process/_raster_dataprocess.py
 src/usda/data_process/_tiler_calculation.py
+src/usda/data_visual/__init__.py
+src/usda/data_visual/_plot_style.py
 src/usda/data_visualization/__init__.py
 src/usda/data_visualization/_chart_custom.py
 src/usda/data_visualization/_colors.py
@@ -186,6 +188,7 @@ src/usda/pattern_signature/_pattern_module.py
 src/usda/pattern_signature/_signature.py
 src/usda/pattern_signature/_signature2distance_integration.py
 src/usda/pgm/__init__.py
+src/usda/pgm/_pgm_conversion.py
 src/usda/pgm/_probability_theory.py
 src/usda/stats/__init__.py
 src/usda/stats/_descriptive_stats.py

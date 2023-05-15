@@ -15,6 +15,7 @@ __all__ = [
     "database",
     "utils",
     "data_visualization",
+    "data_visual",
     "stats",
     "data_process",
     "geodata_process",
