@@ -95,6 +95,15 @@ src/usda/meta_heuristics/_pso.py
 src/usda/meta_heuristics/_pso_2d.py
 src/usda/meta_heuristics/_pso_2d_testing.py
 src/usda/migrated_project/__init__.py
+src/usda/migrated_project/invest/__init__.py
+src/usda/migrated_project/invest/configs/__init__.py
+src/usda/migrated_project/invest/configs/_carbon_configs.py
+src/usda/migrated_project/invest/configs/carbon_pools_willamette.csv
+src/usda/migrated_project/invest/configs/unit_definitions.txt
+src/usda/migrated_project/invest/esv/__init__.py
+src/usda/migrated_project/invest/esv/_carbon.py
+src/usda/migrated_project/invest/esv/_unit_registry.py
+src/usda/migrated_project/invest/esv/_utils.py
 src/usda/migrated_project/pix2pix/A2B.py
 src/usda/migrated_project/pix2pix/__init__.py
 src/usda/migrated_project/pix2pix/sketch_A2B.py
