@@ -8,6 +8,7 @@ import numpy as np
 from shapely.geometry import Polygon,Point
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import pandas as pd
     
 def random_pts_in_bounds(polygon_gdf, number):  
     '''
@@ -110,4 +111,62 @@ def meshgrid_pts_in_geoBounds(polygon_gdf,x_dis=100,y_dis=100):
     
     return pts_in_polygon_gdf 
     
- 
+def extract_raster_vals_at_pts(pt_coords,raster_fn):
+    '''
+    对一个栅格数据执行给定采样点提取栅格值
+
+    Parameters
+    ----------
+    pt_coords : list(float)
+        采样点坐标值列表，格式为[(x1,y1),(x2,y2)].
+    raster_fn : string
+        栅格文件路径名.
+
+    Returns
+    -------
+    sample_vals : array
+        采样点位置栅格值.
+
+    '''    
+    import rasterio as rio
+    import numpy as np
+    
+    raster=rio.open(raster_fn)
+    sample_vals=np.stack(list(raster.sample(pt_coords)))
+    
+    return sample_vals
+
+def extract_raster_vals_at_pts_batch(pt_coords,raster_fns_lst):
+    '''
+    对多个栅格数据执行给定采样点提取栅格值
+
+    Parameters
+    ----------
+    pt_coords : list(float)
+        采样点坐标值列表，格式为[(x1,y1),(x2,y2)].
+    raster_fns_lst : list(string)
+        多个栅格文件路径名列表.
+
+    Returns
+    -------
+    sample_vals_array : array
+        多个栅格采样点值数组.
+    idx_lst : list(int)
+        栅格数索引值列表.
+
+    '''    
+    from tqdm.notebook import tqdm
+    
+    idx_lst=[]
+    sample_vals_lst=[]
+    pbar=tqdm(total=len(raster_fns_lst))
+    for i,fn in tqdm(enumerate(raster_fns_lst)):
+        sample_vals=extract_raster_vals_at_pts(pt_coords,fn)
+        idx_lst.append(i)
+        sample_vals_lst.append(sample_vals)
+        pbar.update(1)
+        
+    pbar.close()    
+    sample_vals_array=np.concatenate(sample_vals_lst, axis=1)
+    return sample_vals_array,idx_lst   
+            

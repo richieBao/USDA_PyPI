@@ -16,6 +16,7 @@ from ._graphic_drawing import demo_con_style_multiple
 from ._colors import generate_colors
 from ._colors import data_division
 from ._colors import uniqueish_color
+from ._colors import cmap_patch_build
 from ._raster_show import bands_show
 from ._image_process import image_exposure
 from ._image_process import downsampling_blockFreqency

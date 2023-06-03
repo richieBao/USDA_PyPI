@@ -144,3 +144,35 @@ def rec_quadrats_bounded_gdf(polygon_gdf,h_distance,v_distance):
     grids_in_polygon_gdf.reset_index(drop=True,inplace=True)
     
     return grids_in_polygon_gdf 
+
+def rasters_minimum_bound(raster_fns):
+    from shapely.geometry import Polygon
+    import rioxarray as rxr
+    import pandas as pd    
+    import geopandas as gpd
+    
+    bounds={} # left, bottom, right, top
+    crs={}
+    for idx,fn in enumerate(raster_fns):
+        raster=rxr.open_rasterio(fn,masked=True).squeeze()
+        bounds[idx]=raster.rio.bounds()
+        crs[idx]=raster.rio.crs
+        
+    print(f'crs:\n{crs}')
+    columns=['left','bottom','right','top']
+    bounds_df=pd.DataFrame.from_dict(bounds,orient='index',columns=columns)
+    minimum_bounds={}
+    for col in columns:
+        if col in ['left','bottom']:
+            minimum_bounds[col]=bounds_df[col].max()
+        elif col in ['right','top']:
+            minimum_bounds[col]=bounds_df[col].min()   
+    
+    bound_geo=Polygon([[minimum_bounds['left'],minimum_bounds['bottom']],
+                       [minimum_bounds['left'],minimum_bounds['top']],
+                       [minimum_bounds['right'],minimum_bounds['top']],
+                       [minimum_bounds['right'],minimum_bounds['bottom']],
+                       [minimum_bounds['left'],minimum_bounds['bottom']]])
+    bound_gdf=gpd.GeoDataFrame(index=[0], crs=crs[0], geometry=[bound_geo])  
+        
+    return {'bound_gdf':bound_gdf,'crs':crs,'bounds_df':bounds_df}

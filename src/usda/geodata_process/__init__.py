@@ -9,6 +9,7 @@ from ._quadrat import pt_on_quadrat
 from ._quadrat import rec_quadrats_gdf
 from ._quadrat import rec_quadrats_bounded_gdf
 from ._quadrat import pt_coordi_transform
+from ._quadrat import rasters_minimum_bound
 
 from ._raster_dataprocess import rio_read_subset
 from ._raster_dataprocess import raster2polygon
@@ -22,8 +23,11 @@ from ._rio_tiler import deg2num
 from ._rio_tiler import centroid
 from._rio_tiler import tiled_web_map_show
 from ._rasterize import create_multiband_raster
+
 from ._sample_pts import meshgrid_pts_in_geoBounds
 from ._sample_pts import random_pts_in_geoBounds
+from ._sample_pts import extract_raster_vals_at_pts
+from ._sample_pts import extract_raster_vals_at_pts_batch
 
 from ._shp_dataprocess import shp2gdf
 
@@ -45,5 +49,8 @@ __all__ = [
     "zonal_stats_raster_batch",
     "raster_mosaic",
     "shp2gdf",
+    "extract_raster_vals_at_pts",
+    "extract_raster_vals_at_pts_batch",
+    "rasters_minimum_bound",
     ]
 

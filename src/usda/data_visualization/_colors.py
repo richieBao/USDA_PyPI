@@ -62,3 +62,35 @@ def uniqueish_color():
     import numpy as np
     
     return plt.cm.gist_ncar(np.random.random())
+
+def cmap_patch_build(labels_cmap_dict):
+    '''
+    生成matplotlib.colors.ListedColormap，matplotlib.colors.BoundaryNorm和matplotlib.patches.Patch，用于分类数据地图打印并显示图例
+
+    Parameters
+    ----------
+    labels_cmap_dict : dict
+        字典格式为{分类值:[分类名，颜色则]}，例如{1:["Barren",'gray'],2:["Permanent_Snow_and_Ice",'ghostwhite']}.
+
+    Returns
+    -------
+    cmap : matplotlib.colors.ListedColormap
+        Colormap object generated from a list of colors. it can also be used to generate special colormaps for ordinary mapping.
+    norm : matplotlib.colors.BoundaryNorm
+        Generate a colormap index based on discrete intervals.
+    patches : matplotlib.patches.Patch
+        A patch is a 2D artist with a face color and an edge color.
+
+    '''    
+    from matplotlib.colors import from_levels_and_colors
+    from matplotlib import colors
+    import matplotlib.patches as mpatches
+    
+    labels={k:v[0] for k,v in labels_cmap_dict.items()}
+    cmap_lst=list(map(list,zip(*[[k,v[1]] for k,v in labels_cmap_dict.items()])))
+
+    cmap_dict={k[0]:colors.to_rgb(k[1]) for k in zip(*cmap_lst)}
+    cmap, norm=from_levels_and_colors(cmap_lst[0],cmap_lst[1][:-1])    
+    patches=[mpatches.Patch(color=cmap_dict[i],label=labels[i]) for i in cmap_dict]
+    
+    return cmap,norm,patches

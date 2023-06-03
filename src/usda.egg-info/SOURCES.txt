@@ -98,10 +98,18 @@ src/usda/migrated_project/__init__.py
 src/usda/migrated_project/invest/__init__.py
 src/usda/migrated_project/invest/configs/__init__.py
 src/usda/migrated_project/invest/configs/_carbon_configs.py
+src/usda/migrated_project/invest/configs/_crop_pollination_configs.py
+src/usda/migrated_project/invest/configs/_crop_production_percentile_configs.py
+src/usda/migrated_project/invest/configs/_crop_production_regression_configs.py
+src/usda/migrated_project/invest/configs/_habitat_quality_configs.py
 src/usda/migrated_project/invest/configs/carbon_pools_willamette.csv
 src/usda/migrated_project/invest/configs/unit_definitions.txt
 src/usda/migrated_project/invest/esv/__init__.py
 src/usda/migrated_project/invest/esv/_carbon.py
+src/usda/migrated_project/invest/esv/_crop_pollination.py
+src/usda/migrated_project/invest/esv/_crop_production_percentile.py
+src/usda/migrated_project/invest/esv/_crop_production_regression.py
+src/usda/migrated_project/invest/esv/_habitat_quality.py
 src/usda/migrated_project/invest/esv/_unit_registry.py
 src/usda/migrated_project/invest/esv/_utils.py
 src/usda/migrated_project/pix2pix/A2B.py
@@ -197,6 +205,7 @@ src/usda/pattern_signature/_pattern_module.py
 src/usda/pattern_signature/_signature.py
 src/usda/pattern_signature/_signature2distance_integration.py
 src/usda/pgm/__init__.py
+src/usda/pgm/_pgm_calculating.py
 src/usda/pgm/_pgm_conversion.py
 src/usda/pgm/_probability_theory.py
 src/usda/stats/__init__.py

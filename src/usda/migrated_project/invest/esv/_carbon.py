@@ -20,7 +20,6 @@ from osgeo import gdal
 import numpy
 import pygeoprocessing
 import taskgraph
-import taskgraph
 
 import sys,os
 sys.path.append('..')
