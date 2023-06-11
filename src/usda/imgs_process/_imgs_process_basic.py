@@ -47,6 +47,29 @@ def random_shape_onImage(img,thresh1=130,thresh2=255):
     
     return result,PIL_img
 
+def binarize_noise_image(img_fn,channel=0,threshold_binary=0.9,direction='gt',threshold_noise=0.1,resize=None):
+    
+    img=Image.open(img_fn)
+    if resize:
+        img_original=img.resize(resize)
+    else:
+        img_original=img        
+    
+    img_original_mono=np.array(img_original)[:,:,channel]/255
+    
+    if direction=='gt':
+        img_original_mono=np.where(img_original_mono>threshold_binary,1,-1)
+    elif direction=='lt':
+        img_original_mono=np.where(img_original_mono<threshold_binary,1,-1)
+        
+    img_noise=img_original_mono.copy()
+    n=img_original_mono.shape[0]
+    noise=np.random.rand(n,n)
+    ind=np.where(noise<threshold_noise)
+    img_noise[ind]=-img_noise[ind]
+    
+    return img_original_mono,img_noise
+
 
 if __name__=="__main__":
     import glob, os

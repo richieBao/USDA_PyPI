@@ -10,6 +10,7 @@ from ._habitat_quality import Habitat_quality
 from ._crop_pollination import Crop_pollination
 from ._crop_production_percentile import Crop_production_percentile
 from ._crop_production_regression import Crop_production_regression
+from ._urban_cooling_model import Urban_cooling
 
 __all__ = [
     "u",
@@ -18,5 +19,6 @@ __all__ = [
     "Crop_pollination",
     "Crop_production_percentile",
     "Crop_production_regression",
+    "Urban_cooling",
     ]
 
