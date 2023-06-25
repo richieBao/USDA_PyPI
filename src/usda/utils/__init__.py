@@ -18,6 +18,7 @@ from ._gadgets import lst_index_split
 from ._gadgets import flatten_lst
 from ._gadgets import nestedlst_insert
 from ._gadgets import AttrDict
+from ._gadgets import sequence2series_of_overlapping_with_labels
 
 from ._df_process import complete_dataframe_rowcols
 from ._df_process import xy_to_matrix
@@ -40,5 +41,6 @@ __all__=[
     "matrix_to_xy",
     "df_normalize",
     "AttrDict",
+    "sequence2series_of_overlapping_with_labels",
     ]
 

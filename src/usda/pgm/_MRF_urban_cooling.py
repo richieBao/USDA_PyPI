@@ -161,3 +161,7 @@ if __name__=="__main__":
     }    
         
     muc=MRF_urban_cooling(args,Urban_cooling,epochs=1,alpha=1,beta=1) 
+    
+    import pickle
+    with open(os.path.join(args['workspace_dir'],'tmp_gap_val.pkl'),'wb') as f:
+        pickle.dump(muc.tmp_gap_val_lst,f)

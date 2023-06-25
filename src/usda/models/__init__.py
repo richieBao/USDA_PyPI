@@ -21,6 +21,7 @@ from ._superpixel_segmentation import superpixel_segmentation_quickshift
 from ._superpixel_segmentation import multiSegs_stackStatistics
 from ._bow_feature_builder import feature_builder_BOW
 from ._label_encoder import df_multiColumns_LabelEncoder
+from ._label_encoder import text2ints_encoded
 from ._entropy import entropy_compomnent
 from ._entropy import IG
 from ._decision_tree import decisionTree_structure
@@ -28,6 +29,16 @@ from ._random_forest_classifier import ERF_trainer
 from ._image_tag_extractor import ImageTag_extractor
 from ._clustering import clustering_minibatchkmeans_selectkbest_ns
 from ._global_local_autocorrelation import moran_local_autocorrelation_gdf
+
+from ._rnn_lstm import RNN_LSTM_sequence
+from ._rnn_lstm import RNN_LSTM_train_sequence
+from ._rnn_lstm import RNN_model_img
+from ._rnn_lstm import RNN_train_img
+from ._rnn_lstm import CharModel
+from ._rnn_lstm import char_train
+from ._rnn_lstm import char_random_generation
+
+from ._nlp import build_co_occurrence_matrix
 
 __all__=[
     "k_neighbors_entire",
@@ -53,6 +64,15 @@ __all__=[
     "SIR_spatialPropagating",
     "clustering_minibatchkmeans_selectkbest_ns",
     "moran_local_autocorrelation_gdf",
+    "RNN_LSTM_sequence",
+    "RNN_LSTM_train_sequence",
+    "RNN_model_img",
+    "RNN_train_img",
+    "text2ints_encoded",
+    "CharModel",
+    "char_train",
+    "char_random_generation",
+    "build_co_occurrence_matrix",
     ]
 
 

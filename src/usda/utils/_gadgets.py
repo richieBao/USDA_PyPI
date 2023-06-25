@@ -119,6 +119,16 @@ class AttrDict(dict):
 
     def is_immutable(self):
         return self.__dict__[AttrDict.IMMUTABLE]
+    
+def sequence2series_of_overlapping_with_labels(seq,ws):
+    out=[]
+    length=len(seq)
+    for i in range(length-ws):
+        win=seq[i:i+ws]
+        label=seq[i+ws:i+ws+1]
+        out.append((win,label))
+
+    return out    
 
 if __name__=="__main__":
     xyz=6
