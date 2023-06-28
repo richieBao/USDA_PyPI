@@ -38,7 +38,39 @@ from ._rnn_lstm import CharModel
 from ._rnn_lstm import char_train
 from ._rnn_lstm import char_random_generation
 
-from ._nlp import build_co_occurrence_matrix
+from ._nlp_tools import build_co_occurrence_matrix
+from ._nlp_tools import text_replace_preprocess
+from ._nlp_tools import create_lookup_tables4vocab
+from ._nlp_tools import subsampling_of_frequent_words
+from ._nlp_tools import get_batches4word2vec
+from ._nlp_tools import get_target4word2vec
+from ._nlp_tools import Word2idx_idx2word
+from ._nlp_tools import unicodeToAscii
+from ._nlp_tools import readLangs2langs
+from ._nlp_tools import filterPair
+from ._nlp_tools import filterPairs
+from ._nlp_tools import prepareData4seq2seq
+
+
+from ._word2vec_sgns import SkipGramNeg
+from ._word2vec_sgns import NegativeSamplingLoss
+from ._word2vec_sgns import cosine_similarity
+from ._word2vec_sgns import noise_dist4sgns
+from ._word2vec_sgns import sgns_train
+
+from ._seq2seq import EncoderRNN
+from ._seq2seq import DecoderRNN
+from ._seq2seq import BahdanauAttention
+from ._seq2seq import AttnDecoderRNN
+from ._seq2seq import indexesFromSentence
+from ._seq2seq import tensorFromSentence
+from ._seq2seq import tensorsFromPair
+from ._seq2seq import get_dataloader
+from ._seq2seq import seq2seq_train
+from ._seq2seq import seq2seq_evaluateRandomly
+from ._seq2seq import showAttention
+from ._seq2seq import evaluateAndShowAttention
+
 
 __all__=[
     "k_neighbors_entire",
@@ -73,6 +105,22 @@ __all__=[
     "char_train",
     "char_random_generation",
     "build_co_occurrence_matrix",
+    "text_replace_preprocess",
+    "create_lookup_tables4vocab",
+    "subsampling_of_frequent_words",
+    "get_batches4word2vec",
+    "SkipGramNeg",
+    "NegativeSamplingLoss",
+    "cosine_similarity",
+    "noise_dist4sgns",
+    "sgns_train",
+    "get_target4word2vec",
+    "Word2idx_idx2word",
+    "unicodeToAscii",
+    "readLangs2langs",
+    "filterPair",
+    "filterPairs",
+    "prepareData4seq2seq",
     ]
 
 

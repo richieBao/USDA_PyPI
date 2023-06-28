@@ -190,11 +190,13 @@ src/usda/models/_global_local_autocorrelation.py
 src/usda/models/_image_tag_extractor.py
 src/usda/models/_label_encoder.py
 src/usda/models/_neighbors.py
-src/usda/models/_nlp.py
+src/usda/models/_nlp_tools.py
 src/usda/models/_random_forest_classifier.py
 src/usda/models/_rnn_lstm.py
+src/usda/models/_seq2seq.py
 src/usda/models/_sir_model.py
 src/usda/models/_superpixel_segmentation.py
+src/usda/models/_word2vec_sgns.py
 src/usda/net/_.py
 src/usda/net/__init__.py
 src/usda/net/_networks_pix2pix.py
