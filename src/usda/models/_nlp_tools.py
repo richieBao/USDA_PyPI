@@ -130,6 +130,8 @@ def get_batches4word2vec(words, batch_size, window_size=5):
             y.extend(batch_y)
             x.extend([batch_x]*len(batch_y))
         yield x, y
+        
+#------------------------------------------------------------------------------         
 
 class Word2idx_idx2word:
     '''
@@ -154,7 +156,7 @@ class Word2idx_idx2word:
             self.n_words += 1
         else:
             self.word2count[word] += 1
-            
+                       
 # Turn a Unicode string to plain ASCII, thanks to
 # https://stackoverflow.com/a/518232/2809427
 def unicodeToAscii(s):
@@ -168,9 +170,19 @@ def normalizeString(s):
     s = unicodeToAscii(s.lower().strip())
     s = re.sub(r"([.!?])", r" \1", s)
     s = re.sub(r"[^a-zA-Z!?]+", r" ", s)
-    return s.strip()        
+    return s.strip()     
 
-def readLangs2langs(root,lang1, lang2, reverse=False):
+def normalizeString_cmn(s):
+    s = s.lower().strip()
+    if ' ' not in s:
+        s = list(s)
+        s = ' '.join(s)
+    s = unicodeToAscii(s)  
+    s = re.sub(r"([.。!！?？])", "", s)
+    return s
+    
+
+def readLangs2langs(root,lang1, lang2, reverse=False,cmn=False):
     print("Reading lines...")
 
     # Read the file and split into lines
@@ -178,7 +190,11 @@ def readLangs2langs(root,lang1, lang2, reverse=False):
         read().strip().split('\n')
 
     # Split every line into pairs and normalize
-    pairs = [[normalizeString(s) for s in l.split('\t')] for l in lines]
+    
+    if cmn:
+        pairs = [[normalizeString_cmn(s) for s in l.split('\t')[:2]] for l in lines]
+    else:
+        pairs = [[normalizeString(s) for s in l.split('\t')] for l in lines]
 
     # Reverse pairs, make Lang instances
     if reverse:
@@ -199,8 +215,8 @@ def filterPair(p,MAX_LENGTH,eng_prefixes):
 def filterPairs(pairs,MAX_LENGTH,eng_prefixes):
     return [pair for pair in pairs if filterPair(pair,MAX_LENGTH,eng_prefixes)]
 
-def prepareData4seq2seq(root,lang1, lang2,eng_prefixes,MAX_LENGTH = 10, reverse=False):
-    input_lang, output_lang, pairs = readLangs2langs(root,lang1, lang2, reverse)
+def prepareData4seq2seq(root,lang1, lang2,eng_prefixes,MAX_LENGTH = 10, reverse=False,cmn=False):
+    input_lang, output_lang, pairs = readLangs2langs(root,lang1, lang2, reverse,cmn)
     print("Read %s sentence pairs" % len(pairs))
     pairs = filterPairs(pairs,MAX_LENGTH,eng_prefixes)
     print("Trimmed to %s sentence pairs" % len(pairs))
@@ -214,11 +230,8 @@ def prepareData4seq2seq(root,lang1, lang2,eng_prefixes,MAX_LENGTH = 10, reverse=
     return input_lang, output_lang, pairs
             
 if __name__=="__main__":
-    eng_fra_root=r'I:\data\NLP_dataset\eng-fra' # \eng-fra.txt'
-    # eng_fra_root=r'I:\data\NLP_dataset'
-    
+    root=r'I:\data\NLP_dataset' 
     MAX_LENGTH = 10
-    
     eng_prefixes = (
         "i am ", "i m ",
         "he is", "he s ",
@@ -227,8 +240,32 @@ if __name__=="__main__":
         "we are", "we re ",
         "they are", "they re "
     )
-    input_lang, output_lang, pairs =prepareData4seq2seq(eng_fra_root,'eng', 'fra',True) # 'eng', 'fra','eng','cmn' 
-    print(random.choice(pairs))
+    
+    hidden_size = 128
+    batch_size = 32    
+    lang1, lang2='eng', 'cmn'
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    input_lang, output_lang,pairs, train_dataloader = usda_models.get_dataloader4seq2seq(batch_size,root,lang1, lang2,eng_prefixes,MAX_LENGTH,device,reverse=True,cmn=True)    
+        
+        
+    
+    
+    
+    # eng_fra_root=r'I:\data\NLP_dataset\eng-fra' # \eng-fra.txt'
+    # # eng_fra_root=r'I:\data\NLP_dataset'
+    
+    # MAX_LENGTH = 10
+    
+    # eng_prefixes = (
+    #     "i am ", "i m ",
+    #     "he is", "he s ",
+    #     "she is", "she s ",
+    #     "you are", "you re ",
+    #     "we are", "we re ",
+    #     "they are", "they re "
+    # )
+    # input_lang, output_lang, pairs =prepareData4seq2seq(eng_fra_root,'eng', 'fra',True) # 'eng', 'fra','eng','cmn' 
+    # print(random.choice(pairs))
 
     # print(filterPairs([["i am ok","i m ok"]]))
     

@@ -11,6 +11,7 @@ from io import open
 import unicodedata
 import re
 import random
+import os
 
 import torch
 import torch.nn as nn
@@ -23,6 +24,7 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler
 import matplotlib.pyplot as plt
 # plt.switch_backend('agg')
 import matplotlib.ticker as ticker
+import matplotlib
 import numpy as np
 
 import time
@@ -32,7 +34,7 @@ if __package__:
     from ._nlp_tools import prepareData4seq2seq  
 else:
     from _nlp_tools import prepareData4seq2seq
-    
+        
 SOS_token = 0
 EOS_token = 1
 
@@ -103,8 +105,10 @@ class BahdanauAttention(nn.Module):
         return context, weights
 
 class AttnDecoderRNN(nn.Module):
-    def __init__(self, hidden_size, output_size, dropout_p=0.1):
+    def __init__(self, hidden_size, output_size, dropout_p=0.1,MAX_LENGTH=10,device='cpu'): # device='cpu'
         super(AttnDecoderRNN, self).__init__()
+        self.MAX_LENGTH=MAX_LENGTH
+        self.device=device
         self.embedding = nn.Embedding(output_size, hidden_size)
         self.attention = BahdanauAttention(hidden_size)
         self.gru = nn.GRU(2 * hidden_size, hidden_size, batch_first=True)
@@ -113,12 +117,12 @@ class AttnDecoderRNN(nn.Module):
 
     def forward(self, encoder_outputs, encoder_hidden, target_tensor=None):
         batch_size = encoder_outputs.size(0)
-        decoder_input = torch.empty(batch_size, 1, dtype=torch.long, device=device).fill_(SOS_token)
+        decoder_input = torch.empty(batch_size, 1, dtype=torch.long,device=self.device).fill_(SOS_token) 
         decoder_hidden = encoder_hidden
         decoder_outputs = []
         attentions = []
 
-        for i in range(MAX_LENGTH):
+        for i in range(self.MAX_LENGTH):
             decoder_output, decoder_hidden, attn_weights = self.forward_step(
                 decoder_input, decoder_hidden, encoder_outputs
             )
@@ -155,18 +159,18 @@ class AttnDecoderRNN(nn.Module):
 def indexesFromSentence(lang, sentence):
     return [lang.word2index[word] for word in sentence.split(' ')]
 
-def tensorFromSentence(lang, sentence):
+def tensorFromSentence(lang, sentence,device):
     indexes = indexesFromSentence(lang, sentence)
     indexes.append(EOS_token)
     return torch.tensor(indexes, dtype=torch.long, device=device).view(1, -1)
 
-def tensorsFromPair(pair):
-    input_tensor = tensorFromSentence(input_lang, pair[0])
-    target_tensor = tensorFromSentence(output_lang, pair[1])
+def tensorsFromPair(pair,device):
+    input_tensor = tensorFromSentence(input_lang, pair[0],device)
+    target_tensor = tensorFromSentence(output_lang, pair[1],device)
     return (input_tensor, target_tensor)
 
-def get_dataloader(batch_size,root,lang1, lang2,eng_prefixes,MAX_LENGTH=10):
-    input_lang, output_lang, pairs = prepareData4seq2seq(root,lang1, lang2, eng_prefixes,MAX_LENGTH,True)
+def get_dataloader4seq2seq(batch_size,root,lang1, lang2,eng_prefixes,MAX_LENGTH=10,device='cpu',reverse=False,cmn=False):
+    input_lang, output_lang, pairs = prepareData4seq2seq(root,lang1, lang2, eng_prefixes,MAX_LENGTH,reverse,cmn)
 
     n = len(pairs)
     input_ids = np.zeros((n, MAX_LENGTH), dtype=np.int32)
@@ -226,7 +230,7 @@ def timeSince(since, percent):
     return '%s (- %s)' % (asMinutes(s), asMinutes(rs))
 
 def seq2seq_train(train_dataloader, encoder, decoder, n_epochs, learning_rate=0.001,
-               print_every=100, plot_every=100):
+               print_every=100, plot_every=100,save_path=None):    
     start = time.time()
     plot_losses = []
     print_loss_total = 0  # Reset every print_every
@@ -234,8 +238,20 @@ def seq2seq_train(train_dataloader, encoder, decoder, n_epochs, learning_rate=0.
 
     encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
     decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate)
-    criterion = nn.NLLLoss()
+    criterion = nn.NLLLoss()    
+    
+    if os.path.exists(save_path):
+        checkpoint= torch.load(save_path)
+        encoder.load_state_dict(checkpoint['best_encoder_state_dict'])
+        decoder.load_state_dict(checkpoint['best_decoder_state_dict'])
+        encoder_optimizer.load_state_dict(checkpoint['encoder_optimizer_state_dict'])
+        decoder_optimizer.load_state_dict(checkpoint['decoder_optimizer_state_dict'])
+        epoch_trained = checkpoint['epoch']
+        print('loaded checkpoint')
+    else:
+        epoch_trained=0          
 
+    best_loss=np.inf
     for epoch in range(1, n_epochs + 1):
         loss = train_epoch(train_dataloader, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
         print_loss_total += loss
@@ -251,6 +267,20 @@ def seq2seq_train(train_dataloader, encoder, decoder, n_epochs, learning_rate=0.
             plot_loss_avg = plot_loss_total / plot_every
             plot_losses.append(plot_loss_avg)
             plot_loss_total = 0
+            
+        if loss<best_loss:
+            best_loss=loss
+            best_encoder=encoder.state_dict()  
+            best_decoder=decoder.state_dict()
+            if save_path:
+                torch.save({
+                    'epoch':epoch+epoch_trained,
+                    'best_encoder_state_dict':best_encoder,
+                    'best_decoder_state_dict':best_decoder,
+                    'encoder_optimizer_state_dict':encoder_optimizer.state_dict(),
+                    'decoder_optimizer_state_dict':decoder_optimizer.state_dict(),
+                    'loss':best_loss},
+                    save_path)                
 
     showPlot(plot_losses)
     
@@ -262,9 +292,9 @@ def showPlot(points):
     ax.yaxis.set_major_locator(loc)
     plt.plot(points)    
     
-def evaluate(encoder, decoder, sentence, input_lang, output_lang):
+def evaluate(encoder, decoder, sentence, input_lang, output_lang,device):
     with torch.no_grad():
-        input_tensor = tensorFromSentence(input_lang, sentence)
+        input_tensor = tensorFromSentence(input_lang, sentence,device)
 
         encoder_outputs, encoder_hidden = encoder(input_tensor)
         decoder_outputs, decoder_hidden, decoder_attn = decoder(encoder_outputs, encoder_hidden)
@@ -280,12 +310,12 @@ def evaluate(encoder, decoder, sentence, input_lang, output_lang):
             decoded_words.append(output_lang.index2word[idx.item()])
     return decoded_words, decoder_attn
 
-def seq2seq_evaluateRandomly(encoder, decoder, pairs,n=10):
+def seq2seq_evaluateRandomly(encoder, decoder, pairs,input_lang, output_lang,device,n=10):
     for i in range(n):
         pair = random.choice(pairs)
         print('>', pair[0])
         print('=', pair[1])
-        output_words, _ = evaluate(encoder, decoder, pair[0], input_lang, output_lang)
+        output_words, _ = evaluate(encoder, decoder, pair[0], input_lang, output_lang,device)
         output_sentence = ' '.join(output_words)
         print('<', output_sentence)
         print('')    
@@ -307,8 +337,8 @@ def showAttention(input_sentence, output_words, attentions):
     # print('-'*50)
     plt.show()
 
-def evaluateAndShowAttention(input_sentence):
-    output_words, attentions = evaluate(encoder, decoder, input_sentence, input_lang, output_lang)
+def evaluateAndShowAttention(encoder, decoder, input_sentence, input_lang, output_lang,device):
+    output_words, attentions = evaluate(encoder, decoder, input_sentence, input_lang, output_lang,device)
     print('input =', input_sentence)
     print('output =', ' '.join(output_words))    
     showAttention(input_sentence, output_words, attentions[0, :len(output_words), :])    
@@ -316,11 +346,9 @@ def evaluateAndShowAttention(input_sentence):
 
 if __name__=="__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    root=r'I:\data\NLP_dataset\eng-fra' # \eng-fra.txt'
-    # eng_fra_root=r'I:\data\NLP_dataset'
     
+    root=r'I:\data\NLP_dataset' 
     MAX_LENGTH = 10
-    
     eng_prefixes = (
         "i am ", "i m ",
         "he is", "he s ",
@@ -329,21 +357,55 @@ if __name__=="__main__":
         "we are", "we re ",
         "they are", "they re "
     )
-
+    
     hidden_size = 128
     batch_size = 32    
-    lang1, lang2='eng', 'fra'
-    input_lang, output_lang,pairs, train_dataloader = get_dataloader(batch_size,root,lang1, lang2,eng_prefixes,MAX_LENGTH)
+    lang1, lang2='eng', 'cmn'
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    input_lang, output_lang,pairs, train_dataloader = get_dataloader4seq2seq(batch_size,root,lang1, lang2,eng_prefixes,MAX_LENGTH,device,reverse=True,cmn=True)    
+    
+    # root=r'I:\data\NLP_dataset\eng-fra' # \eng-fra.txt'
+    # # eng_fra_root=r'I:\data\NLP_dataset'
+    
+    # MAX_LENGTH = 10
+    
+    # eng_prefixes = (
+    #     "i am ", "i m ",
+    #     "he is", "he s ",
+    #     "she is", "she s ",
+    #     "you are", "you re ",
+    #     "we are", "we re ",
+    #     "they are", "they re "
+    # )
+
+    # hidden_size = 128
+    # batch_size = 32    
+    # lang1, lang2='eng', 'fra'
+    # input_lang, output_lang,pairs, train_dataloader = get_dataloader4seq2seq(batch_size,root,lang1, lang2,eng_prefixes,MAX_LENGTH,device)
+    
+    
     encoder = EncoderRNN(input_lang.n_words, hidden_size).to(device)
-    decoder = AttnDecoderRNN(hidden_size, output_lang.n_words).to(device)
-    seq2seq_train(train_dataloader, encoder, decoder, 80, print_every=5, plot_every=5)
+    decoder = AttnDecoderRNN(hidden_size, output_lang.n_words,MAX_LENGTH=MAX_LENGTH,device=device).to(device)
+    
+    save_path=r'I:\model_ckpts\seq2seq\seq2seq_ch2en.pth'
+    seq2seq_train(train_dataloader, encoder, decoder, 80, print_every=5, plot_every=5,save_path=save_path)
+    
+    checkpoint=torch.load(save_path)
+    encoder.load_state_dict(checkpoint['best_encoder_state_dict'])    
+    encoder.to(device)    
+    decoder.load_state_dict(checkpoint['best_decoder_state_dict'])    
+    decoder.to(device)            
     
     encoder.eval()
     decoder.eval()
-    seq2seq_evaluateRandomly(encoder, decoder,pairs)    
+    seq2seq_evaluateRandomly(encoder, decoder,pairs,input_lang, output_lang,device)    
     
-    evaluateAndShowAttention('il n est pas aussi grand que son pere')
-    evaluateAndShowAttention('je suis trop fatigue pour conduire')
-    evaluateAndShowAttention('je suis desole si c est une question idiote')
-    evaluateAndShowAttention('je suis reellement fiere de vous')    
+    # evaluateAndShowAttention('il n est pas aussi grand que son pere')
+    # evaluateAndShowAttention('je suis trop fatigue pour conduire')
+    # evaluateAndShowAttention('je suis desole si c est une question idiote')
+    # evaluateAndShowAttention('je suis reellement fiere de vous')  
+    
+    sentence='我 们 非 常 需 要 食 物'
+    input_sentence=' '.join(f'{sentence}')
+    evaluateAndShowAttention(encoder, decoder, input_sentence, input_lang, output_lang,device)
     

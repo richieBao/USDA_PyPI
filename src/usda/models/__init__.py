@@ -65,7 +65,7 @@ from ._seq2seq import AttnDecoderRNN
 from ._seq2seq import indexesFromSentence
 from ._seq2seq import tensorFromSentence
 from ._seq2seq import tensorsFromPair
-from ._seq2seq import get_dataloader
+from ._seq2seq import get_dataloader4seq2seq
 from ._seq2seq import seq2seq_train
 from ._seq2seq import seq2seq_evaluateRandomly
 from ._seq2seq import showAttention
@@ -121,6 +121,7 @@ __all__=[
     "filterPair",
     "filterPairs",
     "prepareData4seq2seq",
+    "get_dataloader4seq2seq",
     ]
 
 
