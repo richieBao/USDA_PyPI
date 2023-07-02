@@ -71,6 +71,18 @@ from ._seq2seq import seq2seq_evaluateRandomly
 from ._seq2seq import showAttention
 from ._seq2seq import evaluateAndShowAttention
 
+from ._transformer import TransformerModel
+from ._transformer import PositionalEncoding
+from ._transformer import data_process4transformer
+from ._transformer import batchify
+from ._transformer import train4transformer
+from ._transformer import evaluate4transformer
+
+from ._vit import img_to_patch
+from ._vit import AttentionBlock
+from ._vit import VisionTransformer
+from ._vit import ViT
+from ._vit import train_model4ViT
 
 __all__=[
     "k_neighbors_entire",
@@ -122,6 +134,16 @@ __all__=[
     "filterPairs",
     "prepareData4seq2seq",
     "get_dataloader4seq2seq",
+    "TransformerModel",
+    "PositionalEncoding",
+    "data_process4transformer",
+    "batchify",
+    "train4transformer",
+    "evaluate4transformer",
+    "img_to_patch",
+    "VisionTransformer",
+    "ViT",
+    "train_model4ViT",
     ]
 
 

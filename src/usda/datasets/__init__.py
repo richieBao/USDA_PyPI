@@ -23,6 +23,9 @@ from ._rs_image import Sentinel2_bandFNs
 from ._kml_info import kml_coordiExtraction
 from ._img_info import img_exif_info
 
+from ._files_downloading import files_downloading
+from ._files_downloading import cifar10_downloading2fixedParams_loader
+
 __all__ = [
     "load_sales_data_cartoon_database",
     "load_ramen_price_cartoon_statistic",
@@ -40,7 +43,9 @@ __all__ = [
     "load_evaluation_criteria_raw_values",
     "load_sustainability_attributes4electricity_generation_tech",
     "load_microclimate_in_office_rooms",
-    'load_jisperveld_data'
+    'load_jisperveld_data',
+    'files_downloading',
+    'cifar10_downloading2fixedParams_loader',
     ]
 
 
