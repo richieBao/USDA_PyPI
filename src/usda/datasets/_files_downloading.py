@@ -15,6 +15,14 @@ import pytorch_lightning as pl
 import torch
 import torch.utils.data as data
 
+import requests
+import geopandas as gpd
+import matplotlib as mpl
+import numpy as np
+import matplotlib.pyplot as plt
+import shapely
+from tqdm import tqdm
+
 def files_downloading(base_url,files_name,save_dir):
     # Create checkpoint path if it doesn't exist yet
     os.makedirs(save_dir, exist_ok=True)
@@ -61,3 +69,49 @@ def cifar10_downloading2fixedParams_loader(dataset_path,seed=42):
     
     return train_set,val_set,test_set,train_loader,val_loader,test_loader 
     
+def esa_worldcover_2020_grid_downloading(show=False,figsize=(20,10)):
+    s3_url_prefix = "https://esa-worldcover.s3.eu-central-1.amazonaws.com"
+    url=f"{s3_url_prefix}/v100/2020/esa_worldcover_2020_grid.geojson"
+    #print(url) 
+    response=requests.get(url)
+    data=response.json()
+    wc_grid=gpd.GeoDataFrame.from_features(data)
+    
+    if show:
+        ranodm_cmap=mpl.colors.ListedColormap (np.random.rand(len(wc_grid),3))
+        
+        fig, ax=plt.subplots(figsize=figsize)
+        wc_grid.plot(column='ll_tile',cmap=ranodm_cmap,ax=ax)
+        fig.patch.set_visible(False)
+        ax.axis('off')
+        plt.show()    
+        
+        return wc_grid,ranodm_cmap
+    else:
+        return wc_grid
+    
+def esa_worldcover_downloading(boundary,save_root,y='2020'):
+    wc_grid=esa_worldcover_2020_grid_downloading()
+    bounds_geometry=shapely.Polygon.from_bounds(*boundary)
+    
+    # get grid tiles intersecting AOI
+    tiles=wc_grid[wc_grid.intersects(bounds_geometry)]    
+    
+    url_lst=[]
+    fns=[]
+    s3_url_prefix = "https://esa-worldcover.s3.eu-central-1.amazonaws.com"
+    for tile in tqdm(tiles.ll_tile):
+        if y=='2020':
+            url = f"{s3_url_prefix}/v100/2020/map/ESA_WorldCover_10m_2020_v100_{tile}_Map.tif"
+        elif y=='2021':
+            url = f"{s3_url_prefix}/v200/2021/map/ESA_WorldCover_10m_2021_v200_{tile}_Map.tif"
+        
+        url_lst.append(url)
+        r = requests.get(url, allow_redirects=True)
+        out_fn = os.path.join(save_root,f"ESA_WorldCover_10m_2020_v100_{tile}_Map.tif")
+        fns.append(out_fn)
+        with open(out_fn, 'wb') as f:
+            f.write(r.content)        
+            
+    return url_lst,fns,tiles
+            

@@ -11,6 +11,9 @@ from shapely.geometry import MultiLineString
 from shapely.ops import polygonize
 import geopandas as gpd
 
+import rioxarray as rxr
+import pandas as pd
+
 def pt_coordi_transform(old_epsg,new_epsg,pt_coordinate):
     '''
     转换点坐标投影
@@ -176,3 +179,22 @@ def rasters_minimum_bound(raster_fns):
     bound_gdf=gpd.GeoDataFrame(index=[0], crs=crs[0], geometry=[bound_geo])  
         
     return {'bound_gdf':bound_gdf,'crs':crs,'bounds_df':bounds_df}
+
+def rastercells2shp(rasterfn,outSHPfn=None):
+    raster=rxr.open_rasterio(rasterfn)    
+    x, y, vals = raster.x.values, raster.y.values, raster.values
+    
+    x, y = np.meshgrid(x, y)
+    x, y, vals= x.flatten(), y.flatten(), vals.flatten()
+    
+    raster_pd = pd.DataFrame.from_dict({'vals': vals, 'x': x, 'y': y})
+    raster_gpd = gpd.GeoDataFrame(geometry=gpd.GeoSeries.from_xy(raster_pd['x'], raster_pd['y'], crs=raster.rio.crs))
+    cell_x,cell_y=raster.rio.resolution()
+    
+    raster_gpd['geometry']= raster_gpd.buffer(cell_x/2,cap_style=3)
+    raster_merged=raster_gpd.merge(raster_pd,left_index=True, right_index=True)
+    
+    if outSHPfn:
+        raster_merged.to_file(outSHPfn)    
+    
+    return raster_merged

@@ -25,6 +25,10 @@ from ._img_info import img_exif_info
 
 from ._files_downloading import files_downloading
 from ._files_downloading import cifar10_downloading2fixedParams_loader
+from ._files_downloading import esa_worldcover_2020_grid_downloading
+from ._files_downloading import esa_worldcover_downloading
+
+from ._panorama_baidu_download import roads_pts4bsv_tourLine
 
 __all__ = [
     "load_sales_data_cartoon_database",
@@ -46,6 +50,9 @@ __all__ = [
     'load_jisperveld_data',
     'files_downloading',
     'cifar10_downloading2fixedParams_loader',
+    'esa_worldcover_2020_grid_downloading',
+    'esa_worldcover_downloading',
+    'roads_pts4bsv_tourLine',
     ]
 
 

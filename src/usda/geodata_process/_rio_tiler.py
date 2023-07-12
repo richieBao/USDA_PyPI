@@ -5,7 +5,7 @@ Created on Tue Mar 21 17:30:43 2023
 @author: richie bao
 """
 import math  
-from rio_tiler.io import COGReader
+# from rio_tiler.io import COGReader # proj problem
 import numpy as np
 import matplotlib.pyplot as plt
 

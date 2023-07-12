@@ -20,6 +20,7 @@ src/usda/data_process/_raster_dataprocess.py
 src/usda/data_process/_tiler_calculation.py
 src/usda/data_visual/__init__.py
 src/usda/data_visual/_plot_style.py
+src/usda/data_visual/_worldcover_plot_style.py
 src/usda/data_visualization/__init__.py
 src/usda/data_visualization/_chart_custom.py
 src/usda/data_visualization/_colors.py
@@ -56,6 +57,7 @@ src/usda/datasets/_dataset_info.py
 src/usda/datasets/_files_downloading.py
 src/usda/datasets/_img_info.py
 src/usda/datasets/_kml_info.py
+src/usda/datasets/_panorama_baidu_download.py
 src/usda/datasets/_rs_image.py
 src/usda/datasets/data/__init__.py
 src/usda/datasets/data/bowling_contest_cartoon_statistic.pickle
@@ -67,6 +69,9 @@ src/usda/datasets/data/sales_data_cartoon_database.pickle
 src/usda/datasets/data/sustainability_attributes4electricity_generation_tech.pickle
 src/usda/datasets/data/test_score_cartoon_statistic.pickle
 src/usda/geodata_process/__init__.py
+src/usda/geodata_process/_build_clipped_raster_dataset.py
+src/usda/geodata_process/_build_clipped_raster_dataset_pool.py
+src/usda/geodata_process/_data_format_conversion.py
 src/usda/geodata_process/_quadrat.py
 src/usda/geodata_process/_raster_dataprocess.py
 src/usda/geodata_process/_raster_stats.py

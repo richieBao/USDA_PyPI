@@ -11,6 +11,8 @@ import torch.nn.functional as F
 import os
 import torch
 import torch.nn as nn
+from torch import optim
+from torchmetrics import Accuracy  
 
 # PyTorch Lightning
 import pytorch_lightning as pl
@@ -121,11 +123,13 @@ class VisionTransformer(nn.Module):
 
 class ViT(pl.LightningModule):
 
-    def __init__(self, model_kwargs, lr):
+    def __init__(self, model_kwargs, lr): # ,device='cuda'
         super().__init__()
         self.save_hyperparameters()
         self.model = VisionTransformer(**model_kwargs)
         # self.example_input_array = next(iter(train_loader))[0]
+        # self.valid_acc = Accuracy()
+        self.valid_acc=Accuracy(task='multiclass',num_classes=model_kwargs['num_classes'])#.to(device)
 
     def forward(self, x):
         return self.model(x)
@@ -143,17 +147,30 @@ class ViT(pl.LightningModule):
 
         self.log(f'{mode}_loss', loss)
         self.log(f'{mode}_acc', acc)
-        return loss
+        return loss,acc
 
     def training_step(self, batch, batch_idx):
-        loss = self._calculate_loss(batch, mode="train")
+        loss,acc = self._calculate_loss(batch, mode="train")        
+        self.log("loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
-        self._calculate_loss(batch, mode="val")
-
+        # loss,acc =self._calculate_loss(batch, mode="val")       
+        # print(f'val loss={loss};val acc={acc}')
+        # self.log("val_acc", acc, on_step=True, prog_bar=True, logger=True)
+        imgs, labels = batch
+        preds = self.model(imgs)
+        loss = F.cross_entropy(preds, labels)
+        preds = preds.argmax(dim=-1)
+        self.valid_acc.update(preds,labels)      
+        
+        self.log("val_loss", loss, prog_bar=True) 
+        self.log("val_acc", self.valid_acc.compute(), prog_bar=True) 
+        return loss 
+        
     def test_step(self, batch, batch_idx):
-        self._calculate_loss(batch, mode="test")
+        loss,acc =self._calculate_loss(batch, mode="test")
+    
         
 def train_model4ViT(CHECKPOINT_PATH,device,train_loader,val_loader,test_loader,**kwargs):
     
