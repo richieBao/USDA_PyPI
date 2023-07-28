@@ -29,6 +29,12 @@ from ._files_downloading import esa_worldcover_2020_grid_downloading
 from ._files_downloading import esa_worldcover_downloading
 
 from ._panorama_baidu_download import roads_pts4bsv_tourLine
+from ._panorama_baidu_download import baidu_steetview_crawler
+from ._panorama_baidu_download import img_valid_copy_folder
+from ._panorama_baidu_download import baidu_steetview_crawler_from_coordis
+
+from ._poi_crawler import baiduPOI_dataCrawler
+from ._poi_crawler import baiduPOI_dataCrawler_circle
 
 __all__ = [
     "load_sales_data_cartoon_database",
@@ -53,6 +59,11 @@ __all__ = [
     'esa_worldcover_2020_grid_downloading',
     'esa_worldcover_downloading',
     'roads_pts4bsv_tourLine',
+    'baidu_steetview_crawler',
+    'img_valid_copy_folder',
+    'baiduPOI_dataCrawler',
+    'baiduPOI_dataCrawler_circle',
+    'baidu_steetview_crawler_from_coordis',
     ]
 
 

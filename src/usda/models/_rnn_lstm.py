@@ -228,3 +228,115 @@ def char_random_generation(model,checkpoint_path,filename,seq_length=100,gen_len
             # append the new character into the prompt for the next iteration
             pattern.append(index)
             pattern = pattern[1:] # -seq_length            
+            
+class Simple_LSTM(nn.Module):
+    def __init__(self,input_size,output_size,hidden_size,num_layers=1,batch_first=True):
+        super().__init__()
+        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, batch_first=batch_first)
+        self.linear = nn.Linear(hidden_size, output_size)
+    def forward(self,x):
+        x, _=self.lstm(x)
+        #x=x[:, -1, :]
+        x=self.linear(x)
+        return x            
+    
+def spatial_metrics_train(model,train_loader,train_data,test_data,n_epochs,verbose=True):
+    optimizer=optim.Adam(model.parameters())
+    loss_fn=nn.MSELoss()
+    
+    test_rmse_dict={}
+    train_rmse_dict={}
+    for epoch in range(n_epochs):
+        model.train()
+        for X_batch, y_batch in train_loader:
+            #print(X_batch.shape,y_batch.shape)
+            y_pred=model(X_batch)
+            #print(torch.squeeze(y_pred).shape)
+            loss=loss_fn(torch.squeeze(y_pred), y_batch)
+            #print(loss)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+        # Validation
+        #if epoch % 100 != 0:
+            #continue
+            
+        model.eval()
+        with torch.no_grad():
+            train_pred=model(train_data[0])
+            train_rmse=np.sqrt(loss_fn(torch.squeeze(train_pred), train_data[1]))
+            train_rmse_dict[epoch]=train_rmse
+            
+            test_pred=model(test_data[0])
+            test_rmse=np.sqrt(loss_fn(torch.squeeze(test_pred), test_data[1]))
+            test_rmse_dict[epoch]=test_rmse
+            if verbose:
+                print("Epoch %d: train RMSE %.4f, test RMSE %.4f" % (epoch, train_rmse, test_rmse))
+                
+    print('Complete training.')        
+    return train_rmse_dict,test_rmse_dict # model,
+
+def train_test_rmse_plot(train_rmse_dict,test_rmse_dict,figsize=(7,3.5)):
+    fig, axs=plt.subplots(1, 2,figsize=figsize)
+    axs[0].plot(train_rmse_dict.keys(),train_rmse_dict.values())
+    axs[1].plot(test_rmse_dict.keys(),test_rmse_dict.values())
+
+    axs[0].set_title('train rmse')
+    axs[1].set_title('test rmse')
+    axs[0].spines[['right', 'top']].set_visible(False)
+    axs[1].spines[['right', 'top']].set_visible(False)
+    fig.tight_layout()
+    plt.show()   
+    
+def timeseries_pred_plot(model,timeseries,train_data,test_data,window_size,figsize=(20,2),title=None):
+    timeseries = timeseries.values.astype('float32')   
+    train_size=len(train_data[0])
+    with torch.no_grad():
+        # shift train predictions for plotting
+        train_plot = np.ones_like(timeseries) * np.nan
+        y_pred = model(train_data[0])
+        y_pred=torch.squeeze(y_pred)
+        train_plot[window_size:train_size] =y_pred[:-window_size]
+        # shift test predictions for plotting
+        test_plot = np.ones_like(timeseries) * np.nan
+        test_plot[train_size+window_size*2:len(timeseries)] = torch.squeeze(model(test_data[0]))    
+
+    fig,ax=plt.subplots(figsize=figsize)
+    # plot
+    ax.plot(timeseries)
+    ax.plot(train_plot, c='r')
+    ax.plot(test_plot, c='g')    
+    if title:
+        ax.set_title(title)
+    plt.show() 
+    
+def timeseries_pred_generation(model,timeseries,window_size,gen_length=10,norm=None):
+    if norm:
+        mean,std=norm
+        timeseries=(timeseries-mean)/std
+    X=torch.tensor(timeseries.values,dtype=torch.float32)  
+    X_copy=torch.clone(X)
+    X=X[-window_size:][None,:]
+    pred_lst=[]
+    model.eval()
+    with torch.no_grad():
+        for i in range(gen_length):
+            prediction=model(X)
+            pred_lst.append(prediction[0][0])
+            X=torch.cat((X,prediction),1)
+            X=X[:,1:]
+            
+    return pred_lst,X_copy    
+
+def timeseries_pred_generation_plot(X,pred_lst,title=None,figsize=(20,2)):
+    fig,ax=plt.subplots(figsize=figsize)
+    # plot
+    x_1=list(range(len(X)))
+    x_2=list(range(len(pred_lst)))
+    x_2=[x_1[-1]+i for i in x_2]
+    ax.plot(x_1,X, c='r')
+    ax.plot(x_2,pred_lst, c='g')    
+    if title:
+        ax.set_title(title)
+    plt.show() 

@@ -4,11 +4,9 @@ Created on Sun Aug 21 15:11:00 2022
 
 @author: Richie Bao-caDesign设计(cadesign.cn)
 """
+from ._semantic_seg import pass_seg
 
 __all__ = [
-    "stylegan",
-    "pix2pix",
-    "invest",
-    "pass_panoseg",
+    "pass_seg",
     ]
 

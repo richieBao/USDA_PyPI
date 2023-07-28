@@ -5,7 +5,7 @@ Created on Tue Mar 21 17:30:43 2023
 @author: richie bao
 """
 import math  
-# from rio_tiler.io import COGReader # proj problem
+from rio_tiler.io import COGReader # proj problem
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -73,7 +73,6 @@ def tiled_web_map_show(fn,z=9,tilesize=512,offset_x=0,offset_y=0,cmap=None,centr
     -------
     img : array
     图像数据.
-
     '''
     with COGReader(fn) as src:
         print('CRS:',src.crs)

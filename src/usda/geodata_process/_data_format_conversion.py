@@ -29,7 +29,9 @@ def kml2gdf_folder(fn,epsg=None,boundary=None):
 
     '''
     # Enable fiona driver
+    # fiona.drvsupport.supported_drivers['LIBKML'] = 'rw' # 'LIBKML', 'KML'
     fiona.drvsupport.supported_drivers['KML'] = 'rw'
+    # gpd.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
     
     kml_gdf=gpd.GeoDataFrame()
     for layer in tqdm(fiona.listlayers(fn)):

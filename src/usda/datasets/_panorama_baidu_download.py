@@ -20,6 +20,7 @@ from PIL import Image
 import glob
 from PIL import Image
 import shutil
+import shapely
 
 def roads_pts4bsv(roads_gdf,distance=10):
     '''
@@ -85,7 +86,11 @@ def baidu_steetview_crawler(pts_gdf,save_path,ak,save_path_BSV_retrival_info):
     pts_num={}    
     pt_fns={}
     for idx,row in pts_gdf.iterrows():
-        pt_coords=[(pt.x,pt.y) for pt in row.geometry]
+        if isinstance(row.geometry,shapely.geometry.point.Point):
+            pt_coords=[(row.geometry.x,row.geometry.y)] 
+        elif isinstance(row.geometry,shapely.geometry.multipoint.MultiPoint):
+            pt_coords=[(p.x,p.y) for p in row.geometry.geoms]
+
         coords[row.Name]=pt_coords
         pts_num[row.Name]=len(pt_coords)
     print("\npts_num={}".format(sum(pts_num.values())))
@@ -258,6 +263,34 @@ def pts_number_check(pts):
         pts_num[row.Name]=len(pt_coords)
     # print(coords)
     print("\npts_num={}".format(sum(pts_num.values())))
+    
+def baidu_steetview_crawler_from_coordis(coordis,ak,save_dir):
+    urlRoot=r"http://api.map.baidu.com/panorama/v2?"
+    query_dic={
+        'width':'1024',
+        'height':'512', 
+        'fov':'360',
+        'heading':'0',
+        'pitch':'0',
+        'coordtype':'wgs84ll',
+        'ak':ak,
+    }      
+    
+    for idx,coordi in enumerate(coordis):
+        pic_fn=os.path.join(save_dir,"{}.jpg".format(idx))  
+        if not os.path.exists(pic_fn):            
+            query_dic.update({
+                              'location':str(coordi[0])+','+str(coordi[1]),
+                             })         
+            url=urlRoot+urllib.parse.urlencode(query_dic)     
+            try:
+                data=urllib.request.urlopen(url)
+                with open(pic_fn,'wb') as fp:
+                    fp.write(data.read())           
+            except:
+                print('download_error:{}'.format(idx))
+        else:
+            print("file existed.")     
     
 if __name__=="__main__":
     pass

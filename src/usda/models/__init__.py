@@ -37,6 +37,13 @@ from ._rnn_lstm import RNN_train_img
 from ._rnn_lstm import CharModel
 from ._rnn_lstm import char_train
 from ._rnn_lstm import char_random_generation
+from ._rnn_lstm import Simple_LSTM
+from ._rnn_lstm import spatial_metrics_train
+from ._rnn_lstm import train_test_rmse_plot
+from ._rnn_lstm import timeseries_pred_plot
+from ._rnn_lstm import timeseries_pred_generation
+from ._rnn_lstm import timeseries_pred_generation_plot
+
 
 from ._nlp_tools import build_co_occurrence_matrix
 from ._nlp_tools import text_replace_preprocess
@@ -83,6 +90,9 @@ from ._vit import AttentionBlock
 from ._vit import VisionTransformer
 from ._vit import ViT
 from ._vit import train_model4ViT
+
+from ._plot_components import plot_components
+from ._plot_components import resize_array
 
 __all__=[
     "k_neighbors_entire",
@@ -144,6 +154,14 @@ __all__=[
     "VisionTransformer",
     "ViT",
     "train_model4ViT",
+    "Simple_LSTM",
+    "spatial_metrics_train",
+    "train_test_rmse_plot",
+    "timeseries_pred_plot",
+    "timeseries_pred_generation",
+    "timeseries_pred_generation_plot",
+    "plot_components",
+    "resize_array",
     ]
 
 

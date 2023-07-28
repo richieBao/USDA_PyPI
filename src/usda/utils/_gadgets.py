@@ -4,6 +4,11 @@ Created on Fri Oct 28 08:25:20 2022
 
 @author: richie bao
 """
+import torch.optim as optim
+import torch.utils.data as data
+import numpy as np
+import torch
+import pandas as pd
 
 def variable_name(var):
     '''
@@ -129,6 +134,44 @@ def sequence2series_of_overlapping_with_labels(seq,ws):
         out.append((win,label))
 
     return out    
+
+def create_sequence2series_datasetNdataloader_from_df(df,cols,window_size=10,test_size_ratio=0.1,batch_size=64):
+    test_size=int(len(df)*test_size_ratio)
+    train_set,test_set=df[:-test_size][cols],df[-test_size:][cols]
+    
+    train_data_dict={}
+    train_loader_dict={}
+    test_data_dict={}
+    test_loader_dict={}
+    
+    def ds_dl(ds_df,col):
+        s2s=sequence2series_of_overlapping_with_labels(ds_df[col].values, window_size)
+        X,y=zip(*s2s)
+        X=np.vstack(X)
+        y=np.hstack(y)
+        X,y=torch.Tensor(X),torch.Tensor(y) #.type(torch.LongTensor) 
+        loader=data.DataLoader(data.TensorDataset(X,y), shuffle=True, batch_size=batch_size)
+        return (X,y),loader 
+    
+    for col in cols:
+        train_data,train_loader=ds_dl(train_set,col)
+        train_data_dict[col]=train_data
+        train_loader_dict[col]=train_loader
+        
+        test_data,test_loader=ds_dl(test_set,col)
+        test_data_dict[col]=test_data
+        test_loader_dict[col]=test_loader        
+        
+    return train_data_dict,test_data_dict,train_loader_dict,test_loader_dict   
+
+def normalize_by_meanNstd(df):
+    mean_std_dict={col:[df[col].mean(),df[col].std()] for col in df.columns}
+    #print(mean_std_dict)
+    norm_dict={}
+    for col in df.columns:
+        norm_dict[col]=(df[col]-mean_std_dict[col][0])/mean_std_dict[col][1]
+    norm_df=pd.DataFrame(norm_dict)
+    return norm_df,mean_std_dict
 
 if __name__=="__main__":
     xyz=6
