@@ -7,7 +7,7 @@ Created on Sun Aug 21 15:11:00 2022
 python setup.py sdist
 twine upload dist/usda-0.0.22.tar.gz
 """
-__version__ = "0.0.26"
+__version__ = "0.0.27"
 
 __all__ = [
     "data_process"

@@ -77,6 +77,7 @@ src/usda/geodata_process/__init__.py
 src/usda/geodata_process/_build_clipped_raster_dataset.py
 src/usda/geodata_process/_build_clipped_raster_dataset_pool.py
 src/usda/geodata_process/_data_format_conversion.py
+src/usda/geodata_process/_overlapping_polygons.py
 src/usda/geodata_process/_quadrat.py
 src/usda/geodata_process/_raster_dataprocess.py
 src/usda/geodata_process/_raster_stats.py
@@ -84,6 +85,8 @@ src/usda/geodata_process/_rasterize.py
 src/usda/geodata_process/_rio_tiler.py
 src/usda/geodata_process/_sample_pts.py
 src/usda/geodata_process/_shp_dataprocess.py
+src/usda/geodata_process/_torchgeo_datasets_utils.py
+src/usda/geodata_process/_torchgeo_seg_patch.py
 src/usda/imgs_process/__init__.py
 src/usda/imgs_process/_imgs_process_basic.py
 src/usda/indices/__init__.py

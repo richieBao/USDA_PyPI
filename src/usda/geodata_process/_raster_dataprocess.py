@@ -11,6 +11,8 @@ from rasterio.warp import calculate_default_transform, reproject, Resampling
 
 import rasterio,glob,os
 from rasterio.merge import merge
+import glob
+from osgeo import gdal
 
 def rio_read_subset(fn,lbNrt_coordinates):
     '''
@@ -196,3 +198,14 @@ def raster_mosaic(dir_path,out_fp,dtype=None):
         dest.write(mosaic.astype(data_type))     
     
     return out_trans
+
+def raster_mosaic_vrt(raster_dir,out_fn,xRes=1,yRes=1):    
+    fn_lst=glob.glob(os.path.join(raster_dir,'*.tif'))
+    src=gdal.Open(fn_lst[0],gdal.GA_ReadOnly)    
+    gt =src.GetGeoTransform()    
+    xRes=gt[1]
+    yRes=gt[5]
+    
+    vrt=gdal.BuildVRT('merged.vrt',fn_lst)
+    gdal.Translate(out_fn,vrt,xRes=xRes,yRes=yRes)
+    vrt=None

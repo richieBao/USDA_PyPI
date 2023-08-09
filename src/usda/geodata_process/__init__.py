@@ -16,6 +16,7 @@ from ._raster_dataprocess import rio_read_subset
 from ._raster_dataprocess import raster2polygon
 from ._raster_dataprocess import raster_reprojection
 from ._raster_dataprocess import raster_mosaic
+from ._raster_dataprocess import raster_mosaic_vrt
 
 from ._raster_stats import zonal_stats_raster
 from ._raster_stats import zonal_stats_raster_batch
@@ -35,6 +36,23 @@ from ._build_clipped_raster_dataset import xy_size_elevation
 from ._build_clipped_raster_dataset import build_clipped_raster_dataset
 
 from ._data_format_conversion import kml2gdf_folder
+
+from ._overlapping_polygons import IoU_2Polygons
+from ._overlapping_polygons import drop_overlapping_polygons
+from ._overlapping_polygons import planetary_computer_items_filter4download
+
+from ._torchgeo_seg_patch import AppendNDVI
+from ._torchgeo_seg_patch import AppendNDWI
+from ._torchgeo_seg_patch import remove_bbox
+from ._torchgeo_seg_patch import naip_preprocess
+from ._torchgeo_seg_patch import naip_rd
+from ._torchgeo_seg_patch import RasterDataset
+from ._torchgeo_seg_patch import NAIP
+from ._torchgeo_seg_patch import cmap4LC
+from ._torchgeo_seg_patch import Seg_config
+from ._torchgeo_seg_patch import img_size_expand_topNright
+from ._torchgeo_seg_patch import segarray2tiff
+from ._torchgeo_seg_patch import get_random_string
 
 __all__ = [
     "pt_coordi_transform",
@@ -61,5 +79,21 @@ __all__ = [
     "xy_size_elevation",
     "build_clipped_raster_dataset",
     "kml2gdf_folder",
+    "drop_overlapping_polygons",
+    "IoU_2Polygons",
+    "planetary_computer_items_filter4download",
+    " AppendNDVI",
+    "AppendNDWI",
+    "remove_bbox",
+    "naip_preprocess",
+    "naip_rd",
+    "RasterDataset",
+    "NAIP",
+    "cmap4LC",
+    "Seg_config",
+    "img_size_expand_topNright",
+    "segarray2tiff",
+    "get_random_string",
+    "raster_mosaic_vrt",
     ]
 

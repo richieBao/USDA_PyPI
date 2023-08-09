@@ -1,0 +1,24 @@
+conda install gdal
+pip install geopandas
+
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install rioxarray
+pip install rasterstats
+# pip install rio-tiler
+pip install -U scikit-learn
+
+pip install torchgeo
+
+
+
+
+conda install -c conda-forge gdal
+pip install geopandas
+pip install rioxarray
+
+
+conda install gdal=3.1 -c conda-forge -yconda install gdal=3.1 -c conda-forge -y
+
+import os
+os.environ["USE_PATH_FOR_GDAL_PYTHON"] = "YES"
+os.environ['PATH']=os.environ['PATH'] + ';C:\\Users\\richie\.conda'
