@@ -6,6 +6,7 @@ Created on Sun Aug 21 15:11:00 2022
 """
 from ._descriptive_stats import frequency_bins
 from ._descriptive_stats import comparisonOFdistribution
+from ._descriptive_stats import xdas_stats
 
 from ._outlier import is_outlier
 from ._kde import ptsKDE_geoDF2raster
@@ -29,5 +30,6 @@ __all__ = [
     "coefficient_of_determination_correction",
     "confidenceInterval_estimator_LR_multivariable",
     "P_Xk_binomialDistribution",
+    "xdas_stats",
     ]
 

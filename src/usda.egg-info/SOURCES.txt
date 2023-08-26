@@ -84,6 +84,7 @@ src/usda/geodata_process/_raster_stats.py
 src/usda/geodata_process/_rasterize.py
 src/usda/geodata_process/_rio_tiler.py
 src/usda/geodata_process/_sample_pts.py
+src/usda/geodata_process/_scale.py
 src/usda/geodata_process/_shp_dataprocess.py
 src/usda/geodata_process/_torchgeo_datasets_utils.py
 src/usda/geodata_process/_torchgeo_seg_patch.py
@@ -260,6 +261,8 @@ src/usda/pgm/_pgm_calculating.py
 src/usda/pgm/_pgm_conversion.py
 src/usda/pgm/_pgm_draw.py
 src/usda/pgm/_probability_theory.py
+src/usda/sim/__init__.py
+src/usda/sim/_gaussian_weight.py
 src/usda/stats/__init__.py
 src/usda/stats/_descriptive_stats.py
 src/usda/stats/_kde.py
@@ -282,3 +285,4 @@ src/usda/utils/_operating_time.py
 src/usda/weight/__init__.py
 src/usda/weight/_decision_rule.py
 src/usda/weight/_entropy_weight.py
+src/usda/weight/_gaussian_weight.py

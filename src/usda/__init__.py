@@ -32,4 +32,5 @@ __all__ = [
     "migrated_project",
     "imgs_process",
     "pgm",
+    "sim",
     ]

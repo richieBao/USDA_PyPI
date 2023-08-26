@@ -173,6 +173,9 @@ def normalize_by_meanNstd(df):
     norm_df=pd.DataFrame(norm_dict)
     return norm_df,mean_std_dict
 
+def normalize_by_minmax4all(array):
+    return (array - np.min(array)) / (np.max(array) - np.min(array))
+
 if __name__=="__main__":
     xyz=6
     var_str=variable_name(xyz)

@@ -20,6 +20,8 @@ from ._decision_rule import idocriw_method
 from ._decision_rule import electre_i
 from ._decision_rule import waspas_method
 
+from ._gaussian_weight import gaussian_weight
+
 __all__ = [
     "df_Pij",
     "entropy_weight",
@@ -35,5 +37,6 @@ __all__ = [
     "idocriw_method",
     "electre_i",
     "waspas_method",
+    "gaussian_weight",
     ]
 

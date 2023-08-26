@@ -64,6 +64,7 @@ def G_drawing(G,edge_labels=None,node_labels=None,routes=[],nodes=[],**kwargs):
     "node_size": 150,
     "node_color": "olive",
     "edgecolors": "olive",
+    "edge_color":'k',
     "linewidths": 7,
     "width": 1,
     "with_labels":True,    

@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns 
 
+from scipy import stats
+
 def frequency_bins(df,bins,field):    
     '''
     function - 频数分布计算
@@ -72,3 +74,40 @@ def comparisonOFdistribution(df,field,bins=100):
 
     s=np.random.normal(0, 1, len(df[field]))
     sns.histplot(s, bins=bins,kde=True,stat="density",linewidth=0,color='b')
+    
+def xdas_stats(xdas,exclulde=None):
+    stats4pop={}
+    exception_k=[]
+    for k,downsampled in xdas.items(): 
+        grain=[round(i,3) for i in downsampled.rio.resolution()]
+        if exclulde is None:
+            data=downsampled.data
+            data_flatten=data.reshape(-1)
+        else:
+            data=np.setdiff1d(downsampled.data,exclulde)
+            data_flatten=data.reshape(-1)
+
+        try:
+            stats4pop[grain[0]]=dict(
+                # shape=data.shape,
+                n=len(data_flatten),
+                max=np.max(data_flatten),
+                min=np.min(data_flatten),
+                sampleRange=np.ptp(data_flatten),
+                median=np.median(data_flatten),
+                mean=np.mean(data_flatten),
+                harmonic_mean=stats.hmean(data_flatten),
+                std=np.std(data_flatten),
+                var=np.var(data_flatten),
+                nanstd=np.nanstd(data_flatten),
+                nanvar=np.nanvar(data_flatten),
+                skew=stats.skew(data_flatten),
+                kurtosis=stats.kurtosis(data_flatten),
+                entropy=stats.entropy(data_flatten),            
+                )
+        except:
+            exception_k.append(k)
+
+        stats4pop_df=pd.DataFrame.from_dict(stats4pop)
+
+    return stats4pop_df,exception_k    

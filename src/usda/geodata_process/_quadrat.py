@@ -198,3 +198,14 @@ def rastercells2shp(rasterfn,outSHPfn=None):
         raster_merged.to_file(outSHPfn)    
     
     return raster_merged
+
+def find_boundingRectangle_coordis(polygons):
+    coordis=[]
+    for polygon in polygons:
+        coordis.extend(list(polygon.exterior.coords))
+    xy=list(zip(*coordis))
+    extremum_x=[min(xy[0]),max(xy[0])]
+    extremum_y=[min(xy[1]),max(xy[1])]
+    left_bottom=[extremum_x[0],extremum_y[0]]
+    right_top=[extremum_x[1],extremum_y[1]]
+    return left_bottom,right_top

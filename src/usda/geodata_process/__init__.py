@@ -11,6 +11,7 @@ from ._quadrat import rec_quadrats_bounded_gdf
 from ._quadrat import pt_coordi_transform
 from ._quadrat import rasters_minimum_bound
 from ._quadrat import rastercells2shp
+from ._quadrat import find_boundingRectangle_coordis
 
 from ._raster_dataprocess import rio_read_subset
 from ._raster_dataprocess import raster2polygon
@@ -54,6 +55,9 @@ from ._torchgeo_seg_patch import img_size_expand_topNright
 from ._torchgeo_seg_patch import segarray2tiff
 from ._torchgeo_seg_patch import get_random_string
 
+from ._scale import array2dataarray
+from ._scale import upNdownsampling
+
 __all__ = [
     "pt_coordi_transform",
     "pt_on_quadrat",
@@ -95,5 +99,8 @@ __all__ = [
     "segarray2tiff",
     "get_random_string",
     "raster_mosaic_vrt",
+    "array2dataarray",
+    "upNdownsampling",
+    "find_boundingRectangle_coordis",
     ]
 
