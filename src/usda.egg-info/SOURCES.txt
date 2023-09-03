@@ -115,6 +115,9 @@ src/usda/meta_heuristics/_pso.py
 src/usda/meta_heuristics/_pso_2d.py
 src/usda/meta_heuristics/_pso_2d_testing.py
 src/usda/migrated_project/__init__.py
+src/usda/migrated_project/RL_an_introduction/__init__.py
+src/usda/migrated_project/RL_an_introduction/chapter02/__init__.py
+src/usda/migrated_project/RL_an_introduction/chapter02/ten_armed_testbed.py
 src/usda/migrated_project/invest/__init__.py
 src/usda/migrated_project/invest/configs/__init__.py
 src/usda/migrated_project/invest/configs/_carbon_configs.py
@@ -282,6 +285,7 @@ src/usda/utils/_displayable_path.py
 src/usda/utils/_file_structure.py
 src/usda/utils/_gadgets.py
 src/usda/utils/_operating_time.py
+src/usda/utils/untitled0.py
 src/usda/weight/__init__.py
 src/usda/weight/_decision_rule.py
 src/usda/weight/_entropy_weight.py

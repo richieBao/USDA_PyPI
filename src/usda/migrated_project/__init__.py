@@ -10,5 +10,6 @@ __all__ = [
     "pix2pix",
     "invest",
     "pass_panoseg",
+    "RL_an_introduction",
     ]
 
