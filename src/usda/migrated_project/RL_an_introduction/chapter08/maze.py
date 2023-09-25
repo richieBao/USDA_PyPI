@@ -8,7 +8,7 @@
 
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import heapq
@@ -395,14 +395,11 @@ def prioritized_sweeping(q_value, model, maze, dyna_params):
     return backups
 
 # Figure 8.2, DynaMaze, use 10 runs instead of 30 runs
-def figure_8_2():
+def figure_8_2(runs = 10,episodes = 50,planning_steps = [0, 5, 50],figsize=(5, 5)):
     # set up an instance for DynaMaze
     dyna_maze = Maze()
     dyna_params = DynaParams()
 
-    runs = 10
-    episodes = 50
-    planning_steps = [0, 5, 50]
     steps = np.zeros((len(planning_steps), episodes))
 
     for run in tqdm(range(runs)):
@@ -418,15 +415,16 @@ def figure_8_2():
 
     # averaging over runs
     steps /= runs
-
+    
+    plt.figure(figsize=figsize)
     for i in range(len(planning_steps)):
         plt.plot(steps[i, :], label='%d planning steps' % (planning_steps[i]))
     plt.xlabel('episodes')
     plt.ylabel('steps per episode')
     plt.legend()
-
-    plt.savefig('../images/figure_8_2.png')
-    plt.close()
+    plt.show()
+    # plt.savefig('../images/figure_8_2.png')
+    # plt.close()
 
 # wrapper function for changing maze
 # @maze: a maze instance
@@ -473,7 +471,7 @@ def changing_maze(maze, dyna_params):
     return rewards
 
 # Figure 8.4, BlockingMaze
-def figure_8_4():
+def figure_8_4(figsize=(5, 5)):
     # set up a blocking maze instance
     blocking_maze = Maze()
     blocking_maze.START_STATE = [5, 3]
@@ -503,18 +501,19 @@ def figure_8_4():
 
     # play
     rewards = changing_maze(blocking_maze, dyna_params)
-
+    
+    plt.figure(figsize=figsize)
     for i in range(len(dyna_params.methods)):
         plt.plot(rewards[i, :], label=dyna_params.methods[i])
     plt.xlabel('time steps')
     plt.ylabel('cumulative reward')
     plt.legend()
-
-    plt.savefig('../images/figure_8_4.png')
-    plt.close()
+    plt.show()
+    # plt.savefig('../images/figure_8_4.png')
+    # plt.close()
 
 # Figure 8.5, ShortcutMaze
-def figure_8_5():
+def figure_8_5(figsize=(5, 5)):
     # set up a shortcut maze instance
     shortcut_maze = Maze()
     shortcut_maze.START_STATE = [5, 3]
@@ -544,15 +543,17 @@ def figure_8_5():
 
     # play
     rewards = changing_maze(shortcut_maze, dyna_params)
-
+    
+    plt.figure(figsize=figsize)
     for i in range(len(dyna_params.methods)):
         plt.plot( rewards[i, :], label=dyna_params.methods[i])
     plt.xlabel('time steps')
     plt.ylabel('cumulative reward')
     plt.legend()
+    plt.show()
 
-    plt.savefig('../images/figure_8_5.png')
-    plt.close()
+    # plt.savefig('../images/figure_8_5.png')
+    # plt.close()
 
 # Check whether state-action values are already optimal
 def check_path(q_values, maze):
@@ -571,7 +572,7 @@ def check_path(q_values, maze):
     return True
 
 # Example 8.4, mazes with different resolution
-def example_8_4():
+def example_8_4(figsize=(5, 5)):
     # get the original 6 * 9 maze
     original_maze = Maze()
 
@@ -610,7 +611,7 @@ def example_8_4():
     for run in range(0, runs):
         for i in range(0, len(method_names)):
             for mazeIndex, maze in zip(range(0, len(mazes)), mazes):
-                print('run %d, %s, maze size %d' % (run, method_names[i], maze.WORLD_HEIGHT * maze.WORLD_WIDTH))
+                # print('run %d, %s, maze size %d' % (run, method_names[i], maze.WORLD_HEIGHT * maze.WORLD_WIDTH))
 
                 # initialize the state action values
                 q_value = np.zeros(maze.q_size)
@@ -639,20 +640,23 @@ def example_8_4():
 
     # Dyna-Q performs several backups per step
     backups[1, :] *= params_dyna.planning_steps + 1
-
+    
+    plt.figure(figsize=figsize)
     for i in range(0, len(method_names)):
         plt.plot(np.arange(1, num_of_mazes + 1), backups[i, :], label=method_names[i])
     plt.xlabel('maze resolution factor')
     plt.ylabel('backups until optimal solution')
     plt.yscale('log')
     plt.legend()
+    plt.show()
 
-    plt.savefig('../images/example_8_4.png')
-    plt.close()
+    # plt.savefig('../images/example_8_4.png')
+    # plt.close()
 
 if __name__ == '__main__':
     figure_8_2()
-    figure_8_4()
-    figure_8_5()
-    example_8_4()
+    # figure_8_4()
+    # figure_8_5()
+    # example_8_4()
+    # pass
 

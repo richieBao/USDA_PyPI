@@ -8,6 +8,11 @@ Created on Sat Sep  2 10:47:33 2023
 
 __all__=[
     "chapter02",
+    "chapter03",
+    "chapter05",
+    "chapter06",
+    "chapter07",
+    "chapter08"
     ]
 
 

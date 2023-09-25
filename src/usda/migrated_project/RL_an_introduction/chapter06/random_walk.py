@@ -8,7 +8,7 @@
 
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -83,21 +83,21 @@ def monte_carlo(values, alpha=0.1, batch=False):
     return trajectory, [returns] * (len(trajectory) - 1)
 
 # Example 6.2 left
-def compute_state_value():
+def compute_state_value(ax):
     episodes = [0, 1, 10, 100]
     current_values = np.copy(VALUES)
-    plt.figure(1)
+    # plt.figure(1)
     for i in range(episodes[-1] + 1):
         if i in episodes:
-            plt.plot(("A", "B", "C", "D", "E"), current_values[1:6], label=str(i) + ' episodes')
+            ax.plot(("A", "B", "C", "D", "E"), current_values[1:6], label=str(i) + ' episodes')
         temporal_difference(current_values)
-    plt.plot(("A", "B", "C", "D", "E"), TRUE_VALUE[1:6], label='true values')
-    plt.xlabel('State')
-    plt.ylabel('Estimated Value')
-    plt.legend()
+    ax.plot(("A", "B", "C", "D", "E"), TRUE_VALUE[1:6], label='true values')
+    ax.set_xlabel('State')
+    ax.set_ylabel('Estimated Value')
+    ax.legend()
 
 # Example 6.2 right
-def rms_error():
+def rms_error(ax):
     # Same alpha value can appear in both arrays
     td_alphas = [0.15, 0.1, 0.05]
     mc_alphas = [0.01, 0.02, 0.03, 0.04]
@@ -122,16 +122,15 @@ def rms_error():
                     monte_carlo(current_values, alpha=alpha)
             total_errors += np.asarray(errors)
         total_errors /= runs
-        plt.plot(total_errors, linestyle=linestyle, label=method + ', $\\alpha$ = %.02f' % (alpha))
-    plt.xlabel('Walks/Episodes')
-    plt.ylabel('Empirical RMS error, averaged over states')
-    plt.legend()
+        ax.plot(total_errors, linestyle=linestyle, label=method + ', $\\alpha$ = %.02f' % (alpha))
+    ax.set_xlabel('Walks/Episodes')
+    ax.set_ylabel('Empirical RMS error, averaged over states')
+    ax.legend()
 
 # Figure 6.2
 # @method: 'TD' or 'MC'
-def batch_updating(method, episodes, alpha=0.001):
-    # perform 100 independent runs
-    runs = 100
+def batch_updating(method, episodes, alpha=0.001,runs = 100):
+    # perform 100 independent runs    
     total_errors = np.zeros(episodes)
     for r in tqdm(range(0, runs)):
         current_values = np.copy(VALUES)
@@ -167,7 +166,7 @@ def batch_updating(method, episodes, alpha=0.001):
     total_errors /= runs
     return total_errors
 
-def example_6_2():
+def example_6_2_():
     plt.figure(figsize=(10, 20))
     plt.subplot(2, 1, 1)
     compute_state_value()
@@ -178,8 +177,17 @@ def example_6_2():
 
     plt.savefig('../images/example_6_2.png')
     plt.close()
+    
+def example_6_2(figsize=(10,5)):
+    _, axes = plt.subplots(1, 2, figsize=figsize)
 
-def figure_6_2():
+    compute_state_value(axes[0])
+    rms_error(axes[1])
+    
+    plt.tight_layout()
+    plt.show()    
+
+def figure_6_2_():
     episodes = 100 + 1
     td_errors = batch_updating('TD', episodes)
     mc_errors = batch_updating('MC', episodes)
@@ -195,7 +203,24 @@ def figure_6_2():
 
     plt.savefig('../images/figure_6_2.png')
     plt.close()
+    
+def figure_6_2(episodes = 100 + 1,alpha=0.001,runs = 100,figsize=(5, 5)):    
+    td_errors = batch_updating('TD', episodes,alpha,runs)
+    mc_errors = batch_updating('MC', episodes,alpha,runs)
+
+    plt.figure(figsize=figsize)
+    plt.plot(td_errors, label='TD')
+    plt.plot(mc_errors, label='MC')
+    plt.title("Batch Training")
+    plt.xlabel('Walks/Episodes')
+    plt.ylabel('RMS error, averaged over states')
+    plt.xlim(0, 100)
+    plt.ylim(0, 0.25)
+    plt.legend()
+
+    plt.show()    
 
 if __name__ == '__main__':
-    example_6_2()
-    figure_6_2()
+    # example_6_2()
+    # figure_6_2()
+    pass

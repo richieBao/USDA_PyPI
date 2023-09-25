@@ -14,7 +14,8 @@ import numpy as np
 from tqdm import trange
 
 # matplotlib.use('Agg')
-
+#import usda.data_visual as usda_vis
+from ....data_visual import plot_style_axis_A
 
 class Bandit:
     # @k_arm: # of arms
@@ -146,7 +147,7 @@ def figure_2_1(k=10,num=2000,seed=3467,delta_x=0.1,delta_y=0.1,figsize=(10,5),hi
     plt.show()    
 
 
-def figure_2_2(runs=2000, time=1000):
+def figure_2_2_(runs=2000, time=1000):
     epsilons = [0, 0.1, 0.01]
     bandits = [Bandit(epsilon=eps, sample_averages=True) for eps in epsilons]
     best_action_counts, rewards = simulate(runs, time, bandits)
@@ -169,9 +170,25 @@ def figure_2_2(runs=2000, time=1000):
 
     plt.savefig('../images/figure_2_2.png')
     plt.close()
+    
+def figure_2_2(best_action_counts, rewards,epsilons = [0, 0.1, 0.01],figsize=(20, 5)):
+    fig,axes=plt.subplots(1,2,figsize=figsize)
+    for eps, reward in zip(epsilons, rewards):
+        axes[0].plot(reward, label='$\epsilon = %.02f$' % (eps))
+    axes[0].set_xlabel('steps')
+    axes[0].set_ylabel('average reward')
+
+    for eps, counts in zip(epsilons, best_action_counts):
+        axes[1].plot(counts, label='$\epsilon = %.02f$' % (eps))
+    axes[1].set_xlabel('steps')
+    axes[1].set_ylabel('% optimal action')
+    plot_style_axis_A(axes[0])
+    plot_style_axis_A(axes[1])
+    plt.legend(loc=5)
+    plt.show()   
 
 
-def figure_2_3(runs=2000, time=1000):
+def figure_2_3_(runs=2000, time=1000):
     bandits = []
     bandits.append(Bandit(epsilon=0, initial=5, step_size=0.1))
     bandits.append(Bandit(epsilon=0.1, initial=0, step_size=0.1))
@@ -185,9 +202,19 @@ def figure_2_3(runs=2000, time=1000):
 
     plt.savefig('../images/figure_2_3.png')
     plt.close()
+    
+def figure_2_3(best_action_counts,figsize=(5, 5)):
+    fig,ax=plt.subplots(figsize=figsize)
+    ax.plot(best_action_counts[0], label='$\epsilon = 0, q = 5$')
+    ax.plot(best_action_counts[1], label='$\epsilon = 0.1, q = 0$')
+    ax.set_xlabel('Steps')
+    ax.set_ylabel('% optimal action')
+    plt.legend(loc='right')
+    plot_style_axis_A(ax)
+    plt.show()    
 
 
-def figure_2_4(runs=2000, time=1000):
+def figure_2_4_(runs=2000, time=1000):
     bandits = []
     bandits.append(Bandit(epsilon=0, UCB_param=2, sample_averages=True))
     bandits.append(Bandit(epsilon=0.1, sample_averages=True))
@@ -201,9 +228,19 @@ def figure_2_4(runs=2000, time=1000):
 
     plt.savefig('../images/figure_2_4.png')
     plt.close()
+    
+def figure_2_4(average_rewards,figsize=(5, 5)):
+    fig,ax=plt.subplots(figsize=figsize)
+    ax.plot(average_rewards[0], label='UCB $c = 2$')
+    ax.plot(average_rewards[1], label='epsilon greedy $\epsilon = 0.1$')
+    ax.set_xlabel('Steps')
+    ax.set_ylabel('Average reward')
+    plt.legend(loc='right')
+    plot_style_axis_A(ax)
+    plt.show()    
 
 
-def figure_2_5(runs=2000, time=1000):
+def figure_2_5_(runs=2000, time=1000):
     bandits = []
     bandits.append(Bandit(gradient=True, step_size=0.1, gradient_baseline=True, true_reward=4))
     bandits.append(Bandit(gradient=True, step_size=0.1, gradient_baseline=False, true_reward=4))
@@ -224,6 +261,20 @@ def figure_2_5(runs=2000, time=1000):
     plt.savefig('../images/figure_2_5.png')
     plt.close()
 
+def figure_2_5(best_action_counts,bandits,figsize=(5, 5)):
+    labels = [r'$\alpha = 0.1$, with baseline',
+              r'$\alpha = 0.1$, without baseline',
+              r'$\alpha = 0.4$, with baseline',
+              r'$\alpha = 0.4$, without baseline']
+    
+    fig,ax=plt.subplots(figsize=figsize)
+    for i in range(len(bandits)):
+        ax.plot(best_action_counts[i], label=labels[i])
+    ax.set_xlabel('Steps')
+    ax.set_ylabel('% Optimal action')
+    plt.legend(loc='right')
+    plot_style_axis_A(ax)
+    plt.show()
 
 def figure_2_6(runs=2000, time=1000):
     labels = ['epsilon-greedy', 'gradient bandit',
@@ -259,9 +310,10 @@ def figure_2_6(runs=2000, time=1000):
 
 
 if __name__ == '__main__':
-    figure_2_1()
+    # figure_2_1()
     # figure_2_2()
     # figure_2_3()
     # figure_2_4()
     # figure_2_5()
     # figure_2_6()
+    pass

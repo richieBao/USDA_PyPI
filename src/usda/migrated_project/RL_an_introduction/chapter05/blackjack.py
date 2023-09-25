@@ -9,7 +9,7 @@
 
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tqdm import tqdm
@@ -20,7 +20,7 @@ ACTION_STAND = 1  #  "strike" in the book
 ACTIONS = [ACTION_HIT, ACTION_STAND]
 
 # policy for player
-POLICY_PLAYER = np.zeros(22, dtype=np.int)
+POLICY_PLAYER = np.zeros(22, dtype=int)
 for i in range(12, 20):
     POLICY_PLAYER[i] = ACTION_HIT
 POLICY_PLAYER[20] = ACTION_STAND
@@ -240,9 +240,7 @@ def monte_carlo_es(episodes):
     return state_action_values / state_action_pair_count
 
 # Monte Carlo Sample with Off-Policy
-def monte_carlo_off_policy(episodes):
-    initial_state = [True, 13, 2]
-
+def monte_carlo_off_policy(episodes,initial_state = [True, 13, 2]):   
     rhos = []
     returns = []
 
@@ -276,7 +274,7 @@ def monte_carlo_off_policy(episodes):
 
     return ordinary_sampling, weighted_sampling
 
-def figure_5_1():
+def figure_5_1_():
     states_usable_ace_1, states_no_usable_ace_1 = monte_carlo_on_policy(10000)
     states_usable_ace_2, states_no_usable_ace_2 = monte_carlo_on_policy(500000)
 
@@ -303,8 +301,33 @@ def figure_5_1():
 
     plt.savefig('../images/figure_5_1.png')
     plt.close()
+    
+def figure_5_1(episodes=[10000,500000],figsize=(15, 14),fontsize=10):
+    states_usable_ace_1, states_no_usable_ace_1 = monte_carlo_on_policy(episodes[0])
+    states_usable_ace_2, states_no_usable_ace_2 = monte_carlo_on_policy(episodes[1])
 
-def figure_5_2():
+    states = [states_usable_ace_1,
+              states_usable_ace_2,
+              states_no_usable_ace_1,
+              states_no_usable_ace_2]
+
+    titles = [f'Usable Ace, {episodes[0]} Episodes',
+              f'Usable Ace,  {episodes[1]} Episodes',
+              f'No Usable Ace,  {episodes[0]} Episodes',
+              f'No Usable Ace,  {episodes[1]} Episodes']
+
+    _, axes = plt.subplots(2, 2, figsize=figsize)
+    plt.subplots_adjust(wspace=0.1, hspace=0.2)
+    axes = axes.flatten()
+
+    for state, title, axis in zip(states, titles, axes):
+        fig = sns.heatmap(np.flipud(state), cmap="YlGnBu", ax=axis, xticklabels=range(1, 11),yticklabels=list(reversed(range(12, 22))))
+        fig.set_ylabel('player sum', fontsize=fontsize)
+        fig.set_xlabel('dealer showing', fontsize=fontsize)
+        fig.set_title(title, fontsize=fontsize)
+    plt.show()    
+
+def figure_5_2_():
     state_action_values = monte_carlo_es(500000)
 
     state_value_no_usable_ace = np.max(state_action_values[:, :, 0, :], axis=-1)
@@ -337,8 +360,40 @@ def figure_5_2():
 
     plt.savefig('../images/figure_5_2.png')
     plt.close()
+    
+def figure_5_2(episodes=500000,figsize=(15, 14),fontsize=10):
+    state_action_values = monte_carlo_es(episodes)
 
-def figure_5_3():
+    state_value_no_usable_ace = np.max(state_action_values[:, :, 0, :], axis=-1)
+    state_value_usable_ace = np.max(state_action_values[:, :, 1, :], axis=-1)
+
+    # get the optimal policy
+    action_no_usable_ace = np.argmax(state_action_values[:, :, 0, :], axis=-1)
+    action_usable_ace = np.argmax(state_action_values[:, :, 1, :], axis=-1)
+
+    images = [action_usable_ace,
+              state_value_usable_ace,
+              action_no_usable_ace,
+              state_value_no_usable_ace]
+
+    titles = ['Optimal policy with usable Ace',
+              'Optimal value with usable Ace',
+              'Optimal policy without usable Ace',
+              'Optimal value without usable Ace']
+
+    _, axes = plt.subplots(2, 2,figsize=figsize )
+    plt.subplots_adjust(wspace=0.1, hspace=0.2)
+    axes = axes.flatten()
+
+    for image, title, axis in zip(images, titles, axes):
+        fig = sns.heatmap(np.flipud(image), cmap="YlGnBu", ax=axis, xticklabels=range(1, 11),
+                          yticklabels=list(reversed(range(12, 22))))
+        fig.set_ylabel('player sum', fontsize=fontsize)
+        fig.set_xlabel('dealer showing', fontsize=fontsize)
+        fig.set_title(title, fontsize=fontsize)
+    plt.show()    
+
+def figure_5_3_():
     true_value = -0.27726
     episodes = 10000
     runs = 100
@@ -362,9 +417,31 @@ def figure_5_3():
 
     plt.savefig('../images/figure_5_3.png')
     plt.close()
+    
+def figure_5_3(true_value = -0.27726,episodes = 10000,runs = 100,figsize=(5, 5)):    
+    error_ordinary = np.zeros(episodes)
+    error_weighted = np.zeros(episodes)
+    for i in tqdm(range(0, runs)):
+        ordinary_sampling_, weighted_sampling_ = monte_carlo_off_policy(episodes)
+        # get the squared error
+        error_ordinary += np.power(ordinary_sampling_ - true_value, 2)
+        error_weighted += np.power(weighted_sampling_ - true_value, 2)
+    error_ordinary /= runs
+    error_weighted /= runs
+
+    fig,ax=plt.subplots(figsize=figsize)
+    ax.plot(np.arange(1, episodes + 1), error_ordinary, color='green', label='Ordinary Importance Sampling')
+    ax.plot(np.arange(1, episodes + 1), error_weighted, color='red', label='Weighted Importance Sampling')
+    ax.set_ylim(-0.1, 5)
+    ax.set_xlabel('Episodes (log scale)')
+    ax.set_ylabel(f'Mean square error\n(average over {runs} runs)')
+    plt.xscale('log')
+    plt.legend()
+    plt.show()    
 
 
 if __name__ == '__main__':
-    figure_5_1()
-    figure_5_2()
-    figure_5_3()
+    pass
+    # figure_5_1()
+    # figure_5_2()
+    # figure_5_3()

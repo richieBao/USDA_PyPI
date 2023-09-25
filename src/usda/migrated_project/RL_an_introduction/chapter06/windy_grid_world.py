@@ -8,7 +8,7 @@
 
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 # world height
@@ -85,7 +85,7 @@ def episode(q_value):
         time += 1
     return time
 
-def figure_6_3():
+def figure_6_3(figsize=(5, 5)):
     q_value = np.zeros((WORLD_HEIGHT, WORLD_WIDTH, 4))
     episode_limit = 500
 
@@ -98,13 +98,15 @@ def figure_6_3():
         ep += 1
 
     steps = np.add.accumulate(steps)
-
+    
+    plt.figure(figsize=figsize)
     plt.plot(steps, np.arange(1, len(steps) + 1))
     plt.xlabel('Time steps')
     plt.ylabel('Episodes')
+    plt.show()
 
-    plt.savefig('../images/figure_6_3.png')
-    plt.close()
+    # plt.savefig('../images/figure_6_3.png')
+    # plt.close()
 
     # display the optimal policy
     optimal_policy = []
@@ -130,4 +132,5 @@ def figure_6_3():
 
 if __name__ == '__main__':
     figure_6_3()
+    
 

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.table import Table
 
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 
 WORLD_SIZE = 5
 A_POS = [0, 1]
@@ -47,8 +47,8 @@ def step(state, action):
     return next_state, reward
 
 
-def draw_image(image):
-    fig, ax = plt.subplots()
+def draw_image(image,figsize=(5,5)):
+    fig, ax = plt.subplots(figsize=figsize)
     ax.set_axis_off()
     tb = Table(ax, bbox=[0, 0, 1, 1])
 
@@ -81,8 +81,8 @@ def draw_image(image):
 
     ax.add_table(tb)
 
-def draw_policy(optimal_values):
-    fig, ax = plt.subplots()
+def draw_policy(optimal_values,figsize=(5,5)):
+    fig, ax = plt.subplots(figsize=figsize)
     ax.set_axis_off()
     tb = Table(ax, bbox=[0, 0, 1, 1])
 
@@ -190,6 +190,7 @@ def figure_3_5():
 
 
 if __name__ == '__main__':
-    figure_3_2_linear_system()
-    figure_3_2()
-    figure_3_5()
+    # figure_3_2_linear_system()
+    # figure_3_2()
+    # figure_3_5()
+    pass

@@ -19,6 +19,7 @@ __all__ = [
     "stats",
     "data_process",
     "geodata_process",
+    "geodata_process_opt",
     "models",
     "maths",
     "indices",
@@ -33,4 +34,5 @@ __all__ = [
     "imgs_process",
     "pgm",
     "sim",
+    "rl",
     ]

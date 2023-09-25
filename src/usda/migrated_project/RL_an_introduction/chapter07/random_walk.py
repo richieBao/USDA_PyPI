@@ -8,7 +8,7 @@
 
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -95,7 +95,7 @@ def temporal_difference(value, n, alpha):
         state = next_state
 
 # Figure 7.2, it will take quite a while
-def figure7_2():
+def figure7_2(figsize=(5, 5)):
     # all possible steps
     steps = np.power(2, np.arange(0, 10))
 
@@ -121,6 +121,8 @@ def figure7_2():
                     errors[step_ind, alpha_ind] += np.sqrt(np.sum(np.power(value - TRUE_VALUE, 2)) / N_STATES)
     # take average
     errors /= episodes * runs
+    
+    plt.figure(figsize=figsize)
 
     for i in range(0, len(steps)):
         plt.plot(alphas, errors[i, :], label='n = %d' % (steps[i]))
@@ -128,9 +130,10 @@ def figure7_2():
     plt.ylabel('RMS error')
     plt.ylim([0.25, 0.55])
     plt.legend()
-
-    plt.savefig('../images/figure_7_2.png')
-    plt.close()
+    
+    plt.show()
+    # plt.savefig('../images/figure_7_2.png')
+    # plt.close()
 
 if __name__ == '__main__':
     figure7_2()
