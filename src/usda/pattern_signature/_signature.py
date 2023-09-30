@@ -9,7 +9,7 @@ import pandas as pd
 import math
 import itertools
 from collections import Counter
-from ..pattern_signature import  _grid_neighbors_xy_finder as nghxy_finder
+from ..pattern_signature import  _grid_s_xy_finder as nghxy_finder
 from toolz import partition
 
 def lexsort_based(data):                 

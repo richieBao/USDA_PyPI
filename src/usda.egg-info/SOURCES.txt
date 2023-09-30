@@ -90,6 +90,7 @@ src/usda/geodata_process/_torchgeo_datasets_utils.py
 src/usda/geodata_process/_torchgeo_seg_patch.py
 src/usda/geodata_process_opt/__init__.py
 src/usda/geodata_process_opt/_raster_dataprocess.py
+src/usda/geodata_process_opt/_raster_dataprocess_extra.py
 src/usda/imgs_process/__init__.py
 src/usda/imgs_process/_imgs_process_basic.py
 src/usda/indices/__init__.py
@@ -283,7 +284,10 @@ src/usda/pgm/_pgm_conversion.py
 src/usda/pgm/_pgm_draw.py
 src/usda/pgm/_probability_theory.py
 src/usda/rl/__init__.py
+src/usda/rl/_animal_movements.py
+src/usda/rl/_animal_movements_pool.py
 src/usda/rl/_dqn.py
+src/usda/rl/_procyon_lotor_movement_env.py
 src/usda/rl/_ql.py
 src/usda/rl/_utils.py
 src/usda/sim/__init__.py
@@ -306,8 +310,8 @@ src/usda/utils/_df_process.py
 src/usda/utils/_displayable_path.py
 src/usda/utils/_file_structure.py
 src/usda/utils/_gadgets.py
+src/usda/utils/_grid_neighbors.py
 src/usda/utils/_operating_time.py
-src/usda/utils/untitled0.py
 src/usda/weight/__init__.py
 src/usda/weight/_decision_rule.py
 src/usda/weight/_entropy_weight.py

@@ -28,6 +28,13 @@ from ._df_process import xy_to_matrix
 from ._df_process import matrix_to_xy
 from ._df_process import df_normalize
 
+from ._grid_neighbors import grid_neighbors
+from ._grid_neighbors import grid_distance
+from ._grid_neighbors import calibrate_dist
+from ._grid_neighbors import dist_weight_CDF
+from ._grid_neighbors import group_sum
+from ._grid_neighbors import movements_LCdistSum_model_r2score
+
 
 __all__=[
     "Bunch",
@@ -49,5 +56,11 @@ __all__=[
     "create_sequence2series_datasetNdataloader_from_df",
     "normalize_by_meanNstd",
     "normalize_by_minmax4all",
+    "grid_neighbors",
+    "grid_distance",
+    "calibrate_dist",
+    "dist_weight_CDF",
+    "group_sum",
+    "movements_LCdistSum_model_r2score",
     ]
 

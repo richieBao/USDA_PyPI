@@ -209,3 +209,4 @@ def raster_mosaic_vrt(raster_dir,out_fn,xRes=1,yRes=1):
     vrt=gdal.BuildVRT('merged.vrt',fn_lst)
     gdal.Translate(out_fn,vrt,xRes=xRes,yRes=yRes)
     vrt=None
+    

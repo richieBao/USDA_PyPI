@@ -26,6 +26,9 @@ from ._dqn import select_action
 from ._dqn import plot_durations
 from ._dqn import optimize_model
 from ._dqn import show_one_episode_DQN
+
+from ._animal_movements import predicting_kde
+from ._procyon_lotor_movement_env import ProcyonLotorMovementEnv
  
 __all__ = [
     "save_frames_as_gif4gym",
@@ -48,5 +51,6 @@ __all__ = [
     "plot_durations",
     "optimize_model",
     "show_one_episode_DQN",
+    "predicting_kde",
     ]
 

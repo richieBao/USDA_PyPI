@@ -9,7 +9,7 @@ from ._signature import class_clumpSize_histogram
 from ._signature import class_co_occurrence
 from ._signature import class_decomposition
 from ._signature import group_bins_histogram
-from ._grid_neighbors_xy_finder import GridNghFinder
+from ._grid_s_xy_finder import GridNghFinder
 
 from ._distance_metric import Distances
 from ._signature2distance_integration import signature2distance_integrating
