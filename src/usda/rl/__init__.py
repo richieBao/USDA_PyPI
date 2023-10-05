@@ -9,6 +9,7 @@ from ._utils import env_info_print
 from ._utils import gym_env_steps_rgb_array
 from ._utils import show_one_episode_QL
 from ._utils import custom_env_steps_rgb_array
+from ._utils import plot_animation
 
 from ._ql import Params_frozenlake
 from ._ql import Qlearning
@@ -29,6 +30,16 @@ from ._dqn import show_one_episode_DQN
 
 from ._animal_movements import predicting_kde
 from ._procyon_lotor_movement_env import ProcyonLotorMovementEnv
+
+from ._ising_model import Ising_Metropolis_MCMC
+
+from ._pi_monte_carlo import pi_using_MonteCarlo_anim
+from ._pi_monte_carlo import pi_using_MonteCarlo
+
+from ._ising_marl import Ising_MARL
+from ._ising_marl import ising_1d_plot
+from ._ising_marl import ising_2d_plot
+
  
 __all__ = [
     "save_frames_as_gif4gym",
@@ -52,5 +63,12 @@ __all__ = [
     "optimize_model",
     "show_one_episode_DQN",
     "predicting_kde",
+    "Ising_Metropolis_MCMC",
+    "pi_using_MonteCarlo_anim",
+    "pi_using_MonteCarlo",
+    "Ising_MARL",
+    "ising_1d_plot",
+    "ising_2d_plot",
+    "plot_animation",
     ]
 

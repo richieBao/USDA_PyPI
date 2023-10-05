@@ -287,6 +287,9 @@ src/usda/rl/__init__.py
 src/usda/rl/_animal_movements.py
 src/usda/rl/_animal_movements_pool.py
 src/usda/rl/_dqn.py
+src/usda/rl/_ising_marl.py
+src/usda/rl/_ising_model.py
+src/usda/rl/_pi_monte_carlo.py
 src/usda/rl/_procyon_lotor_movement_env.py
 src/usda/rl/_ql.py
 src/usda/rl/_utils.py
