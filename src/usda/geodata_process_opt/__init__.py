@@ -12,6 +12,8 @@ from ._raster_dataprocess import raster_mosaic_vrt
 
 from ._raster_dataprocess_extra import raster_resampling
 
+from ._rasterize import rasterize
+
 __all__ = [
     "rio_read_subset",
     "raster2polygon",
@@ -19,5 +21,6 @@ __all__ = [
     "raster_mosaic",
     "raster_mosaic_vrt",
     "raster_resampling",
+    "rasterize",
     ]
 
