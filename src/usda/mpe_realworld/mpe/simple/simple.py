@@ -201,7 +201,7 @@ class Scenario(BaseScenario):
         # print(plat_reward)
         
         dist2 = np.sum(np.square(agent.state.p_pos - world.landmarks[0].state.p_pos))
-        # print(dist2)
+        # print(-dist2+plat_reward)
         return -dist2+plat_reward
 
     def observation(self, agent, world):

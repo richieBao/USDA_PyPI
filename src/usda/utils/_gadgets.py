@@ -9,6 +9,7 @@ import torch.utils.data as data
 import numpy as np
 import torch
 import pandas as pd
+import matplotlib
 
 def variable_name(var):
     '''
@@ -175,6 +176,11 @@ def normalize_by_meanNstd(df):
 
 def normalize_by_minmax4all(array):
     return (array - np.min(array)) / (np.max(array) - np.min(array))
+
+def cmap2hex(cmap_name,N): 
+    cmap = matplotlib.cm.get_cmap(cmap_name, N)
+    hex_colors={i:matplotlib.colors.rgb2hex(cmap(i)) for i in range(N)}
+    return hex_colors 
 
 if __name__=="__main__":
     xyz=6

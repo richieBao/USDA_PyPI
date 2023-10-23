@@ -19,6 +19,7 @@ from pettingzoo.utils.agent_selector import agent_selector
 # from usda.mpe_realworld.utils.agent_selector import agent_selector
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+step_set=set()
 
 def make_env(raw_env):
     # print('-#!')
@@ -226,6 +227,7 @@ class SimpleEnv(AECEnv):
         # set action for each agent
         for i, agent in enumerate(self.world.agents):
             action = self.current_actions[i]
+            # print(action)
             scenario_action = []
             if agent.movable:
                 mdim = self.world.dim_p * 2 + 1
@@ -282,8 +284,11 @@ class SimpleEnv(AECEnv):
             sensitivity = 5.0
             if agent.accel is not None:
                 sensitivity = agent.accel
+                
+            # print('-',agent.action.u)
             agent.action.u *= sensitivity
             action = action[1:]
+            # print(action)
         if not agent.silent:
             # communication action
             if self.continuous_actions:
@@ -296,6 +301,7 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action):
+        # print(action)
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
@@ -308,18 +314,24 @@ class SimpleEnv(AECEnv):
         self.agent_selection = self._agent_selector.next()
 
         self.current_actions[current_idx] = action
+        # print(self.current_actions)
 
         if next_idx == 0:
             self._execute_world_step()
             self.steps += 1
             if self.steps >= self.max_cycles:
                 for a in self.agents:
-                    self.truncations[a] = True
+                    self.truncations[a] = True        
         else:
             self._clear_rewards()
 
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
+        
+        
+        # if  self.steps not in step_set:
+        #     print('-',self.steps)
+        #     step_set.add(self.steps)
 
         if self.render_mode == "human":
             self.render()
@@ -389,7 +401,7 @@ class SimpleEnv(AECEnv):
             # print()
             # print('#1',x_,y_,entity.state.p_pos)
             
-            
+            # print(entity.color,(x_, y_))
             pygame.draw.circle(
                 self.screen, entity.color * 200, (x_, y_), entity.size * 350
             )  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet

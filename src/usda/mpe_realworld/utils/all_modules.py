@@ -51,6 +51,7 @@ from usda.mpe_realworld.mpe import (
     simple_tag_v3,
     simple_realworld,
     simple_world_comm_v3,
+    navona_v1,
 )
 # from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 
@@ -110,6 +111,7 @@ all_environments = {
     "mpe/simple_tag_v3": simple_tag_v3,
     "mpe/simple_world_comm_v3": simple_world_comm_v3,
     "mpe/simple_realworld": simple_realworld,
+    "mpe/navona":navona_v1,
     # "sisl/multiwalker_v9": multiwalker_v9,
     # "sisl/waterworld_v4": waterworld_v4,
     # "sisl/pursuit_v4": pursuit_v4,

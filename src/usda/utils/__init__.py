@@ -22,6 +22,7 @@ from ._gadgets import sequence2series_of_overlapping_with_labels
 from ._gadgets import create_sequence2series_datasetNdataloader_from_df
 from ._gadgets import normalize_by_meanNstd
 from ._gadgets import normalize_by_minmax4all
+from ._gadgets import cmap2hex
 
 from ._df_process import complete_dataframe_rowcols
 from ._df_process import xy_to_matrix
@@ -62,5 +63,6 @@ __all__=[
     "dist_weight_CDF",
     "group_sum",
     "movements_LCdistSum_model_r2score",
+    "cmap2hex",
     ]
 

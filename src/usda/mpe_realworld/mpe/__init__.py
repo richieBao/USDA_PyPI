@@ -9,7 +9,7 @@
 __all__ = [
     "simple",
     "simple_push",
-    # "simple_realworld",
+    "navona",
     # "simple_realworld_raw_env",
     ]
 
