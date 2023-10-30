@@ -296,6 +296,9 @@ src/usda/net/__init__.py
 src/usda/net/_networks_pix2pix.py
 src/usda/network/__init__.py
 src/usda/network/_g_drawing.py
+src/usda/network/_gnn_algorithms.py
+src/usda/network/_gnn_interpretation.py
+src/usda/network/_gnn_interpretation_run.py
 src/usda/network/_huffman_coding.py
 src/usda/network/_pt_pattern.py
 src/usda/network/graph_embedding/__init__.py

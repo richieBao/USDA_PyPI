@@ -12,7 +12,7 @@ if __package__:
 else:
     from _gnn_interpretation import app
 
-def dash_usda_datasetidx():
+def gnn_algorithms_dash():
     """ Run the app from an entry point defined in setup.cfg
     TODO: need to check port is available
     """
@@ -28,4 +28,4 @@ def dash_usda_datasetidx():
     app.run(host=host, port=port, debug=False)
     
 if __name__=="__main__":
-    dash_usda_datasetidx()
+    gnn_algorithms_dash()
