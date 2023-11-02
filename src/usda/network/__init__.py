@@ -18,6 +18,7 @@ from ._huffman_coding import huffman_encoding_dict
 from ._gnn_interpretation_run import gnn_algorithms_dash
 from ._gnn_algorithms import VanillaGNNLayer
 from ._gnn_algorithms import VanillaGNN
+from ._gnn_algorithms import GCN
 
 __all__ = [
     "G_drawing",
@@ -35,5 +36,6 @@ __all__ = [
     "gnn_algorithms_dash",
     "VanillaGNNLayer",
     "VanillaGNN",
+    "GCN",
     ]
 

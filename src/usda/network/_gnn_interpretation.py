@@ -15,6 +15,10 @@ import numpy as np
 import random
 import copy
 
+from torch_geometric.nn import GCNConv
+from torch_geometric.utils.convert import from_networkx
+from torch_geometric.data import Data
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -109,14 +113,8 @@ class GraphConstructor:
             'elements': GraphConstructor.data()
             }
         G=nx.cytoscape_graph(data_dict)
-        return G        
-  
-G_fixed=GraphConstructor.data_networkx()
-update_stack={'elements':[],'attrs':[]}
-data_GC=GraphConstructor.data()
-original_G=GraphConstructor.data_networkx()   
+        return G       
 
-#%%
 app.layout = dbc.Container([
     html.H4('GNN Algorithms'),
     dbc.Tabs([
@@ -148,6 +146,12 @@ class Tab_general:
             ],
             # align="center",            
             )
+
+#%% vGNN
+G_fixed=GraphConstructor.data_networkx()
+update_stack={'elements':[],'attrs':[]}
+data_GC=GraphConstructor.data()
+original_G=GraphConstructor.data_networkx()  
 
 def tab_vanilla():      
     tab_div=dbc.Container([
@@ -200,7 +204,7 @@ def tab_vanilla():
     )    
     return tab_div      
 
-#%%
+
 def formula_update_content(G_fixed,data,weight_1,iter_num):
     neighbors=list(G_fixed.neighbors(data['id']))
     text=flatten_lst([['W',html.Sup(f'({iter_num+1})'),'h',html.Sub(f'({i})'),html.Sup(f'({iter_num})'),'+'] for i in [data['id']]+neighbors])[:-1]
@@ -273,7 +277,7 @@ def formula_update(data,weight_1,click_update,_,click_undo):
         
         return content,iter_info,weight_iter_info,no_update,no_update      
    
-#%%      
+     
 class VanillaGNNLayer(torch.nn.Module):
     def __init__(self, dim_in, dim_out,weight=None):
         super().__init__()
@@ -310,7 +314,8 @@ def update_all_nodes(click_update,_,click_undo,click_randomize,weight):
         return data_GC,True      
     
     # print('---',click_update,click_undo)
-    if ctx.triggered_id == "button-reset":          
+    if ctx.triggered_id == "button-reset":  
+        # G_fixed=original_G        
         return data_GC,True   
     
     if click_update is None:
@@ -345,33 +350,40 @@ def update_all_nodes(click_update,_,click_undo,click_randomize,weight):
             nx.set_node_attributes(G_fixed, attrs_label)
             return update_stack['elements'].pop(),False     
         elif click_update-click_undo<2:
-            G_fixed=original_G
+            G_fixed=GraphConstructor.data_networkx() 
             return data_GC,True
         else:            
-            G_fixed=original_G
+            G_fixed=GraphConstructor.data_networkx() 
             return data_GC,True        
     
-#%%
+#%% tab_GCN 
+gcn_G_fixed=GraphConstructor.data_networkx()
+gcn_update_stack={'elements':[],'attrs':[]}
+gcn_data_GC=GraphConstructor.data()
+gcn_original_G=GraphConstructor.data_networkx()  
+
 def tab_gcn():      
     tab_div=dbc.Container([
         html.Br(),
         html.Div([
-            dbc.Button('Reset', id='button-reset',color="dark",n_clicks=0,className="me-1"),
-            dbc.Button('Undo Last Update', id='button-undo',color="dark",n_clicks=0,className="me-1",disabled=True),
-            dbc.Button('Update All Nodes', id='button-update',color="dark",n_clicks=0,className="me-1"),
-            dbc.Button('Randomize Graph', id='button-randomize',color="dark",n_clicks=0,className="me-1"),
+            dbc.Button('Reset', id='gcn_button-reset',color="dark",n_clicks=0,className="me-1"),
+            dbc.Button('Undo Last Update', id='gcn_button-undo',color="dark",n_clicks=0,className="me-1",disabled=True),
+            dbc.Button('Update All Nodes', id='gcn_button-update',color="dark",n_clicks=0,className="me-1"),
+            dbc.Button('Randomize Graph', id='gcn_button-randomize',color="dark",n_clicks=0,className="me-1"),
             ],
             # align="center",            
             ),
         dbc.Row([
             dbc.Col([
-                html.P(id='weight_iter'),       
-                dcc.Slider(-10, 10, 0.1, value=1, marks=None,tooltip={"placement": "bottom", "always_visible": True},id='weight_1'),
-                ],),                             
+                html.P(id='gcn_weight_1_iter'),       
+                dcc.Slider(-10, 10, 0.1, value=1, marks=None,tooltip={"placement": "bottom", "always_visible": True},id='gcn_weight_1'),
+                # html.P(id='gcn_weight_2_iter'), 
+                # dcc.Slider(-10, 10, 0.1, value=1, marks=None,tooltip={"placement": "bottom", "always_visible": True},id='gcn_weight_2'),                
+                ],),       
             dbc.Col([
                 html.B('Initial Graph'),     
                 cyto.Cytoscape(
-                        id='graph_fixed',
+                        id='gcn_graph_fixed',
                         elements=GraphConstructor.data(),
                         style={'width': '100%', 'height': '500px'},
                         layout={
@@ -385,14 +397,14 @@ def tab_gcn():
             ),     
         dbc.Row([
             dbc.Col([
-            html.P(id='current_node_id'),
-            html.Div(id='formula_update'),
+            html.P(id='gcn_current_node_id'),
+            html.Div(id='gcn_formula_update'),
             html.P(dcc.Markdown('''
                                 ---
                                 
                                 Here, $f$ is just ReLu: $f(x)=max(x,0)$,  
                                 
-                                Note that the weight $W^{(1)}$ is shared across all nodes!         
+                                Note that the weight $W^{(1)}$ and $B^{(1)}$ are shared across all nodes!         
                                 ''',mathjax=True)),
                 ]),    
             # dbc.Col([
@@ -403,15 +415,179 @@ def tab_gcn():
             align="center",
             ),    
            dbc.Row([          
-               html.Div(id='cytoscape-tapNodeData-output'),
+               html.Div(id='gcn_cytoscape-tapNodeData-output'),
                ]),
     ],
     fluid=True,
     )    
     return tab_div  
 
+def gcn_iter_info_update(current_node_id,iter_num):
+        iter_info=[
+            html.B(f'Next Update (Iteration {iter_num}):'),
+            html.Br(),
+            html.Span(f'Equation for Node {current_node_id}:')
+            ]
+        
+        weight_1_iter_info=[
+            html.B('Parameters for Next Update'),
+            html.Br(),
+            html.Span(['W',html.Sup(f'({iter_num})')])
+            ] 
+        
+        # weight_2_iter_info=[
+        #     html.Span(['B',html.Sup(f'({iter_num})')])
+        #     ]
+        
+        return iter_info,weight_1_iter_info 
+    
+def gcn_formula_update_content(gcn_G_fixed,data,weight_1,iter_num):
+    current_node_id=data['id']
+    neighbors=list(gcn_G_fixed.neighbors(current_node_id))
+    # text_1=flatten_lst(['W',html.Sup(f'({iter_num+1})'),' x ','(',
+    #       flatten_lst([['h',html.Sub(f'({i})'),html.Sup(f'({iter_num})'),'+'] for i in neighbors])[:-1],')','/',str(len(neighbors)),
+    #       '+','B',html.Sup(f'({iter_num+1})'),' x ','h',html.Sub(current_node_id),html.Sup(f'({iter_num})')])
+    text_1=flatten_lst([['W',html.Sup(f'({iter_num+1})'),'h',html.Sub(f'({i})'),html.Sup(f'({iter_num})'),f'/sqrt(deg({current_node_id})deg({i}))','+'] for i in [current_node_id]+neighbors])[:-1]
+    
+    # text_2=flatten_lst([f'{weight_1}×','(',
+    #         flatten_lst([['{:.3f}'.format(gcn_G_fixed.nodes[i]['feature']),'+'] for i in neighbors])[:-1],')','/',str(len(neighbors)),
+    #         '+',f'{weight_2}',' x ','{:.3f}'.format(gcn_G_fixed.nodes[current_node_id]['feature'])
+    #         ])
+    current_node_degree=gcn_G_fixed.degree[current_node_id]+1
+    text_2=flatten_lst([[f'{weight_1}×','{:.3f}'.format(gcn_G_fixed.nodes[i]['feature']),f'/sqrt({current_node_degree}x{gcn_G_fixed.degree[i]+1})','+'] for i in [current_node_id]+neighbors])[:-1]
+    # result=round(weight_1*sum([gcn_G_fixed.nodes[i]['feature'] for i in neighbors])/len(neighbors)+weight_2*gcn_G_fixed.nodes[current_node_id]['feature'],3)
+    result=round(weight_1*sum([gcn_G_fixed.nodes[i]['feature']/np.sqrt(current_node_degree*(gcn_G_fixed.degree[i]+1)) for i in [current_node_id]+neighbors]),3)
+    # print(result)
+    
+    content=html.Div([
+        html.Span(['h',html.Sup(f'({iter_num+1})'),html.Sub(data['id']),'=','f(']+text_1+[')']),
+        html.Br(),
+        html.Span(['=f(']+text_2+[')']),
+        html.Br(),
+        html.Span(['=f(']+[result]+[')']),
+        html.Br(),
+        html.Span([f'ReLU({result})=']+[max(result,0)]),
+        ],
+        style={'font-size':'24px'})    
+
+    return content    
+    
+
+@callback(
+    Output('gcn_formula_update', 'children'),
+    Output('gcn_current_node_id', 'children'),
+    Output('gcn_weight_1_iter', 'children'),
+    # Output('gcn_weight_2_iter', 'children'),
+    Output('gcn_button-update', "n_clicks"),
+    Output('gcn_button-undo', "n_clicks"),    
+    Input('gcn_graph_fixed', 'tapNodeData'),
+    Input('gcn_weight_1','value'),
+    # Input('gcn_weight_2','value'),
+    Input('gcn_button-update', "n_clicks"),
+    Input('gcn_button-reset','n_clicks'),
+    Input('gcn_button-undo', "n_clicks"),    
+    )
+def formula_update(data,weight_1,click_update,_,click_undo):    
+    global gcn_G_fixed    
+    global gcn_original_G
+            
+    if ctx.triggered_id == "gcn_button-reset":  
+        # gcn_G_fixed=GraphConstructor.data_networkx()
+        gcn_G_fixed=gcn_original_G
+        data=gcn_G_fixed.nodes['A']     
+        
+        current_node_id=data['id']
+        iter_num=1
+        iter_info,weight_1_iter_info =gcn_iter_info_update(current_node_id,iter_num)
+        return no_update,iter_info,weight_1_iter_info,0,0
+    
+    iter_num=abs(click_update-click_undo)+1
+            
+    if data is None:        
+        data=gcn_G_fixed.nodes['A']           
+
+    if data:
+        content=gcn_formula_update_content(gcn_G_fixed,data,weight_1,iter_num-1)        
+        current_node_id=data['id']
+        iter_info,weight_1_iter_info=gcn_iter_info_update(current_node_id,iter_num)
+        
+
+        return content,iter_info,weight_1_iter_info,no_update,no_update      
 
 
+
+@callback(
+    Output('gcn_graph_fixed', 'elements'),
+    Output('gcn_button-undo', 'disabled'),
+    Input('gcn_button-update', "n_clicks"),
+    Input('gcn_button-reset','n_clicks'),
+    Input('gcn_button-undo', "n_clicks"),         
+    Input('gcn_button-randomize', "n_clicks"),  
+    Input('gcn_weight_1','value'),
+    # Input('gcn_weight_2','value'),
+    )
+def gcn_update_all_nodes(click_update,_,click_undo,click_randomize,weight_1): 
+    global gcn_update_stack
+    global gcn_G_fixed
+    global gcn_original_G
+    global gcn_data_GC   
+
+    if ctx.triggered_id == "gcn_button-randomize":  
+        rnd_G=Random_Graph()
+        gcn_G_fixed=rnd_G.random_G
+        gcn_data_GC=rnd_G.random_G_cytoscape['elements']     
+        gcn_original_G=copy.deepcopy(gcn_G_fixed)
+        return gcn_data_GC,True      
+    
+    # # print('---',click_update,click_undo)
+    if ctx.triggered_id == "gcn_button-reset":      
+        # gcn_G_fixed=gcn_original_G
+        return gcn_data_GC,True   
+    
+    if click_update is None:
+        raise PreventUpdate
+    elif click_update==0:
+        return gcn_data_GC,True      
+    
+    if ctx.triggered_id == "gcn_button-update":      
+        G_pyg_=from_networkx(gcn_G_fixed)
+        data=Data(x=G_pyg_.feature.reshape(-1,1).to(torch.float), edge_index=G_pyg_.edge_index)
+        
+        net=GCNConv(1,1,normalize=True,bias=False)
+        list(net.parameters())[0].data.fill_(weight_1)
+        y=net(data.x,data.edge_index).detach().numpy().reshape(-1) 
+ 
+        attrs_feature={k:{'feature':v} for k,v in zip(list(gcn_G_fixed.nodes()),y)}        
+        attrs_label={k: {'label':f'{k}({v:.3f})'} for k,v in zip(list(gcn_G_fixed.nodes()),y)}
+        
+        nx.set_node_attributes(gcn_G_fixed, attrs_feature)
+        nx.set_node_attributes(gcn_G_fixed, attrs_label)
+        
+        gcn_G_fixed_cytoscape=nx.cytoscape_data(gcn_G_fixed) 
+        gcn_update_stack['elements'].append(gcn_G_fixed_cytoscape['elements'])       
+        gcn_update_stack['attrs'].append([attrs_feature,attrs_label])
+
+        return gcn_G_fixed_cytoscape['elements'],False   
+        
+    if ctx.triggered_id == "gcn_button-undo": 
+        if len(gcn_update_stack['elements'])>1:
+            attrs_feature,attrs_label=gcn_update_stack['attrs'].pop()
+            nx.set_node_attributes(gcn_G_fixed, attrs_feature)
+            nx.set_node_attributes(gcn_G_fixed, attrs_label)
+            return gcn_update_stack['elements'].pop(),False    
+        if click_update-click_undo<2:            
+            gcn_G_fixed=GraphConstructor.data_networkx()   
+            return gcn_data_GC,True
+        else:                        
+            gcn_G_fixed=GraphConstructor.data_networkx() 
+            return gcn_data_GC,True        
+        
+#%%tab_GAT
+
+
+        
+        
+        
 
 #%%
 if __name__ == '__main__':
