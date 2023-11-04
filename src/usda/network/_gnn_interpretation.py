@@ -19,6 +19,7 @@ import copy
 from torch_geometric.nn import GCNConv
 from torch_geometric.utils.convert import from_networkx
 from torch_geometric.data import Data
+from torch_geometric.nn import GATv2Conv,GATConv
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -675,7 +676,7 @@ def gat_formula_update_content(gcn_G_fixed,data,weight_1,weight_2,iter_num):
     current_node_degree=gcn_G_fixed.degree[current_node_id]+1
 
     e_node=[weight_2*weight_1*(gcn_G_fixed.nodes[i]['feature']+gcn_G_fixed.nodes[current_node_id]['feature']) for i in [current_node_id]+neighbors]
-    LReLU = nn.LeakyReLU(negative_slope=0.) #0.2
+    LReLU = nn.LeakyReLU(negative_slope=0.2) #0.2
     e_node_LeakyReLU=[LReLU(torch.tensor(e).to(torch.float)) for e in e_node]                     
                                 
     text_1=flatten_lst([['e',html.Sub(f'{current_node_id}'),html.Sub(f'{i}'),'=LeakyReLU(',
@@ -786,47 +787,56 @@ def gat_update_all_nodes(click_update,_,click_undo,click_randomize,weight_1,weig
         return gat_data_GC,True      
     
     # # print('---',click_update,click_undo)
-    # if ctx.triggered_id == "gat_button-reset":      
-    #     # gat_G_fixed=gat_original_G
-    #     return gat_data_GC,True   
+    if ctx.triggered_id == "gat_button-reset":      
+        # gat_G_fixed=gat_original_G
+        return gat_data_GC,True   
     
-    # if click_update is None:
-    #     raise PreventUpdate
-    # elif click_update==0:
-    #     return gat_data_GC,True      
+    if click_update is None:
+        raise PreventUpdate
+    elif click_update==0:
+        return gat_data_GC,True      
     
-    # if ctx.triggered_id == "gat_button-update":      
-    #     G_pyg_=from_networkx(gat_G_fixed)
-    #     data=Data(x=G_pyg_.feature.reshape(-1,1).to(torch.float), edge_index=G_pyg_.edge_index)
+    if ctx.triggered_id == "gat_button-update":      
+        G_pyg_=from_networkx(gat_G_fixed)
+        data=Data(x=G_pyg_.feature.reshape(-1,1).to(torch.float), edge_index=G_pyg_.edge_index)
         
-    #     net=gatConv(1,1,normalize=True,bias=False)
-    #     list(net.parameters())[0].data.fill_(weight_1)
-    #     y=net(data.x,data.edge_index).detach().numpy().reshape(-1) 
+        net=GATConv(data.num_features,1,normalize=True,bias=False,negative_slope=0.2)
+        for para in list(net.parameters()):   
+            para.data.fill_(1.0)
+        y=net(data.x,data.edge_index).detach().numpy().reshape(-1) 
  
-    #     attrs_feature={k:{'feature':v} for k,v in zip(list(gat_G_fixed.nodes()),y)}        
-    #     attrs_label={k: {'label':f'{k}({v:.3f})'} for k,v in zip(list(gat_G_fixed.nodes()),y)}
+        attrs_feature={k:{'feature':v} for k,v in zip(list(gat_G_fixed.nodes()),y)}        
+        attrs_label={k: {'label':f'{k}({v:.3f})'} for k,v in zip(list(gat_G_fixed.nodes()),y)}
         
-    #     nx.set_node_attributes(gat_G_fixed, attrs_feature)
-    #     nx.set_node_attributes(gat_G_fixed, attrs_label)
+        nx.set_node_attributes(gat_G_fixed, attrs_feature)
+        nx.set_node_attributes(gat_G_fixed, attrs_label)
         
-    #     gat_G_fixed_cytoscape=nx.cytoscape_data(gat_G_fixed) 
-    #     gat_update_stack['elements'].append(gat_G_fixed_cytoscape['elements'])       
-    #     gat_update_stack['attrs'].append([attrs_feature,attrs_label])
+        gat_G_fixed_cytoscape=nx.cytoscape_data(gat_G_fixed) 
+        gat_update_stack['elements'].append(gat_G_fixed_cytoscape['elements'])       
+        gat_update_stack['attrs'].append([attrs_feature,attrs_label])
 
-    #     return gat_G_fixed_cytoscape['elements'],False   
+        return gat_G_fixed_cytoscape['elements'],False   
         
-    # if ctx.triggered_id == "gat_button-undo": 
-    #     if len(gat_update_stack['elements'])>1:
-    #         attrs_feature,attrs_label=gat_update_stack['attrs'].pop()
-    #         nx.set_node_attributes(gat_G_fixed, attrs_feature)
-    #         nx.set_node_attributes(gat_G_fixed, attrs_label)
-    #         return gat_update_stack['elements'].pop(),False    
-    #     if click_update-click_undo<2:            
-    #         gat_G_fixed=GraphConstructor.data_networkx()   
-    #         return gat_data_GC,True
-    #     else:                        
-    #         gat_G_fixed=GraphConstructor.data_networkx() 
-    #         return gat_data_GC,True              
+    if ctx.triggered_id == "gat_button-undo": 
+        if len(gat_update_stack['elements'])>1:
+            attrs_feature,attrs_label=gat_update_stack['attrs'].pop()
+            nx.set_node_attributes(gat_G_fixed, attrs_feature)
+            nx.set_node_attributes(gat_G_fixed, attrs_label)
+            return gat_update_stack['elements'].pop(),False    
+        if click_update-click_undo<2:            
+            gat_G_fixed=GraphConstructor.data_networkx()   
+            return gat_data_GC,True
+        else:                        
+            gat_G_fixed=GraphConstructor.data_networkx() 
+            return gat_data_GC,True              
+
+#%% tab_GraphSAGE
+
+
+
+
+
+
 
 #%%
 if __name__ == '__main__':
