@@ -11,6 +11,7 @@ import networkx as nx
 from dash.exceptions import PreventUpdate
 import torch
 from torch.nn import Linear
+from torch import nn
 import numpy as np
 import random
 import copy
@@ -134,6 +135,8 @@ def render_content(tab):
         return tab_vanilla()    
     elif tab == 'tab-gcn':
         return tab_gcn()  
+    elif tab == 'tab-gat':
+        return tab_gat()     
     
 class Tab_general:
     @classmethod
@@ -404,7 +407,7 @@ def tab_gcn():
                                 
                                 Here, $f$ is just ReLu: $f(x)=max(x,0)$,  
                                 
-                                Note that the weight $W^{(1)}$ and $B^{(1)}$ are shared across all nodes!         
+                                Note that the weight $W^{(1)}$ is shared across all nodes!         
                                 ''',mathjax=True)),
                 ]),    
             # dbc.Col([
@@ -471,7 +474,6 @@ def gcn_formula_update_content(gcn_G_fixed,data,weight_1,iter_num):
         style={'font-size':'24px'})    
 
     return content    
-    
 
 @callback(
     Output('gcn_formula_update', 'children'),
@@ -487,7 +489,7 @@ def gcn_formula_update_content(gcn_G_fixed,data,weight_1,iter_num):
     Input('gcn_button-reset','n_clicks'),
     Input('gcn_button-undo', "n_clicks"),    
     )
-def formula_update(data,weight_1,click_update,_,click_undo):    
+def gcn_formula_update(data,weight_1,click_update,_,click_undo):    
     global gcn_G_fixed    
     global gcn_original_G
             
@@ -513,8 +515,6 @@ def formula_update(data,weight_1,click_update,_,click_undo):
         
 
         return content,iter_info,weight_1_iter_info,no_update,no_update      
-
-
 
 @callback(
     Output('gcn_graph_fixed', 'elements'),
@@ -583,11 +583,250 @@ def gcn_update_all_nodes(click_update,_,click_undo,click_randomize,weight_1):
             return gcn_data_GC,True        
         
 #%%tab_GAT
+gat_G_fixed=GraphConstructor.data_networkx()
+gat_update_stack={'elements':[],'attrs':[]}
+gat_data_GC=GraphConstructor.data()
+gat_original_G=GraphConstructor.data_networkx()  
 
+def tab_gat():      
+    tab_div=dbc.Container([
+        html.Br(),
+        html.Div([
+            dbc.Button('Reset', id='gat_button-reset',color="dark",n_clicks=0,className="me-1"),
+            dbc.Button('Undo Last Update', id='gat_button-undo',color="dark",n_clicks=0,className="me-1",disabled=True),
+            dbc.Button('Update All Nodes', id='gat_button-update',color="dark",n_clicks=0,className="me-1"),
+            dbc.Button('Randomize Graph', id='gat_button-randomize',color="dark",n_clicks=0,className="me-1"),
+            ],
+            # align="center",            
+            ),
+        dbc.Row([
+            dbc.Col([
+                html.P(id='gat_weight_1_iter'),       
+                dcc.Slider(-10, 10, 0.1, value=1, marks=None,tooltip={"placement": "bottom", "always_visible": True},id='gat_weight_1'),
+                html.P(id='gat_weight_2_iter'), 
+                dcc.Slider(-1, 1, 0.01, value=1, marks=None,tooltip={"placement": "bottom", "always_visible": True},id='gat_weight_2'),                
+                ],),       
+            dbc.Col([
+                html.B('Initial Graph'),     
+                cyto.Cytoscape(
+                        id='gat_graph_fixed',
+                        elements=GraphConstructor.data(),
+                        style={'width': '100%', 'height': '500px'},
+                        layout={
+                            'name': 'cose'
+                        },
+                        stylesheet=GraphConstructor.stylesheet(),
+                    ),       
+                ],),        
+            ], 
+            align="center",
+            ),     
+        dbc.Row([
+            dbc.Col([
+            html.P(id='gat_current_node_id'),
+            html.Div(id='gat_formula_update'),
+            html.P(dcc.Markdown('''
+                                ---
+                                
+                                We have omitted the superscripts on the attention weights for clarity.
+                                
+                                Here, $f$ is LeakyReLU: $LeakyReLU (x)=\max (0, x)+ negative\_slope * \min (0, x)$,  
+                                
+                                Note that the weight $W^{(1)}$ and $A_W^{(1)}$ are shared across all nodes!         
+                                ''',mathjax=True)),
+                ]),    
+            # dbc.Col([
+            #     html.P([
+            #         ]),
+            #     ]),            
+            ], 
+            align="center",
+            ),    
+           dbc.Row([          
+               html.Div(id='gat_cytoscape-tapNodeData-output'),
+               ]),
+    ],
+    fluid=True,
+    )    
+    return tab_div     
+     
+def gat_iter_info_update(current_node_id,iter_num):
+        iter_info=[
+            html.B(f'Next Update (Iteration {iter_num}):'),
+            html.Br(),
+            html.Span(f'Equation for Node {current_node_id}:')
+            ]
+        
+        weight_1_iter_info=[
+            html.B('Parameters for Next Update'),
+            html.Br(),
+            html.Span(['W',html.Sup(f'({iter_num})')])
+            ] 
+        
+        weight_2_iter_info=[
+            html.Span(['A',html.Sub('W'),html.Sup(f'({iter_num})')])
+            ]
+        
+        return iter_info,weight_1_iter_info,weight_2_iter_info 
+    
+def gat_formula_update_content(gcn_G_fixed,data,weight_1,weight_2,iter_num):
+    current_node_id=data['id']
+    neighbors=list(gcn_G_fixed.neighbors(current_node_id))
+    current_node_degree=gcn_G_fixed.degree[current_node_id]+1
 
+    e_node=[weight_2*weight_1*(gcn_G_fixed.nodes[i]['feature']+gcn_G_fixed.nodes[current_node_id]['feature']) for i in [current_node_id]+neighbors]
+    LReLU = nn.LeakyReLU(negative_slope=0.) #0.2
+    e_node_LeakyReLU=[LReLU(torch.tensor(e).to(torch.float)) for e in e_node]                     
+                                
+    text_1=flatten_lst([['e',html.Sub(f'{current_node_id}'),html.Sub(f'{i}'),'=LeakyReLU(',
+                         'A',html.Sub('W'),html.Sup(f'({iter_num+1})'),'(','W',html.Sup(f'({iter_num+1})'),
+                         'h',html.Sub(f'{current_node_id}'),html.Sup(f'({iter_num})'),' + ','W',html.Sup(f'({iter_num+1})'),'h',html.Sub(f'{i}'),html.Sup(f'({iter_num})'),
+                         '))=LeakyReLU(',f'{weight_2}','(',f'{weight_1}',' x ', '{:.3f}'.format(gcn_G_fixed.nodes[current_node_id]['feature']),
+                         ' + ', f'{weight_1}',' x ', '{:.3f}'.format(gcn_G_fixed.nodes[i]['feature']),'))','=LeakyReLU(',  
+                         '{:.3f}'.format(e),')=','{:.3f}'.format(LReLU(torch.tensor(e).to(torch.float))),
+                         html.Br(),] for i,e in zip([current_node_id]+neighbors,e_node)])
+    
+    softmax=nn.Softmax(dim=0)
+    a_node=softmax(torch.tensor(e_node_LeakyReLU))
+    
+    text_2=flatten_lst([['a',html.Sub(f'{current_node_id}'),html.Sub(f'{i}'),'=exp(e',
+        html.Sub(f'{current_node_id}'),html.Sub(f'{i}'),')/(',flatten_lst([['exp(e',html.Sub(f'{current_node_id}'),html.Sub(f'{i}'),')',' + '] for i in [current_node_id]+neighbors])[:-1],')',
+        '=','{:.3f}'.format(a),
+        html.Br(),] for i,a in zip([current_node_id]+neighbors,a_node)])
+    
+    result=sum([a*gcn_G_fixed.nodes[i]['feature'] for i,a in zip([current_node_id]+neighbors,a_node)])*weight_1
+    
+    text_3=flatten_lst([flatten_lst(['h',html.Sub(f'{current_node_id}'),html.Sup(f'({iter_num+1})'),'=','f(W',html.Sup(f'({iter_num+1})'), ' x (',flatten_lst([['a',html.Sub(f'{current_node_id}'),html.Sub(f'{i}'), ' x ',
+                       'h',html.Sub(f'{i}'),html.Sup(f'({iter_num})'),' + '] for i in [current_node_id]+neighbors])[:-1],'))']),html.Br(),
+                        ['=f(','{:.3f}'.format(weight_1),' x (',flatten_lst([['{:.3f}'.format(a), ' x ','{:.3f}'.format(gcn_G_fixed.nodes[i]['feature']), ' + '] for i,a in zip([current_node_id]+neighbors,a_node)])[:-1]],html.Br(),
+                        ['=f(','{:.3f}'.format(result),')'],html.Br(),
+                        ['=LeakyReLU(','{:.3f}'.format(result),')'],html.Br(),
+                        ['=','{:.3f}'.format(LReLU(result))]
+                        ])
+    
+    
+    content=html.Div([
+        html.Span(text_3),
+        html.Br(),
+        html.Span(['with attention weights a', html.Sub(f'{current_node_id}'),'computed as:'],style={'font-size':'16px'}),
+        html.Br(),
+        html.Span(text_2),
+        html.Br(),
+        html.Span(['where the unnormalized attention weights e', html.Sub(f'{current_node_id}'),' are given by:'],style={'font-size':'16px'}),
+        html.Br(),
+        html.Span(text_1)
         
+        ],
+        style={'font-size':'24px'})    
+
+    return content       
         
+@callback(
+    Output('gat_formula_update', 'children'),
+    Output('gat_current_node_id', 'children'),
+    Output('gat_weight_1_iter', 'children'),
+    Output('gat_weight_2_iter', 'children'),
+    Output('gat_button-update', "n_clicks"),
+    Output('gat_button-undo', "n_clicks"),    
+    Input('gat_graph_fixed', 'tapNodeData'),
+    Input('gat_weight_1','value'),
+    Input('gat_weight_2','value'),
+    Input('gat_button-update', "n_clicks"),
+    Input('gat_button-reset','n_clicks'),
+    Input('gat_button-undo', "n_clicks"),    
+    )
+def gat_formula_update(data,weight_1,weight_2,click_update,_,click_undo):    
+    global gat_G_fixed    
+    global gat_original_G
+            
+    if ctx.triggered_id == "gat_button-reset":  
+        # gat_G_fixed=GraphConstructor.data_networkx()
+        gat_G_fixed=gat_original_G
+        data=gat_G_fixed.nodes['A']     
         
+        current_node_id=data['id']
+        iter_num=1
+        iter_info,weight_1_iter_info,weight_2_iter_info=gat_iter_info_update(current_node_id,iter_num)
+        return no_update,iter_info,weight_1_iter_info,weight_2_iter_info ,0,0
+    
+    iter_num=abs(click_update-click_undo)+1
+            
+    if data is None:        
+        data=gat_G_fixed.nodes['A']           
+
+    if data:
+        content=gat_formula_update_content(gat_G_fixed,data,weight_1,weight_2,iter_num-1)        
+        current_node_id=data['id']
+        iter_info,weight_1_iter_info,weight_2_iter_info=gat_iter_info_update(current_node_id,iter_num)
+        
+
+        return content,iter_info,weight_1_iter_info,weight_2_iter_info,no_update,no_update  
+
+@callback(
+    Output('gat_graph_fixed', 'elements'),
+    Output('gat_button-undo', 'disabled'),
+    Input('gat_button-update', "n_clicks"),
+    Input('gat_button-reset','n_clicks'),
+    Input('gat_button-undo', "n_clicks"),         
+    Input('gat_button-randomize', "n_clicks"),  
+    Input('gat_weight_1','value'),
+    Input('gat_weight_2','value'),
+    )
+def gat_update_all_nodes(click_update,_,click_undo,click_randomize,weight_1,weight_2): 
+    global gat_update_stack
+    global gat_G_fixed
+    global gat_original_G
+    global gat_data_GC   
+
+    if ctx.triggered_id == "gat_button-randomize":  
+        rnd_G=Random_Graph()
+        gat_G_fixed=rnd_G.random_G
+        gat_data_GC=rnd_G.random_G_cytoscape['elements']     
+        gat_original_G=copy.deepcopy(gat_G_fixed)
+        return gat_data_GC,True      
+    
+    # # print('---',click_update,click_undo)
+    # if ctx.triggered_id == "gat_button-reset":      
+    #     # gat_G_fixed=gat_original_G
+    #     return gat_data_GC,True   
+    
+    # if click_update is None:
+    #     raise PreventUpdate
+    # elif click_update==0:
+    #     return gat_data_GC,True      
+    
+    # if ctx.triggered_id == "gat_button-update":      
+    #     G_pyg_=from_networkx(gat_G_fixed)
+    #     data=Data(x=G_pyg_.feature.reshape(-1,1).to(torch.float), edge_index=G_pyg_.edge_index)
+        
+    #     net=gatConv(1,1,normalize=True,bias=False)
+    #     list(net.parameters())[0].data.fill_(weight_1)
+    #     y=net(data.x,data.edge_index).detach().numpy().reshape(-1) 
+ 
+    #     attrs_feature={k:{'feature':v} for k,v in zip(list(gat_G_fixed.nodes()),y)}        
+    #     attrs_label={k: {'label':f'{k}({v:.3f})'} for k,v in zip(list(gat_G_fixed.nodes()),y)}
+        
+    #     nx.set_node_attributes(gat_G_fixed, attrs_feature)
+    #     nx.set_node_attributes(gat_G_fixed, attrs_label)
+        
+    #     gat_G_fixed_cytoscape=nx.cytoscape_data(gat_G_fixed) 
+    #     gat_update_stack['elements'].append(gat_G_fixed_cytoscape['elements'])       
+    #     gat_update_stack['attrs'].append([attrs_feature,attrs_label])
+
+    #     return gat_G_fixed_cytoscape['elements'],False   
+        
+    # if ctx.triggered_id == "gat_button-undo": 
+    #     if len(gat_update_stack['elements'])>1:
+    #         attrs_feature,attrs_label=gat_update_stack['attrs'].pop()
+    #         nx.set_node_attributes(gat_G_fixed, attrs_feature)
+    #         nx.set_node_attributes(gat_G_fixed, attrs_label)
+    #         return gat_update_stack['elements'].pop(),False    
+    #     if click_update-click_undo<2:            
+    #         gat_G_fixed=GraphConstructor.data_networkx()   
+    #         return gat_data_GC,True
+    #     else:                        
+    #         gat_G_fixed=GraphConstructor.data_networkx() 
+    #         return gat_data_GC,True              
 
 #%%
 if __name__ == '__main__':
