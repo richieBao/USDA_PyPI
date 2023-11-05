@@ -19,6 +19,7 @@ from ._gnn_interpretation_run import gnn_algorithms_dash
 from ._gnn_algorithms import VanillaGNNLayer
 from ._gnn_algorithms import VanillaGNN
 from ._gnn_algorithms import GCN
+from ._gnn_algorithms import GATv2
 
 __all__ = [
     "G_drawing",
@@ -37,5 +38,6 @@ __all__ = [
     "VanillaGNNLayer",
     "VanillaGNN",
     "GCN",
+    "GATv2",
     ]
 
