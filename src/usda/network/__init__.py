@@ -20,6 +20,11 @@ from ._gnn_algorithms import VanillaGNNLayer
 from ._gnn_algorithms import VanillaGNN
 from ._gnn_algorithms import GCN
 from ._gnn_algorithms import GATv2
+from ._gnn_algorithms import GIN
+from ._gnn_algorithms import gin_train
+from ._gnn_algorithms import gin_test
+from ._gnn_algorithms import gin_prediction_plot
+from ._gnn_algorithms import VGAE_gnn
 
 __all__ = [
     "G_drawing",
@@ -39,5 +44,10 @@ __all__ = [
     "VanillaGNN",
     "GCN",
     "GATv2",
+    "GIN",
+    "gin_train",
+    "gin_test",
+    "gin_prediction_plot",
+    "VGAE_gnn",
     ]
 

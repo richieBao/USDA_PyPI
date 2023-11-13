@@ -8,10 +8,14 @@ ref: Labonne, M. (2023). Hands-On Graph Neural Networks Using Python (1st ed.). 
 """
 import torch
 torch.manual_seed(0)
-from torch.nn import Linear, Dropout
+from torch.nn import Linear, Dropout,Sequential, BatchNorm1d, ReLU
 import torch.nn.functional as F
+from torch_geometric.nn import GATv2Conv, GCNConv,GINConv,global_mean_pool, global_add_pool,VGAE
 
-from torch_geometric.nn import GATv2Conv, GCNConv
+import numpy as np
+import matplotlib.pyplot as plt
+import networkx as nx
+from torch_geometric.utils import to_networkx
 
 
 def accuracy(y_pred, y_true):
@@ -154,3 +158,153 @@ class GATv2(torch.nn.Module):
         out = self(data.x, data.edge_index)
         acc = accuracy(out.argmax(dim=1)[data.test_mask], data.y[data.test_mask])
         return acc
+    
+class GIN(torch.nn.Module):
+    """GIN"""
+    def __init__(self, num_node_features,num_classes,dim_h):
+        super(GIN, self).__init__()
+        self.conv1 = GINConv(
+            Sequential(Linear(num_node_features, dim_h),
+                       BatchNorm1d(dim_h), ReLU(),
+                       Linear(dim_h, dim_h), ReLU()))
+        self.conv2 = GINConv(
+            Sequential(Linear(dim_h, dim_h), BatchNorm1d(dim_h), ReLU(),
+                       Linear(dim_h, dim_h), ReLU()))
+        self.conv3 = GINConv(
+            Sequential(Linear(dim_h, dim_h), BatchNorm1d(dim_h), ReLU(),
+                       Linear(dim_h, dim_h), ReLU()))
+        self.lin1 = Linear(dim_h*3, dim_h*3)
+        self.lin2 = Linear(dim_h*3, num_classes)
+
+    def forward(self, x, edge_index, batch):
+        # Node embeddings 
+        h1 = self.conv1(x, edge_index)
+        h2 = self.conv2(h1, edge_index)
+        h3 = self.conv3(h2, edge_index)
+
+        # Graph-level readout
+        h1 = global_add_pool(h1, batch)
+        h2 = global_add_pool(h2, batch)
+        h3 = global_add_pool(h3, batch)
+
+        # Concatenate graph embeddings
+        h = torch.cat((h1, h2, h3), dim=1)
+
+        # Classifier
+        h = self.lin1(h)
+        h = h.relu()
+        h = F.dropout(h, p=0.5, training=self.training)
+        h = self.lin2(h)
+        
+        return F.log_softmax(h, dim=1)
+    
+def gin_accuracy(pred_y, y):
+    """Calculate accuracy."""
+    return ((pred_y == y).sum() / len(y)).item()    
+    
+def gin_train(model, loader,val_loader,epochs=100,verbose=20):
+    criterion = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+
+    model.train()
+    for epoch in range(epochs+1):
+        total_loss = 0
+        acc = 0
+        val_loss = 0
+        val_acc = 0
+
+        # Train on batches
+        for data in loader:
+            optimizer.zero_grad()
+            out = model(data.x, data.edge_index, data.batch)
+            loss = criterion(out, data.y)
+            total_loss += loss / len(loader)
+            acc += gin_accuracy(out.argmax(dim=1), data.y) / len(loader)
+            loss.backward()
+            optimizer.step()
+
+            # Validation
+            val_loss, val_acc = gin_test(model, val_loader)
+
+        # Print metrics every 20 epochs
+        if(epoch % verbose == 0):
+            print(f'Epoch {epoch:>3} | Train Loss: {total_loss:.2f} | Train Acc: {acc*100:>5.2f}% | Val Loss: {val_loss:.2f} | Val Acc: {val_acc*100:.2f}%')
+            
+    return model
+
+@torch.no_grad()
+def gin_test(model, loader):
+    criterion = torch.nn.CrossEntropyLoss()
+    model.eval()
+    loss = 0
+    acc = 0
+
+    for data in loader:
+        out = model(data.x, data.edge_index, data.batch)
+        loss += criterion(out, data.y) / len(loader)
+        acc += gin_accuracy(out.argmax(dim=1), data.y) / len(loader)
+
+    return loss, acc    
+
+def gin_prediction_plot(model,dataset,figsize=(4,4)):
+    fig, ax = plt.subplots(4, 4)
+    fig.suptitle('GIN - Graph classification')    
+    
+    for i, data in enumerate(dataset):
+        # Calculate color (green if correct, red otherwise)
+        out = model(data.x, data.edge_index, data.batch)
+        color = "green" if out.argmax(dim=1) == data.y else "red"
+    
+        # Plot graph
+        ix = np.unravel_index(i, ax.shape)
+        ax[ix].axis('off')
+        G = to_networkx(dataset[i], to_undirected=True)
+        nx.draw_networkx(G,
+                        pos=nx.spring_layout(G, seed=0),
+                        with_labels=False,
+                        node_size=10,
+                        node_color=color,
+                        width=0.8,
+                        ax=ax[ix]
+                        )    
+        
+    return G
+
+class Encoder(torch.nn.Module):
+    def __init__(self, dim_in, dim_out):
+        super().__init__()
+        self.conv1 = GCNConv(dim_in, 2 * dim_out)
+        self.conv_mu = GCNConv(2 * dim_out, dim_out)
+        self.conv_logstd = GCNConv(2 * dim_out, dim_out)
+
+    def forward(self, x, edge_index):
+        x = self.conv1(x, edge_index).relu()
+        return self.conv_mu(x, edge_index), self.conv_logstd(x, edge_index)
+
+class VGAE_gnn:
+    def __init__(self,dim_in, dim_out,lr=0.01,device='GPU'):
+        self.model = VGAE(Encoder(dim_in, dim_out)).to(device)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)        
+
+    def train(self,train_data):
+        self.model.train()
+        self.optimizer.zero_grad()
+        z = self.model.encode(train_data.x, train_data.edge_index)
+        loss = self.model.recon_loss(z, train_data.pos_edge_label_index) + (1 / train_data.num_nodes) * self.model.kl_loss()
+        loss.backward()
+        self.optimizer.step()
+        return float(loss)
+
+    @torch.no_grad()
+    def test(self,data):
+        self.model.eval()
+        z = self.model.encode(data.x, data.edge_index)
+        return self.model.test(z, data.pos_edge_label_index, data.neg_edge_label_index)
+
+    def fit(self,train_data,test_data,epochs=301,verbose=50):
+        for epoch in range(epochs):
+            loss = self.train(train_data)
+            val_auc, val_ap = self.test(test_data)
+            if epoch % verbose == 0:
+                print(f'Epoch {epoch:>2} | Loss: {loss:.4f} | Val AUC: {val_auc:.4f} | Val AP: {val_ap:.4f}')    
+    
