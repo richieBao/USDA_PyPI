@@ -25,6 +25,9 @@ from ._gnn_algorithms import gin_train
 from ._gnn_algorithms import gin_test
 from ._gnn_algorithms import gin_prediction_plot
 from ._gnn_algorithms import VGAE_gnn
+from ._vae import VariationalAutoEncoder
+from ._vae import vae_train
+from ._vae import vae_digit_inference
 
 __all__ = [
     "G_drawing",
@@ -49,5 +52,8 @@ __all__ = [
     "gin_test",
     "gin_prediction_plot",
     "VGAE_gnn",
+    "VariationalAutoEncoder",
+    "vae_train",
+    "vae_digit_inference",
     ]
 
